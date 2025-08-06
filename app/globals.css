@@ -1,0 +1,151 @@
+/* Importa las capacidades de Tailwind v4. Esto también maneja @tailwind base, components, utilities. */
+@import 'tailwindcss';
+
+/* --- CONFIGURACIÓN DE THEME PARA TAILWIND V4 --- */
+@theme {
+  /* Paleta de Colores Base */
+  --color-light-primary: #f5f6f6;
+  --color-light-secondary: #d9d9d9;
+  --color-light-tertiary: #b9c0bf;
+  --color-dark-primary: #242628;
+  --color-dark-secondary: #3a3d3f;
+  --color-dark-tertiary: #a8a8a8;
+  --color-accent-primary: #de9e36;
+  --color-accent-secondary: #ab6900;
+
+  /* Variables Semánticas - Modo Claro (por defecto) */
+  --color-background: var(--color-light-primary);
+  --color-background-secondary: var(--color-light-secondary);
+  --color-background-interactive: var(--color-light-tertiary);
+  --color-background-accent: var(--color-accent-primary);
+  --color-foreground: var(--color-dark-primary);
+  --color-foreground-secondary: var(--color-dark-secondary);
+  --color-foreground-on-accent: var(--color-light-primary);
+  --color-border: var(--color-light-tertiary);
+  --color-border-interactive: var(--color-accent-primary);
+
+  /* Variables Semánticas - Modo Oscuro */
+  --color-background-dark: var(--color-dark-secondary);
+  --color-background-secondary-dark: var(--color-dark-primary);
+  --color-background-interactive-dark: var(--color-dark-tertiary);
+  --color-foreground-dark: var(--color-light-primary);
+  --color-foreground-secondary-dark: var(--color-light-secondary);
+  --color-foreground-on-accent-dark: var(--color-dark-primary);
+  --color-border-dark: var(--color-dark-tertiary);
+
+  /* Fuentes para Tailwind v4 */
+  --font-oxanium: 'Oxanium', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Iceland', ui-serif, Georgia, serif;
+
+  /* Espaciado personalizado (opcional) */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* Radios de borde personalizados (opcional) */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+
+  /* Sombras personalizadas (opcional) */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg:
+    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* --- ESTILOS BASE Y TRANSICIONES --- */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    @apply font-oxanium;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition:
+      background-color 300ms ease,
+      color 200ms ease;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading;
+    font-weight: 400;
+    line-height: 1.2;
+  }
+
+  /* Asegurar que los elementos interactivos tengan transiciones suaves */
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    transition: all 200ms ease;
+    @apply font-heading;
+  }
+
+  /* Estilos para elementos de formulario */
+  input,
+  textarea,
+  select {
+    background-color: var(--color-background-secondary);
+    border: 1px solid var(--color-border);
+    color: var(--color-foreground);
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: 2px solid var(--color-border-interactive);
+    outline-offset: 2px;
+  }
+}
+
+/* --- COMPONENTES PERSONALIZADOS (OPCIONAL) --- */
+@layer components {
+  .btn-primary {
+    background: var(--color-background-accent);
+    @apply font-oxanium;
+  }
+
+  .card {
+    @apply bg-background-secondary border-border rounded-lg border p-6;
+    @apply shadow-md;
+  }
+
+  .link {
+    @apply text-accent-primary hover:text-accent-secondary;
+    @apply transition-colors duration-200;
+  }
+}
+
+/* --- UTILIDADES PERSONALIZADAS (OPCIONAL) --- */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
