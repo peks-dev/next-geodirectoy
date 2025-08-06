@@ -104,5 +104,14 @@ feat(storage): configurar subida de imágenes con optimización
 4. Envía un pull request a la rama `main`.
 
 Consulta la Guía de Contribución para más detalles (en desarrollo).
+
 ## Licencia
-MIT License
+
+Este proyecto está licenciado bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
+
+### ¿Qué significa esto?
+- ✅ Uso comercial y privado
+- ✅ Modificación y distribución
+- ✅ Incluir en proyectos propietarios
+- ❗ Incluir aviso de copyright
+- ❗ Incluir la licencia MIT

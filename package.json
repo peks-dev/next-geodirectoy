@@ -1,6 +1,11 @@
 {
   "name": "geodirectory",
   "version": "0.1.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/digital-hoop/geodirectory.git"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
