@@ -1,6 +1,5 @@
 import sharp from 'sharp';
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
+import { createClient } from './server';
 import { v4 as uuidv4 } from 'uuid';
 
 // Definir los buckets
@@ -17,33 +16,8 @@ export type UploadResult = {
   error?: string;
 };
 
-// Crear cliente de Supabase
-async function createClient() {
-  const cookieStore = await cookies();
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            );
-          } catch {
-            // Ignorar errores en Server Components
-          }
-        },
-      },
-    }
-  );
-}
-
 // Validar archivo (ejemplo básico)
-function validateFile(file: File): { valid: boolean; error?: string } {
+export function validateFile(file: File): { valid: boolean; error?: string } {
   const maxSize = 5 * 1024 * 1024; // 5MB
   if (file.size > maxSize) {
     return { valid: false, error: 'El archivo excede el tamaño máximo de 5MB' };
@@ -61,21 +35,17 @@ export async function uploadImage(
   userId: string,
   path?: string
 ): Promise<UploadResult> {
-  const validation = validateFile(file);
-  if (!validation.valid) {
-    return { success: false, error: validation.error };
-  }
-
+  // ... (el resto de la función no necesita cambios)
   try {
-    const supabase = await createClient();
+    const supabase = await createClient(); // Ahora usa la función importada
 
     // Leer el archivo como buffer
     const buffer = await file.arrayBuffer();
 
     // Optimizar con Sharp
     const optimizedBuffer = await sharp(buffer)
-      .resize({ width: 1024, height: 1024, fit: 'inside' }) // Tamaño máximo, ajusta según necesites
-      .toFormat('jpeg', { quality: 80 }) // Comprimir a JPEG
+      .resize({ width: 1024, height: 1024, fit: 'inside' })
+      .toFormat('jpeg', { quality: 80 })
       .toBuffer();
 
     // Crear un nuevo archivo optimizado

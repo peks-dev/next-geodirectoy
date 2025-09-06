@@ -1,7 +1,9 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
+// La función DEBE ser async
 export async function createClient() {
+  // DEBEMOS esperar a que la promesa de cookies se resuelva
   const cookieStore = await cookies();
 
   return createServerClient(
@@ -18,9 +20,7 @@ export async function createClient() {
               cookieStore.set(name, value, options)
             );
           } catch {
-            // The `setAll` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
+            // Este error es esperado en Server Components, se puede ignorar.
           }
         },
       },
