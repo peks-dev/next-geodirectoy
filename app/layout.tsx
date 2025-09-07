@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Barlow, Iceland, Oxanium } from 'next/font/google';
 import './globals.css';
+import { Toaster } from 'sonner';
 
 // 1. Configura las fuentes con next/font
 const barlow = Barlow({
@@ -39,6 +40,7 @@ export default function RootLayout({
       <body
         className={`${barlow.variable} ${iceland.variable} ${oxanium.variable} antialiased`}
       >
+        <Toaster />
         {children}
       </body>
     </html>
