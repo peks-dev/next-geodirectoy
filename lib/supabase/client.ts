@@ -1,25 +1,17 @@
-import { createClient } from '@supabase/supabase-js';
+import { createBrowserClient } from '@supabase/ssr';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabaseRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-// Validamos que las variables de entorno existan
-if (!supabaseUrl || !supabaseAnonKey || !supabaseRoleKey) {
-  throw new Error('No variables.');
+// Validamos que las variables de entorno PÚBLICAS existan
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Supabase URL and Anon Key are required.');
 }
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+
+export const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
-  },
-});
-
-// Cliente para operaciones del servidor (con service role key)
-export const supabaseAdmin = createClient(supabaseUrl, supabaseRoleKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false,
   },
 });

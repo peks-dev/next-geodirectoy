@@ -1,12 +1,13 @@
 import { supabase } from './client';
+import { cacheService } from './cacheService';
 import type {
   AuthStateChangeCallback,
   AuthSubscription,
   ServiceResponse,
   SimpleResponse,
   User,
-  UserMetadata,
   Session,
+  ProfileUpdate,
 } from './types';
 
 // Función auxiliar para manejar errores de forma consistente
@@ -18,10 +19,7 @@ function getErrorMessage(error: unknown): string {
 }
 
 export const authService = {
-  /**
-   * Envía un código de verificación de 6 dígitos (OTP) al correo del usuario.
-   * Este es el primer paso para el inicio de sesión sin contraseña.
-   */
+  // Enviar codigo OTP para empezar inicio de sesion
   async sendLoginCode(email: string): SimpleResponse {
     try {
       const { error } = await supabase.auth.signInWithOtp({
@@ -32,7 +30,6 @@ export const authService = {
           shouldCreateUser: true,
         },
       });
-
       if (error) throw error;
       return { error: null };
     } catch (error) {
@@ -40,10 +37,7 @@ export const authService = {
     }
   },
 
-  /**
-   * Verifica el código OTP que el usuario recibió en su correo.
-   * Este es el segundo y último paso para completar el inicio de sesión.
-   */
+  // Verifica el código OTP para completar inicio de sesion
   async verifyEmailOtp(
     email: string,
     token: string
@@ -54,8 +48,17 @@ export const authService = {
         token,
         type: 'email', // Especificamos que es un OTP de tipo email.
       });
-
       if (error) throw error;
+
+      // ESTABLECER CACHE automáticamente después de login exitoso
+      if (data.user && data.user.email) {
+        cacheService.setAuthCache({
+          id: data.user.id,
+          email: data.user.email,
+        });
+      }
+
+      console.log(data);
       return {
         data: { user: data.user!, session: data.session! },
         error: null,
@@ -65,22 +68,22 @@ export const authService = {
     }
   },
 
-  /**
-   * Cierra la sesión del usuario actual.
-   */
+  // Cierra la sesión del usuario actual y limpia el cache.
   async logout(): SimpleResponse {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
+
+      // LIMPIAR CACHE automáticamente en logout
+      cacheService.clearAuthCache();
+
       return { error: null };
     } catch (error) {
       return { error: getErrorMessage(error) };
     }
   },
 
-  /**
-   * Obtiene los datos del usuario autenticado actualmente.
-   */
+  // Obtiene los datos del usuario autenticado actualmente.
   async getCurrentUser(): ServiceResponse<User> {
     try {
       const {
@@ -94,9 +97,7 @@ export const authService = {
     }
   },
 
-  /**
-   * Obtiene la sesión activa del usuario.
-   */
+  // Obtiene la sesión activa del usuario.
   async getCurrentSession(): ServiceResponse<Session> {
     try {
       const {
@@ -110,13 +111,22 @@ export const authService = {
     }
   },
 
-  /**
-   * Actualiza los metadatos (perfil) del usuario actual.
-   */
-  async updateProfile(updates: UserMetadata): SimpleResponse {
+  // Actualiza el perfil del usuario en la tabla profiles.
+  async updateProfile(updates: ProfileUpdate): SimpleResponse {
     try {
-      const { error } = await supabase.auth.updateUser({
-        data: updates,
+      // Obtener el usuario actual
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+      if (userError) throw userError;
+      if (!user) throw new Error('Usuario no autenticado');
+
+      // Actualizar el perfil en la tabla profiles
+      const { error } = await supabase.from('profiles').upsert({
+        id: user.id,
+        ...updates,
+        updated_at: new Date().toISOString(),
       });
 
       if (error) throw error;
@@ -126,13 +136,23 @@ export const authService = {
     }
   },
 
-  /**
-   * Escucha los cambios en el estado de autenticación (login, logout, etc.).
-   */
+  // Escucha los cambios en el estado de autenticación (login, logout, etc.).
   onAuthStateChange(callback: AuthStateChangeCallback): AuthSubscription {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(callback);
     return { data: { subscription }, error: null };
+  },
+
+  // Métodos de conveniencia para acceder al cache desde el authService
+
+  // Acceso rápido para limpiar el cache desde el authService
+  clearCache(): void {
+    cacheService.forceClearCache();
+  },
+
+  // Acceso rápido para verificar el estado del cache desde el authService
+  getCacheStatus() {
+    return cacheService.getCacheStatus();
   },
 };

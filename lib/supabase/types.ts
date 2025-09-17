@@ -11,7 +11,27 @@ import type {
 export type { User, Session, AuthChangeEvent, Subscription };
 export type Provider = SupabaseProvider;
 
-// ========== Tipos para los Argumentos de las Funciones ==========
+// ========== Tipos para profile ==========
+
+export interface Profile {
+  /** ID único del usuario (UUID) - referencia a auth.users(id) */
+  id: string;
+  /** Nombre del usuario (máximo 100 caracteres) */
+  name?: string;
+  /** URL del avatar del usuario */
+  avatar_url?: string;
+  /** Fecha de creación del perfil */
+  created_at: string;
+  /** Fecha de última actualización del perfil */
+  updated_at: string;
+}
+
+export interface ProfileUpdate {
+  /** Nombre del usuario (máximo 100 caracteres) */
+  name?: string;
+  /** URL del avatar del usuario */
+  avatar_url?: string;
+}
 
 /**
  * Metadatos del usuario para el registro o la actualización del perfil.

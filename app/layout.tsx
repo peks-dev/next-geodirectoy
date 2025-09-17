@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import { Barlow, Iceland, Oxanium } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'sonner';
+import BackgroundLines from '@/components/ui/BackgroundLines';
+import { AuthProvider } from '@/components/auth/AuthProvider';
+import { createClient } from '@/lib/supabase/server';
 
 // 1. Configura las fuentes con next/font
 const barlow = Barlow({
@@ -29,19 +32,26 @@ export const metadata: Metadata = {
   description: 'Directorio de comunidades de basketball',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
-    // 2. Aplica las variables de fuente al body
     <html lang="en">
       <body
-        className={`${barlow.variable} ${iceland.variable} ${oxanium.variable} antialiased`}
+        className={`${barlow.variable} ${iceland.variable} ${oxanium.variable} antialiased relative`}
       >
+        <BackgroundLines />
         <Toaster />
-        {children}
+        <main className="relative z-[2]">
+          <AuthProvider initialUser={user}>{children}</AuthProvider>
+        </main>
       </body>
     </html>
   );
