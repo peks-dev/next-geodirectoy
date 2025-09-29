@@ -10,34 +10,44 @@
   --color-light-primary: #f5f6f6;
   --color-light-secondary: #d9d9d9;
   --color-light-tertiary: #b9c0bf;
-  --color-dark-primary: #242628;
-  --color-dark-secondary: #3a3d3f;
-  --color-dark-tertiary: #a8a8a8;
+  --color-light-4: #7b8281;
+  --color-dark-primary: #171717;
+  --color-dark-secondary: #212121;
+  --color-dark-tertiary: #242628;
+  --color-dark-4: #3a3d3f;
   --color-accent-primary: #de9e36;
   --color-accent-secondary: #ab6900;
   --color-error: #c11237;
   --color-success: #59a24d;
 
+  --background-gradient: linear-gradient(
+    135deg,
+    var(--color-light-primary),
+    var(--color-light-tertiary),
+    var(--color-light-secondary)
+  );
+
   /* Variables Semánticas - Modo Claro (por defecto) */
   --color-background: var(--color-dark-tertiary);
   --color-background-secondary: var(--color-light-secondary);
-  --color-background-interactive: var(--color-light-tertiary);
+  --color-background-interactive: var(--color-dark-4);
   --color-background-accent: var(--color-accent-primary);
   --color-foreground: var(--color-dark-primary);
   --color-foreground-secondary: var(--color-dark-secondary);
-  --color-foreground-accent: var(--color-accent-secondary);
-  --color-foreground-on-accent: var(--color-light-primary);
-  --color-border: var(--color-light-tertiary);
+  --color-foreground-accent: var(--color-accent-primary);
+  --color-foreground-on-interactive: var(--color-light-primary);
+  --color-border: var(--color-light-4);
+  --color-border-secondary: #999999;
   --color-border-interactive: var(--color-accent-primary);
 
   /* Variables Semánticas - Modo Oscuro */
   --color-background-dark: var(--color-dark-secondary);
   --color-background-secondary-dark: var(--color-dark-primary);
-  --color-background-interactive-dark: var(--color-dark-tertiary);
+  --color-background-interactive-dark: var(--color-dark-4);
   --color-foreground-dark: var(--color-light-secondary);
   --color-foreground-secondary-dark: var(--color-light-secondary);
-  --color-border-dark: var(--color-dark-tertiary);
-  --color-foreground-on-accent-dark: var(--color-dark-primary);
+  --color-border-dark: var(--color-light-4);
+  --color-foreground-on-interactive-dark: var(--color-light-tertiary);
 
   /* Fuentes para Tailwind v4 */
   --font-oxanium: 'Oxanium', ui-sans-serif, system-ui, sans-serif;
@@ -54,7 +64,7 @@
   --text-xs--line-height: 1.2;
   --text-2xs: clamp(1.1rem, 2vw, 1.5rem);
   --text-2xs--line-height: 1.3;
-  --text-base: clamp(1rem, 1.8vw, 1.2rem);
+  --text-base: clamp(1.6rem, 2.2vw, 2.2rem);
   --text-base--line-height: 1.5;
 
   /* Espaciado personalizado */
@@ -62,12 +72,24 @@
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
   --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
+  --spacing-xl: 5rem;
+
+  /* Contenedores */
+  --width-xs: clamp(20rem, 100%, 42rem);
+  --width-sm: clamp(30rem, 100%, 60rem);
+  --width-md: clamp(40rem, 100%, 70rem);
+  --width-lg: clamp(50rem, 100%, 100rem);
+
+  /*tamañode iconos*/
+  --icon-small-size: clamp(2rem, 2.3vw, 2.2rem);
+  --icon-xsm: clamp(1.5rem, 2vw, 1.9rem);
 
   /* Radios de borde personalizados */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 1rem;
+
+  --border-xs: 2px;
 
   /* Sombras personalizadas */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -80,14 +102,23 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --color-background: var(--color-background-dark);
-    --color-background-secondary: var(--color-background-secondary-dark);
+    --color-background-secondary: var(--color-dark-secondary);
     --color-background-interactive: var(--color-background-interactive-dark);
     --color-foreground: var(--color-foreground-dark);
     --color-foreground-secondary: var(--color-foreground-secondary-dark);
     --color-border: var(--color-border-dark);
+    --color-border-secondary: #4e5254;
     --color-background-accent: var(--color-accent-primary);
     --color-foreground-accent: var(--color-accent-primary);
-    --color-foreground-on-accent: var(--color-foreground-on-accent-dark);
+    --color-foreground-on-interactive: var(
+      --color-foreground-on-interactive-dark
+    );
+    --background-gradient: linear-gradient(
+      135deg,
+      var(--color-dark-primary),
+      var(--color-dark-tertiary),
+      var(--color-dark-secondary)
+    );
   }
 }
 
@@ -105,7 +136,7 @@
   }
 
   body {
-    background-color: var(--color-background);
+    background: var(--background-gradient);
     color: var(--color-foreground);
     font-size: var(--text-base);
     font-family: var(--font-oxanium);
@@ -179,23 +210,11 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
-  .hover-neon:hover {
-    box-shadow:
-      0 0 5px var(--color-border-interactive),
-      0 0 10px var(--color-border-interactive);
-  }
-  .hover-neon-text:hover {
-    filter: drop-shadow(0 0 3px var(--color-accent-primary));
-  }
-  /* Container sizes */
-  .container-sm {
-    width: clamp(20rem, 90%, 42rem);
-  }
-  .container-md {
-    width: clamp(30rem, 90%, 60rem);
-  }
-  .container-lg {
-    width: 100%;
+
+  .transparent-container {
+    backdrop-filter: blur(1px);
+    box-shadow: inset 0 0 100px #ffffff1a;
+    border: 2px solid var(--color-border-secondary);
   }
 
   /* Texts */
@@ -210,5 +229,22 @@
 
   .text-neon-accent {
     filter: drop-shadow(0 0 3px var(--color-accent-primary));
+  }
+  .hover-neon:hover {
+    box-shadow:
+      0 0 5px var(--color-border-interactive),
+      0 0 10px var(--color-border-interactive);
+  }
+  .hover-neon-text:hover {
+    filter: drop-shadow(0 0 3px var(--color-accent-primary));
+  }
+
+  .neon-shadow {
+    box-shadow:
+      0 0 5px var(--color-border-interactive),
+      0 0 10px var(--color-border-interactive);
+  }
+  .neon-effect {
+    filter: drop-shadow(0 0 3px currentColor);
   }
 }
