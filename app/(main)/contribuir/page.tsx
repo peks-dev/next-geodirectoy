@@ -1,12 +1,14 @@
-// En el perfil
-import { ProtectedWrapper } from '@/app/components/auth/ProtectedWrapper';
+// Pagina para registrar comunidades de basketball
 
-export default function ContributionPage() {
+import { ProtectedWrapper } from '@/app/components/auth/ProtectedWrapper';
+import ContributionForm from './components/ContributionForm';
+
+export default async function ContributionPage() {
   return (
     <ProtectedWrapper>
-      <div className="container mx-auto p-4">
-        <h1>pagina de contribución</h1>
-      </div>
+      <section className="mx-auto p-4 h-full">
+        <ContributionForm />
+      </section>
     </ProtectedWrapper>
   );
 }

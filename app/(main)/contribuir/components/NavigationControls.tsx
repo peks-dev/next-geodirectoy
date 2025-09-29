@@ -1,0 +1,63 @@
+'use client';
+import Button from '@/app/components/ui/Button';
+import FlexBox from '@/app/components/ui/containers/FlexBox';
+import TriangleIcon from '@/app/components/ui/svgs/Triangle';
+import CloseIcon from '@/app/components/ui/svgs/CloseIcon';
+import SendIcon from '@/app/components/ui/svgs/SendIcon';
+import { useRouter } from 'next/navigation';
+import { useModal } from '@/components/ui/Modal';
+
+interface Props {
+  prevStep: () => void;
+  nextStep: () => void;
+  currentStep: number;
+}
+
+export default function NavigationControls({
+  prevStep,
+  nextStep,
+  currentStep,
+}: Props) {
+  // close form logic
+  const router = useRouter();
+  const { showConfirmation } = useModal();
+
+  const handleCloseForm = () => {
+    showConfirmation({
+      title: 'salir del formulario',
+      message: 'perderás todos los datos que hallas ingresado',
+      variant: 'primary',
+      confirmText: 'si, salir',
+      onConfirm: () => router.push('/'),
+    });
+  };
+
+  // render component
+  return (
+    <FlexBox
+      align="center"
+      justify="between"
+      className="bg-background-secondary-dark p-3"
+    >
+      <Button variant="icon" onClick={prevStep}>
+        <TriangleIcon />
+      </Button>
+
+      <Button variant="icon" onClick={handleCloseForm} size="xsm">
+        <CloseIcon />
+      </Button>
+
+      {currentStep <= 6 && (
+        <Button variant="icon" onClick={nextStep} className="rotate-180">
+          <TriangleIcon />
+        </Button>
+      )}
+
+      {currentStep === 7 && (
+        <Button variant="icon" type="submit">
+          <SendIcon />
+        </Button>
+      )}
+    </FlexBox>
+  );
+}
