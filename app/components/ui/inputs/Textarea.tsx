@@ -1,14 +1,14 @@
-import { InputHTMLAttributes, forwardRef } from 'react';
+import { TextareaHTMLAttributes, forwardRef } from 'react';
 import Corner from '@/app/components/ui/svgs/Corner';
 
-type InputProps = InputHTMLAttributes<HTMLInputElement>;
+type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
 
-const Input = forwardRef<HTMLInputElement, InputProps>(
+const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className = '', ...props }, ref) => {
     const wrapperClasses = [
       'group',
       'relative',
-      'h-[clamp(4rem,10vh,5.5rem)]',
+      'min-h-[clamp(4rem,10vh,5.5rem)]', // Minimum height, allows expansion
       'w-full',
       'border-2',
       'border-dashed',
@@ -17,16 +17,17 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       'transition-all',
       'duration-200',
       'ease-in-out',
-      'focus-within:border-[var(--color-foreground)]',
+      'focus-within:border-(--color-foreground)',
       className,
     ]
       .filter(Boolean)
       .join(' ');
 
-    const inputClasses = [
+    const textareaClasses = [
       'h-full',
       'w-full',
       'px-4',
+      'py-2', // Added padding for better text spacing in textarea
       'text-sm',
       'outline-none',
       'border-none',
@@ -34,11 +35,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       'text-foreground',
       'text-inherit',
       'placeholder:text-[--color-border]',
+      'resize-none', // Prevent resizing
     ].join(' ');
 
     return (
       <div className={wrapperClasses}>
-        <input ref={ref} className={inputClasses} {...props} />
+        <textarea ref={ref} className={textareaClasses} {...props} />
         <Corner position="top-left" size="small" variant="interactive" />
         <Corner position="top-right" size="small" variant="interactive" />
         <Corner position="bottom-left" size="small" variant="interactive" />
@@ -48,6 +50,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
   }
 );
 
-Input.displayName = 'Input';
+Textarea.displayName = 'Textarea';
 
-export default Input;
+export default Textarea;
