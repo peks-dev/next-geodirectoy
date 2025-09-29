@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { Barlow, Iceland, Oxanium } from 'next/font/google';
 import './globals.css';
-import { Toaster } from 'sonner';
 import BackgroundLines from '@/components/ui/BackgroundLines';
 import { AuthProvider } from '@/components/auth/AuthProvider';
 import { createClient } from '@/lib/supabase/server';
+import ClientProviders from '@/components/ClientProviders';
 
 // 1. Configura las fuentes con next/font
 const barlow = Barlow({
@@ -45,12 +45,13 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${barlow.variable} ${iceland.variable} ${oxanium.variable} antialiased relative`}
+        className={`${barlow.variable} ${iceland.variable} ${oxanium.variable} antialiased relative w-[100vw] h-[100dvh]`}
       >
         <BackgroundLines />
-        <Toaster />
-        <main className="relative z-[2]">
-          <AuthProvider initialUser={user}>{children}</AuthProvider>
+        <main className="relative z-[2] w-full h-full">
+          <AuthProvider initialUser={user}>
+            <ClientProviders>{children}</ClientProviders>
+          </AuthProvider>
         </main>
       </body>
     </html>
