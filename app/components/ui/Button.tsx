@@ -1,24 +1,25 @@
 'use client';
-
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 
 const buttonStyles = {
   base: 'items-center text-center cursor-pointer focus:outline-none transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed font-bold uppercase font-heading border-none',
   variants: {
     primary:
-      'bg-background-accent w-full text-foreground-on-accent text-sm font-bold uppercase hover-neon hover:-translate-y-0.5 active:scale-105',
-    secondary: 'bg-transparent text-foreground-accent text-xs hover-neon-text',
+      'text-dark-primary px-4 py-2 bg-background-accent w-full text-sm font-bold uppercase hover-neon hover:-translate-y-0.5 active:scale-105',
+    secondary:
+      'bg-transparent text-foreground-accent text-xs hover-neon-text px-4 py-2',
     tertiary:
       'text-xs text-accent-primary hover:text-accent-primary text-foreground-accent',
     delete:
-      'bg-error text-white p-0 flex-grow-0 relative z-10 w-12 hover:shadow-error hover:shadow-lg',
-    icon: 'self-center p-1 hover:text-foreground-accent w-[4rem] h-[4rem]',
+      'bg-error text-white px-2 hover:shadow-[0_0_5px_var(--color-error),0_0_10px_var(--color-error)] active:scale-105',
+    icon: 'self-center p-1 hover:text-foreground-accent text-accent-primary hover-neon-text',
   },
   sizes: {
-    default: 'px-4 py-2',
-    sm: 'px-3 py-1.5',
-    lg: 'px-6 py-3',
-    icon: 'p-1',
+    default: 'w-(--icon-small-size) h-(--icon-small-size)', // Tamaño base para icono (ancho/alto)
+    sm: 'w-(--icon-extra-small-size) h-(--icon-extra-small-size)', // Tamaño pequeño para icono
+    xsm: 'w-(--icon-xsm) h-(--icon-xsm)',
+    lg: 'w-(--icon-large-size) h-(--icon-large-size)', // Tamaño grande para icono
+    xl: 'w-(--icon-extra-large-size) h-(--icon-extra-large-size)', // Tamaño extra grande para icono
   },
 };
 
@@ -44,13 +45,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    // Si la variante es 'icon' y no se especifica un tamaño, se usa el tamaño 'icon' por defecto.
-    const buttonSize = variant === 'icon' && size === 'default' ? 'icon' : size;
+    // Si la variante es 'icon' y no se especifica un tamaño, se usa el tamaño 'default'
+    const buttonSize =
+      variant === 'icon' && size === 'default' ? 'default' : size;
 
-    const classes = [
+    // Classes para el botón
+    const buttonClasses = [
       buttonStyles.base,
       buttonStyles.variants[variant],
-      buttonStyles.sizes[buttonSize],
       loading ? 'animate-pulse opacity-50' : '',
       className,
     ]
@@ -62,12 +64,17 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        className={classes}
+        className={buttonClasses}
         disabled={disabled || loading}
         data-loading={loading}
+        type={props.type || 'button'}
         {...props}
       >
-        {children}
+        {variant === 'icon' || variant === 'delete' ? (
+          <figure className={buttonStyles.sizes[buttonSize]}>{children}</figure>
+        ) : (
+          children
+        )}
       </button>
     );
   }
