@@ -5,7 +5,6 @@ import { useModalStore } from './useModalStore';
 import Button from '@/components/ui/Button';
 import FlexBox from '../containers/FlexBox';
 import CloseIcon from '../svgs/CloseIcon';
-import TransparentContainer from '../containers/TransparentContainer';
 
 export const Modal = () => {
   const {
@@ -40,7 +39,7 @@ export const Modal = () => {
           </Button>
         </FlexBox>
 
-        <TransparentContainer>
+        <div className="transparent-container p-sm">
           <p className="text-center text-base mb-4">{message}</p>
           <Button
             variant={variant}
@@ -49,7 +48,7 @@ export const Modal = () => {
           >
             {isLoading ? <p>...cargando</p> : confirmText}
           </Button>
-        </TransparentContainer>
+        </div>
       </div>
     </div>,
     document.body
