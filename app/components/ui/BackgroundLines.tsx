@@ -106,7 +106,7 @@ export default function BgLines({ className }: BgLinesProps) {
   }, []);
 
   const baseClasses =
-    'fixed inset-0 flex flex-col justify-center items-center overflow-hidden z-[1] backdrop-blur-[10px] p-[30px] shadow-[0_4px_6px_rgba(0,0,0,0.1),_0_0_0_1px_rgba(255,255,255,0.1),_inset_0_0_20px_rgba(0,0,0,0.2)] transition-colors duration-300 ease-in-out bg-transparent';
+    'fixed inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden z-[1] backdrop-blur-[10px] p-[30px] shadow-[0_4px_6px_rgba(0,0,0,0.1),0_0_0_1px_rgba(255,255,255,0.1),inset_0_0_20px_rgba(0,0,0,0.2)]';
 
   return (
     <div ref={containerRef} className={`${baseClasses} ${className || ''}`} />
