@@ -5,6 +5,6 @@ interface HeaderProps {
 }
 
 export default function HeaderContainer({ children }: HeaderProps) {
-  const headerStyles = `bg-background-secondary p-sm mb-md`;
+  const headerStyles = `bg-dark-primary p-sm mb-md`;
   return <header className={headerStyles}>{children}</header>;
 }
