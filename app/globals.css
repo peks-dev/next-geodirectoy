@@ -98,9 +98,30 @@
     0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
-/* Invocación - Modo Oscuro */
+.dark {
+  --color-background: var(--color-dark-secondary);
+  --color-background-secondary: var(--color-dark-primary);
+  --color-background-interactive: var(--color-background-interactive-dark);
+  --color-foreground: var(--color-foreground-dark);
+  --color-foreground-secondary: var(--color-foreground-secondary-dark);
+  --color-border: var(--color-border-dark);
+  --color-border-secondary: #4e5254;
+  --color-background-accent: var(--color-accent-primary);
+  --color-foreground-accent: var(--color-accent-primary);
+  --color-foreground-on-interactive: var(
+    --color-foreground-on-interactive-dark
+  );
+  --background-gradient: linear-gradient(
+    135deg,
+    var(--color-dark-primary),
+    var(--color-dark-tertiary),
+    var(--color-dark-secondary)
+  );
+}
+
+/* Fallback - Modo Oscuro */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light) {
     --color-background: var(--color-background-dark);
     --color-background-secondary: var(--color-dark-secondary);
     --color-background-interactive: var(--color-background-interactive-dark);

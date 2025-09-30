@@ -5,6 +5,7 @@ import BackgroundLines from '@/components/ui/BackgroundLines';
 import { AuthProvider } from '@/components/auth/AuthProvider';
 import { createClient } from '@/lib/supabase/server';
 import ClientProviders from '@/components/ClientProviders';
+import { ThemeProvider } from '@/components/theme/ThemeProvider';
 
 // 1. Configura las fuentes con next/font
 const barlow = Barlow({
@@ -43,16 +44,18 @@ export default async function RootLayout({
   } = await supabase.auth.getUser();
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${barlow.variable} ${iceland.variable} ${oxanium.variable} antialiased relative w-[100vw] h-[100dvh]`}
       >
-        <BackgroundLines />
-        <main className="relative z-[2] w-full h-full">
-          <AuthProvider initialUser={user}>
-            <ClientProviders>{children}</ClientProviders>
-          </AuthProvider>
-        </main>
+        <ThemeProvider>
+          <BackgroundLines />
+          <main className="relative z-[2] w-full h-full">
+            <AuthProvider initialUser={user}>
+              <ClientProviders>{children}</ClientProviders>
+            </AuthProvider>
+          </main>
+        </ThemeProvider>
       </body>
     </html>
   );
