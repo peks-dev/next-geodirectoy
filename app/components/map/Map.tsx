@@ -2,9 +2,15 @@
 
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { useAppTheme } from '@/lib/hooks/useAppTheme';
+import CommunitieMarker from './CommunitieMarker';
+import type { MapProps } from './types';
 import 'leaflet/dist/leaflet.css';
 
-export default function Map() {
+export default function Map({
+  locations = [],
+  enablePopups = false,
+  onMarkerClick,
+}: MapProps) {
   const { mounted, isDark } = useAppTheme();
 
   const lightTileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -18,7 +24,7 @@ export default function Map() {
 
   if (!mounted) {
     return (
-      <div className="w-full h-full flex items-center justify-center">
+      <div className="flex h-full w-full items-center justify-center">
         <p className="text-gray-600 dark:text-gray-400">Cargando mapa...</p>
       </div>
     );
@@ -30,7 +36,7 @@ export default function Map() {
       zoom={5}
       minZoom={5}
       maxZoom={18}
-      className="w-full h-full z-0"
+      className="z-0 h-full w-full"
       scrollWheelZoom={true}
     >
       <TileLayer
@@ -38,6 +44,16 @@ export default function Map() {
         url={isDark ? darkTileUrl : lightTileUrl}
         key={isDark ? 'dark' : 'light'}
       />
+
+      {/* Renderizar marcadores */}
+      {locations.map((location) => (
+        <CommunitieMarker
+          key={location.id}
+          location={location}
+          enablePopup={enablePopups}
+          onMarkerClick={onMarkerClick}
+        />
+      ))}
     </MapContainer>
   );
 }

@@ -1,3 +1,6 @@
+export interface CourtId {
+  id: string;
+}
 export type CommunityType = 'pickup' | 'club';
 
 export type FloorType = 'cement' | 'parquet' | 'asphalt' | 'synthetic';
@@ -41,5 +44,4 @@ export interface communityData {
   services: Service;
   age_group: AgeGroup | null;
   categories: Category[] | null;
-  // Add temporary fields if needed, e.g., imageFiles: File[]
 }
