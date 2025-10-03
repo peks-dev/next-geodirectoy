@@ -8,4 +8,7 @@ export interface MapProps {
   enablePopups?: boolean;
   /** Función para obtener datos del popup cuando se hace click */
   onMarkerClick?: (id: string) => Promise<unknown>;
+  children?: React.ReactNode;
+  center?: Coordinates;
+  zoom?: number;
 }

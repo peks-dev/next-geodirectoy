@@ -1,5 +1,4 @@
 'use client';
-
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { useAppTheme } from '@/lib/hooks/useAppTheme';
 import CommunitieMarker from './CommunitieMarker';
@@ -10,6 +9,9 @@ export default function Map({
   locations = [],
   enablePopups = false,
   onMarkerClick,
+  center = { lat: 23.6345, lng: -102.5528 }, // Centro de México por defecto
+  zoom = 5, // Zoom país completo por defecto
+  children,
 }: MapProps) {
   const { mounted, isDark } = useAppTheme();
 
@@ -32,8 +34,8 @@ export default function Map({
 
   return (
     <MapContainer
-      center={[23.6345, -102.5528]}
-      zoom={5}
+      center={[center.lat, center.lng]}
+      zoom={zoom}
       minZoom={5}
       maxZoom={18}
       className="z-0 h-full w-full"
@@ -54,6 +56,9 @@ export default function Map({
           onMarkerClick={onMarkerClick}
         />
       ))}
+
+      {/* Renderizar DraggableMarker u otros children */}
+      {children}
     </MapContainer>
   );
 }

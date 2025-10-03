@@ -1,6 +1,8 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import type { ReactNode } from 'react';
+import type { MapProps } from './types';
 
 /**
  * Wrapper para cargar el componente Map solo en el cliente
@@ -11,10 +13,16 @@ import dynamic from 'next/dynamic';
 const DynamicMap = dynamic(() => import('./Map'), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full flex items-center justify-center bg-gray-100">
+    <div className="flex h-full w-full items-center justify-center bg-gray-100">
       <p className="text-gray-600">Cargando mapa...</p>
     </div>
   ),
 });
 
-export default DynamicMap;
+// Crear wrapper que acepte children
+export default function DynamicMapWrapper({
+  children,
+  ...props
+}: MapProps & { children?: ReactNode }) {
+  return <DynamicMap {...props}>{children}</DynamicMap>;
+}
