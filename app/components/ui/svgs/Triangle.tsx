@@ -1,7 +1,7 @@
 const TriangleIcon = () => {
   return (
     <svg
-      className="w-full h-full"
+      className="h-full w-full"
       viewBox="0 0 78.08 65.94"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"

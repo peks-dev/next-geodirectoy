@@ -15,11 +15,11 @@ export function ThemeToggle() {
   if (!mounted) {
     return (
       <button
-        className="w-8 h-8 rounded-md border border-[var(--color-border)] bg-[var(--color-background-secondary)] flex items-center justify-center"
+        className="flex h-8 w-8 items-center justify-center rounded-md border border-[var(--color-border)] bg-[var(--color-background-secondary)]"
         disabled
         aria-label="Loading theme toggle"
       >
-        <div className="w-4 h-4 bg-[var(--color-foreground)] opacity-20 rounded-full animate-pulse" />
+        <div className="h-4 w-4 animate-pulse rounded-full bg-[var(--color-foreground)] opacity-20" />
       </button>
     );
   }
@@ -35,12 +35,12 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="w-8 h-8 rounded-md border border-[var(--color-border)] bg-[var(--color-background-secondary)] hover:bg-[var(--color-background-interactive)] transition-colors flex items-center justify-center"
+      className="flex h-8 w-8 items-center justify-center rounded-md border border-[var(--color-border)] bg-[var(--color-background-secondary)] transition-colors hover:bg-[var(--color-background-interactive)]"
       aria-label={`Switch to ${resolvedTheme === 'dark' ? 'light' : 'dark'} mode`}
     >
       {resolvedTheme === 'dark' ? (
         <svg
-          className="w-4 h-4"
+          className="h-4 w-4"
           fill="currentColor"
           viewBox="0 0 20 20"
           aria-hidden="true"
@@ -53,7 +53,7 @@ export function ThemeToggle() {
         </svg>
       ) : (
         <svg
-          className="w-4 h-4"
+          className="h-4 w-4"
           fill="currentColor"
           viewBox="0 0 20 20"
           aria-hidden="true"

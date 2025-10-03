@@ -23,11 +23,7 @@ const ToggleInput = ({
 }: Props) => (
   <label
     htmlFor={id}
-    className={`
-       p-1.5 flex cursor-pointer border-accent-primary border-2 border-solid h-min
-       ${wrapperClass}
-       ${checked ? 'neon-shadow bg-accent-primary' : ''}
-     `.trim()}
+    className={`border-accent-primary flex h-min cursor-pointer border-2 border-solid p-1.5 ${wrapperClass} ${checked ? 'neon-shadow bg-accent-primary' : ''} `.trim()}
   >
     <input
       type={type}
@@ -39,11 +35,7 @@ const ToggleInput = ({
       className="hidden"
     />
     <span
-      className={`
-         px-2 py-1 font-bold w-full h-full
-         ${labelClass}
-         ${checked ? 'text-dark-primary bg-accent-primary' : 'text-accent-primary bg-background-interactive'}
-       `.trim()}
+      className={`h-full w-full px-2 py-1 font-bold ${labelClass} ${checked ? 'text-dark-primary bg-accent-primary' : 'text-accent-primary bg-background-interactive'} `.trim()}
     >
       {text}
     </span>

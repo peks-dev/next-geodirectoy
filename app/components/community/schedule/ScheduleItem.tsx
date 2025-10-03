@@ -8,11 +8,11 @@ interface Props {
 
 export default function ScheduleItem({ data, children }: Props) {
   return (
-    <li className=" p-2.5 border-2 border-border w-full flex items-stretch justify-between gap-sm">
-      <div className="bg-light-tertiary p-sm grow text-dark-primary">
-        <p className="text-sm ">{data.days.join(', ')}</p>
-        <div className="flex items-center gap-md mt-1">
-          <figure className="w-[20px] h-[20px]">
+    <li className="border-border gap-sm flex w-full items-stretch justify-between border-2 p-2.5">
+      <div className="bg-light-tertiary p-sm text-dark-primary grow">
+        <p className="text-sm">{data.days.join(', ')}</p>
+        <div className="gap-md mt-1 flex items-center">
+          <figure className="h-[20px] w-[20px]">
             <ClockIcon />
           </figure>
           <p>

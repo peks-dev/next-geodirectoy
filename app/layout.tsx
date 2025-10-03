@@ -46,11 +46,11 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${barlow.variable} ${iceland.variable} ${oxanium.variable} antialiased relative w-[100vw] h-[100dvh]`}
+        className={`${barlow.variable} ${iceland.variable} ${oxanium.variable} relative h-[100dvh] w-[100vw] antialiased`}
       >
         <ThemeProvider>
           <BackgroundLines />
-          <main className="relative z-[2] w-full h-full">
+          <main className="relative z-[2] h-full w-full">
             <AuthProvider initialUser={user}>
               <ClientProviders>{children}</ClientProviders>
             </AuthProvider>
