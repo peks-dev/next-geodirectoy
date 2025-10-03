@@ -76,10 +76,10 @@ export default function ConditionalStep() {
   if (type === 'club') {
     return (
       <FlexBox direction="col" className="h-full max-h-full">
-        <h2 className="text-center text-sm pb-4 border-b-2 border-border-secondary grow-0 font-oxanium">
+        <h2 className="border-border-secondary font-oxanium grow-0 border-b-2 pb-4 text-center text-sm">
           Selecciona las categorías disponibles
         </h2>
-        <div className="max-h-full overflow-auto w-full pt-10">
+        <div className="max-h-full w-full overflow-auto pt-10">
           <FlexBox direction="col" className="gap-md" justify="around">
             {possibleCategories.map((cat) => {
               const isSelected = (categories || []).some(
@@ -91,7 +91,7 @@ export default function ConditionalStep() {
               return (
                 <FlexBox
                   key={cat.category}
-                  className={`border-2 py-sm cursor-pointer bg-background-interactive  text-accent-primary  hover:border-accent-primary ${isSelected ? 'border-accent-primary' : 'border-background-interactive'}`}
+                  className={`py-sm bg-background-interactive text-accent-primary hover:border-accent-primary cursor-pointer border-2 ${isSelected ? 'border-accent-primary' : 'border-background-interactive'}`}
                   align="center"
                   justify="between"
                   direction="col"
@@ -109,13 +109,13 @@ export default function ConditionalStep() {
                   />
                   <label
                     htmlFor={`cat-${cat.category}`}
-                    className={`font-heading text-md uppercase w-full text-center ${isSelected ? 'text-neon-accent' : ''}`}
+                    className={`font-heading text-md w-full text-center uppercase ${isSelected ? 'text-neon-accent' : ''}`}
                   >
                     {`${cat.category} (${cat.min_age}-${cat.max_age || 'y más'} años)`}
                   </label>
                   {isSelected && (
-                    <div className=" flex flex-col gap-sm">
-                      <h3 className="text-center font-oxanium my-3 text-foreground-on-interactive">
+                    <div className="gap-sm flex flex-col">
+                      <h3 className="font-oxanium text-foreground-on-interactive my-3 text-center">
                         Géneros para {cat.category}:
                       </h3>
                       <div className="flex pb-2">
@@ -158,7 +158,7 @@ export default function ConditionalStep() {
     return (
       <FlexBox className="h-full" align="center">
         <div className="m-auto">
-          <h2 className="text-md text-center font-oxanium mb-xl">
+          <h2 className="text-md font-oxanium mb-xl text-center">
             Selecciona la edad predominante
           </h2>
           <FlexBox wrap="wrap" justify="around" className="gap-md">
@@ -185,10 +185,10 @@ export default function ConditionalStep() {
 
   return (
     <FlexBox direction="col" className="h-full" justify="center" align="center">
-      <p className="text-md text-center font-oxanium mb-xl">
-        Selecciona el tipo de comunidad primero.
+      <p className="text-md font-oxanium mb-xl text-center">
+        Selecciona un tipo de comunidad.
       </p>
-      <figure className="text-error w-[15rem] h-[15rem] neon-effect">
+      <figure className="text-error neon-effect h-[15rem] w-[15rem]">
         <WarningIcon />
       </figure>
     </FlexBox>

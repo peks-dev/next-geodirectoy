@@ -1,4 +1,3 @@
-import WrapperStep from './WrapperStep';
 import RetasIcon from '@/components/ui/svgs/RetasIcon';
 import ClubIcon from '@/components/ui/svgs/ClubIcon';
 import FlexBox from '@/app/components/ui/containers/FlexBox';
@@ -16,13 +15,18 @@ export default function TypeStep() {
   ];
 
   return (
-    <WrapperStep className="flex flex-col justify-center gap-xl">
-      <p className="text-center text-md">¿De que comunidad se trata?</p>
+    <FlexBox
+      justify="center"
+      direction="col"
+      className="gap-xl h-full"
+      align="stretch"
+    >
+      <p className="text-md text-center">¿De que comunidad se trata?</p>
       <FlexBox align="center" justify="around">
         {options.map(({ value, label, Icon }) => (
           <label
             key={value}
-            className={`group text-center relative p-4 ${
+            className={`group relative p-4 text-center ${
               selectedType === value
                 ? 'text-accent-primary neon-effect'
                 : 'text-foreground'
@@ -37,7 +41,7 @@ export default function TypeStep() {
               className="sr-only"
             />
 
-            <figure className="w-[100px] h-[100px]">
+            <figure className="h-[100px] w-[100px]">
               <Icon />
             </figure>
             <span className="mt-4">{label}</span>
@@ -64,6 +68,6 @@ export default function TypeStep() {
           </label>
         ))}
       </FlexBox>
-    </WrapperStep>
+    </FlexBox>
   );
 }

@@ -2,11 +2,12 @@ import Input from '@/app/components/ui/inputs/Text';
 import Textarea from '@/app/components/ui/inputs/Textarea';
 import FlexBox from '@/app/components/ui/containers/FlexBox';
 import { useContributionStore } from '../../store/useContributionStore';
+
 export default function BasicInfoStep() {
   const { name, description, updateFormField } = useContributionStore();
 
   return (
-    <FlexBox direction="col" className="h-full gap-xl">
+    <FlexBox direction="col" className="gap-xl h-full">
       <label>
         <Input
           type="text"

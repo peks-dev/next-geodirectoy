@@ -26,12 +26,12 @@ export default function ContributionForm() {
     <FlexBox
       direction="col"
       align="stretch"
-      className="h-full gap-5 w-md m-auto"
+      className="m-auto h-full w-md gap-5"
     >
       <StepIndicator currentStep={currentStep} />
 
       <form
-        className="w-full h-full grow transparent-container p-3 max-h-full overflow-y-auto"
+        className={`transparent-container h-full max-h-full w-full grow overflow-y-auto ${currentStep === 3 ? '' : 'p-3'}`} //evitar padding en LocationStep
         onSubmit={() => console.log('enviado prro')}
       >
         <StepRenderer currentStep={currentStep} />

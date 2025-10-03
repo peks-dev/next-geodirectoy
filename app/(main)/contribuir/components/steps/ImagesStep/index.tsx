@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import { toast } from 'sonner';
 import { useContributionStore } from '../../../store/useContributionStore';
-import WrapperStep from '../WrapperStep';
 import ImagePreview from './components/ImagePreview';
 import FlexBox from '@/app/components/ui/containers/FlexBox';
 import Button from '@/app/components/ui/Button';
@@ -56,7 +55,7 @@ export default function ImagesStep() {
   const canAddMore = images.length < MAX_IMAGES;
 
   return (
-    <WrapperStep className="flex flex-col gap-xl">
+    <FlexBox direction="col" className="gap-xl h-full">
       <p className="text-center text-sm">
         Selecciona o toma {MIN_IMAGES} como mínimo, {MAX_IMAGES} máximo
         <br />
@@ -91,6 +90,6 @@ export default function ImagesStep() {
       {canAddMore && (
         <Button onClick={handleButtonClick}>Elegir imágenes</Button>
       )}
-    </WrapperStep>
+    </FlexBox>
   );
 }

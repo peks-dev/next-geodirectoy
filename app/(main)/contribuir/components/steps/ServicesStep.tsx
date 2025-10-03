@@ -22,7 +22,7 @@ export default function ServicesStep() {
   return (
     <FlexBox className="h-full" align="center" justify="center">
       <div className="w-full">
-        <h2 className="text-center text-md mb-xl font-oxanium">
+        <h2 className="text-md mb-xl font-oxanium text-center">
           selecciona los disponibles
         </h2>
         <FlexBox wrap="wrap" justify="around" className="h-full" align="center">
