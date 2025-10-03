@@ -28,7 +28,7 @@ export default function CommunitieMarker({
 
   // Crear icono con color dinámico basado en tema
   const icon = useMemo(() => {
-    const colorClass = isDark ? 'text-blue-400' : 'text-blue-600';
+    const colorClass = isDark ? 'text-white-primary' : 'text-dark-primary';
     return createLeafletIcon(<MarkerIcon />, colorClass);
   }, [isDark]);
 

@@ -24,7 +24,7 @@ export default function DraggableMarker({
 
   // Crear icono con color dinámico (diferente a los marcadores normales)
   const icon = useMemo(() => {
-    const colorClass = isDark ? 'text-orange-400' : 'text-orange-600';
+    const colorClass = isDark ? 'text-accent-primary' : 'text-accent-primary';
     return createLeafletIcon(<MarkerIcon />, colorClass);
   }, [isDark]);
 
