@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { communityData } from '@/app/types/communityTypes';
+import type { communityData, CommunityType } from '@/app/types/communityTypes';
 
 const INITIAL_FORM_STATE: communityData = {
   type: null,
@@ -30,7 +30,7 @@ interface ContributionStore extends communityData {
   // funciones para las imagenes
   addImages: (files: File[]) => void;
   removeImage: (index: number) => void;
-  removeSchedule: (index: number) => void; // Nueva función
+  removeSchedule: (index: number) => void;
 }
 
 // Hook to use in steps
@@ -38,9 +38,36 @@ export const useContributionStore = create<ContributionStore>((set) => ({
   ...INITIAL_FORM_STATE,
 
   updateFormField: (field, value) =>
-    set((state) => ({ ...state, [field]: value })),
+    set((state) => {
+      const newState = { ...state, [field]: value };
+
+      // Si se está actualizando el tipo, limpiar campos específicos del tipo anterior
+      if (field === 'type') {
+        const newType = value as CommunityType | null;
+
+        switch (newType) {
+          case 'club':
+            // Si cambió a club, limpiar age_group (usado solo en pickup)
+            newState.age_group = null;
+            break;
+          case 'pickup':
+            // Si cambió a pickup, limpiar categories (usado solo en club)
+            newState.categories = null;
+            break;
+          case null:
+          default:
+            // Si no hay tipo seleccionado, limpiar ambos
+            newState.age_group = null;
+            newState.categories = null;
+            break;
+        }
+      }
+
+      return newState;
+    }),
 
   reset: () => set(INITIAL_FORM_STATE),
+
   addImages: (files) =>
     set((state) => {
       const filteredFiles = files.filter(
@@ -61,6 +88,7 @@ export const useContributionStore = create<ContributionStore>((set) => ({
     set((state) => ({
       images: state.images.filter((_, i) => i !== index),
     })),
+
   removeSchedule: (index) =>
     set((state) => ({
       schedule: state.schedule.filter((_, i) => i !== index),

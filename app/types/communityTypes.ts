@@ -7,6 +7,8 @@ export type FloorType = 'cement' | 'parquet' | 'asphalt' | 'synthetic';
 
 export type AgeGroup = 'teens' | 'young_adults' | 'veterans' | 'mixed';
 
+export type Gender = 'male' | 'female' | 'mixed';
+
 export interface Coordinates {
   lat: number;
   lng: number;
@@ -30,7 +32,7 @@ export interface Category {
   category: string;
   min_age: number;
   max_age: number | null;
-  genders: string[];
+  genders: Gender[];
 }
 export interface communityData {
   type: CommunityType | null;

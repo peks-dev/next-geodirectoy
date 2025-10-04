@@ -5,7 +5,7 @@ import LocationStep from './steps/LocationStep';
 import ImageStep from './steps/ImagesStep/index';
 import ScheduleStep from './steps/ScheduleStep/index';
 import ServiceStep from './steps/ServicesStep';
-import ConditionalStep from './steps/ConditionalStep';
+import ConditionalStep from './steps/ConditionalStep/index';
 
 interface StepRendererProps {
   currentStep: number;
