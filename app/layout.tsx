@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Barlow, Iceland, Oxanium } from 'next/font/google';
+import { Iceland, Oxanium } from 'next/font/google';
 import './globals.css';
 import BackgroundLines from '@/components/ui/BackgroundLines';
 import { AuthProvider } from '@/components/auth/AuthProvider';
@@ -8,12 +8,6 @@ import ClientProviders from '@/components/ClientProviders';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 
 // 1. Configura las fuentes con next/font
-const barlow = Barlow({
-  subsets: ['latin'],
-  display: 'swap',
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
-  variable: '--font-barlow', // Crea la variable CSS --font-barlow
-});
 const oxanium = Oxanium({
   subsets: ['latin'],
   display: 'swap',
@@ -46,7 +40,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${barlow.variable} ${iceland.variable} ${oxanium.variable} relative h-[100dvh] w-[100vw] antialiased`}
+        className={`${iceland.variable} ${oxanium.variable} relative h-[100dvh] w-[100vw] antialiased`}
       >
         <ThemeProvider>
           <BackgroundLines />

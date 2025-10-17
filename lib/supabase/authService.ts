@@ -58,7 +58,6 @@ export const authService = {
         });
       }
 
-      console.log(data);
       return {
         data: { user: data.user!, session: data.session! },
         error: null,

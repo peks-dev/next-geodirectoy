@@ -25,7 +25,6 @@ export const cacheService = {
     if (typeof document !== 'undefined') {
       const maxAge = Math.floor(CACHE_DURATION / 1000); // Convertir a segundos
       document.cookie = `${CACHE_KEY}=${JSON.stringify(cacheData)}; path=/; max-age=${maxAge}; samesite=lax`;
-      console.log('✅ Cache de auth establecido para:', user.email);
     }
   },
 
@@ -35,7 +34,6 @@ export const cacheService = {
   clearAuthCache(): void {
     if (typeof document !== 'undefined') {
       document.cookie = `${CACHE_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-      console.log('🧹 Cache de auth limpiado');
     }
   },
 
@@ -71,7 +69,6 @@ export const cacheService = {
    */
   forceClearCache(): void {
     this.clearAuthCache();
-    console.log('🔧 Cache forzosamente limpiado');
   },
 
   /**

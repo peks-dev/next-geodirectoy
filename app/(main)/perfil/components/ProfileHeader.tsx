@@ -12,15 +12,21 @@ export default function ProfileHeader() {
   const handleMapNavigation = () => {
     router.push('/');
   };
+  function formNavitation() {
+    router.push('/contribuir');
+  }
   return (
     <header>
       <FlexBox align="center" justify="between">
         <Button onClick={handleMapNavigation} className="w-min grow-0">
           mapa
         </Button>
-        <p className="grow text-center text-sm">{user?.email}</p>
+        <Button variant="secondary" onClick={formNavitation}>
+          contribuir
+        </Button>
         <LogoutButton />
       </FlexBox>
+      <p className="grow text-center text-sm">{user?.email}</p>
       <div className="mt-8 border-t pt-8">
         <p>aqui va el listado de las canchas</p>
       </div>

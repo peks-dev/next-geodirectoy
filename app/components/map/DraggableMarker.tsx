@@ -10,19 +10,17 @@ import type { Coordinates } from '@/app/types/communityTypes';
 
 interface DraggableMarkerProps {
   initialPosition?: Coordinates;
-  onPositionChange: (coords: Coordinates) => void;
+  // Cambiamos el nombre de la prop para ser más específicos
+  onDragEnd: (coords: Coordinates) => void;
 }
-
-// Usado principalmente en el formulario de contribución
 
 export default function DraggableMarker({
   initialPosition = { lat: 20.9674, lng: -89.5926 }, // Mérida, Yucatán
-  onPositionChange,
+  onDragEnd, // Usamos la nueva prop
 }: DraggableMarkerProps) {
   const { isDark } = useAppTheme();
   const markerRef = useRef<LeafletMarker>(null);
 
-  // Crear icono con color dinámico (diferente a los marcadores normales)
   const icon = useMemo(() => {
     const colorClass = isDark ? 'text-accent-primary' : 'text-accent-primary';
     return createLeafletIcon(<MarkerIcon />, colorClass);
@@ -32,9 +30,10 @@ export default function DraggableMarker({
     const marker = markerRef.current;
     if (marker) {
       const { lat, lng } = marker.getLatLng();
-      onPositionChange({ lat, lng });
+      // Llamamos a la función pasada por props
+      onDragEnd({ lat, lng });
     }
-  }, [onPositionChange]);
+  }, [onDragEnd]);
 
   return (
     <Marker

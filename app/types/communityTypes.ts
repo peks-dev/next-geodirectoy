@@ -1,12 +1,16 @@
+// /home/peks/Documents/projects/refactor-bp/geodirectory/app/types/communityTypes.ts
+
+// ============================================
+// TIPOS BASE
+// ============================================
+
 export interface CourtId {
   id: string;
 }
+
 export type CommunityType = 'pickup' | 'club';
-
 export type FloorType = 'cement' | 'parquet' | 'asphalt' | 'synthetic';
-
 export type AgeGroup = 'teens' | 'young_adults' | 'veterans' | 'mixed';
-
 export type Gender = 'male' | 'female' | 'mixed';
 
 export interface Coordinates {
@@ -22,28 +26,229 @@ export interface Service {
 }
 
 export interface Schedule {
-  days: string[]; // Array de días en inglés, e.g., ["monday", "tuesday"]
+  days: string[];
   time: {
-    start: string; // e.g., "18:00"
-    end: string; // e.g., "20:00"
+    start: string;
+    end: string;
   };
 }
+
 export interface Category {
   category: string;
   min_age: number;
   max_age: number | null;
   genders: Gender[];
 }
-export interface communityData {
+
+// ============================================
+// DATOS DEL FORMULARIO (STORE DE ZUSTAND)
+// ============================================
+
+/**
+ * Tipo para el estado del formulario multi-paso en Zustand.
+ * Contiene valores opcionales (null) mientras el usuario completa el formulario.
+ * Las imágenes pueden ser File (recién seleccionadas) o string (URLs ya subidas).
+ */
+export interface CommunityFormData {
+  id: string | null;
   type: CommunityType | null;
   name: string;
   description: string;
   location: Coordinates | null;
-  images: (File | string)[]; // URLs after upload
+  city: string | null;
+  state: string | null;
+  country: string | null;
+  images: (File | string)[]; // File = nuevo, string = URL ya subida
   floor_type: FloorType | null;
   is_covered: boolean;
   schedule: Schedule[];
   services: Service;
   age_group: AgeGroup | null;
   categories: Category[] | null;
+  user_id?: string;
 }
+
+// ============================================
+// DATOS PARA INSERCIÓN EN BASE DE DATOS
+// ============================================
+
+/**
+ * Tipo para insertar una comunidad en Supabase.
+ * Todos los campos requeridos están presentes y transformados al formato correcto.
+ */
+export interface CommunityInsertData
+  extends Omit<
+    CommunityFormData,
+    'user_id' | 'images' | 'floor_type' | 'id' | 'location'
+  > {
+  user_id: string; // Requerido
+  images: string[]; // Solo URLs después de subir a storage
+  floor_type: FloorType; // Requerido después de análisis de AI
+  location: `POINT(${number} ${number})`; // Formato PostGIS WKT
+}
+
+// ============================================
+// DATOS COMPLETOS DESDE LA BASE DE DATOS
+// ============================================
+
+/**
+ * Tipo para comunidades recuperadas de la base de datos.
+ * Representa el estado completo y validado de una comunidad.
+ */
+export interface Community {
+  id: string;
+  type: CommunityType;
+  name: string;
+  description: string;
+  location: Coordinates;
+  city: string;
+  state: string | null;
+  country: string;
+  images: string[];
+  floor_type: FloorType;
+  is_covered: boolean;
+  schedule: Schedule[];
+  services: Service;
+  age_group: AgeGroup | null;
+  categories: Category[] | null;
+  user_id: string;
+  created_at: string;
+  updated_at: string;
+  average_rating: number;
+  total_reviews: number;
+}
+
+// ============================================
+// RESPUESTAS DE FUNCIONES RPC
+// ============================================
+
+/**
+ * Respuesta completa de las funciones RPC:
+ * - get_community_by_id
+ * - communities_by_city
+ */
+export interface CommunityFullResponse {
+  id: string;
+  type: CommunityType;
+  name: string;
+  description: string;
+  lat: number;
+  lng: number;
+  country: string;
+  state: string | null;
+  city: string;
+  floor_type: FloorType;
+  is_covered: boolean;
+  schedule: Schedule[];
+  services: Service;
+  age_group: AgeGroup | null;
+  categories: Category[] | null;
+  user_id: string;
+  images: string[];
+  created_at: string;
+  updated_at: string;
+  average_rating: number;
+  total_reviews: number;
+}
+
+/**
+ * Respuesta de la función nearby_communities (antes de transformar)
+ */
+export interface CommunityNearbyResponse {
+  id: string;
+  type: CommunityType;
+  name: string;
+  lat: number;
+  lng: number;
+  city: string;
+  distance_meters: number;
+  average_rating: number;
+  total_reviews: number;
+  images: string[];
+}
+
+/**
+ * Respuesta de la función communities_in_view (antes de transformar)
+ */
+export interface CommunityMapResponse {
+  id: string;
+  type: CommunityType;
+  name: string;
+  lat: number;
+  lng: number;
+  city: string;
+  average_rating: number;
+  total_reviews: number;
+}
+
+// ============================================
+// TIPOS TRANSFORMADOS PARA USO EN COMPONENTES
+// ============================================
+
+/**
+ * Comunidad cercana con distancia calculada.
+ * Usado en búsquedas geoespaciales.
+ */
+export interface NearbyCommunity {
+  id: string;
+  type: CommunityType;
+  name: string;
+  location: Coordinates;
+  city: string;
+  distance_meters: number;
+  average_rating: number;
+  total_reviews: number;
+  images: string[];
+}
+
+/**
+ * Comunidad simplificada para mostrar en mapas.
+ * Solo contiene datos necesarios para renderizar marcadores.
+ */
+export interface CommunityForMap {
+  id: string;
+  type: CommunityType;
+  name: string;
+  location: Coordinates;
+  city: string;
+  average_rating: number;
+  total_reviews: number;
+}
+
+// ============================================
+// TIPOS UTILITARIOS
+// ============================================
+
+/**
+ * Respuesta paginada genérica
+ */
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+/**
+ * Bounding box para consultas de mapas
+ */
+export interface MapBounds {
+  minLat: number;
+  minLng: number;
+  maxLat: number;
+  maxLng: number;
+}
+
+// ============================================
+// ALIAS PARA RETROCOMPATIBILIDAD (DEPRECADO)
+// ============================================
+
+/**
+ * @deprecated Use CommunityFormData instead
+ */
+export type communityData = CommunityFormData;
+
+/**
+ * @deprecated Use CommunityInsertData instead
+ */
+export type CommunityDataForDB = CommunityInsertData;
