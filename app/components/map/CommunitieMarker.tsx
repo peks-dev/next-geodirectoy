@@ -1,10 +1,12 @@
 'use client';
 
-import { Marker } from 'react-leaflet';
+import { Marker, Popup } from 'react-leaflet';
 import { useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { createLeafletIcon } from './iconUtils';
 import MarkerIcon from './MarkerIcon';
 import { useAppTheme } from '@/lib/hooks/useAppTheme';
+import Button from '@/components/ui/Button';
 import type { CommunitieLocation } from './types';
 
 interface CommunitieMarkerProps {
@@ -14,10 +16,10 @@ interface CommunitieMarkerProps {
 }
 
 /**
- * Componente individual de marcador de cancha
+ * Componente individual de marcador de comunidad
  *
  * Renderiza un marcador con icono personalizado que se adapta al tema.
- * Opcionalmente maneja clicks para mostrar popups.
+ * Incluye un popup con un botón para navegar a la página individual de la comunidad.
  */
 export default function CommunitieMarker({
   location,
@@ -25,6 +27,7 @@ export default function CommunitieMarker({
   onMarkerClick,
 }: CommunitieMarkerProps) {
   const { isDark } = useAppTheme();
+  const router = useRouter();
 
   // Crear icono con color dinámico basado en tema
   const icon = useMemo(() => {
@@ -38,6 +41,10 @@ export default function CommunitieMarker({
     }
   };
 
+  const handleNavigate = () => {
+    router.push(`/comunidad/${location.id}`);
+  };
+
   return (
     <Marker
       position={[location.lat, location.lng]}
@@ -45,6 +52,23 @@ export default function CommunitieMarker({
       eventHandlers={{
         click: handleClick,
       }}
-    />
+    >
+      {enablePopup && (
+        <Popup>
+          <div className="flex flex-col gap-2 p-2">
+            <p className="text-foreground-primary text-sm font-medium">
+              Ver detalles de la comunidad
+            </p>
+            <Button
+              onClick={handleNavigate}
+              variant="primary"
+              className="w-full"
+            >
+              Ver comunidad
+            </Button>
+          </div>
+        </Popup>
+      )}
+    </Marker>
   );
 }

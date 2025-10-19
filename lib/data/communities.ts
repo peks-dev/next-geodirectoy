@@ -141,10 +141,47 @@ export async function getCommunitiesInView(
 }
 
 // ============================================
-// 5. OBTENER TODAS LAS COMUNIDADES (CON PAGINACIÓN)
+// 5. OBTENER TODAS LAS COMUNIDADES SIN PAGINACIÓN
 // ============================================
 
-export async function getAllCommunities(
+/**
+ * Obtiene todas las comunidades directamente desde la tabla
+ * sin paginación. Útil para mostrar todos los marcadores en el mapa.
+ *
+ * IMPORTANTE: Esta función trae TODOS los registros.
+ * Úsala solo cuando sea necesario (ej: mapa principal).
+ */
+export async function getAllCommunitiesSimple(
+  maxResults: number | null = null
+): Promise<CommunityFullResponse[]> {
+  const supabase = await createClient();
+
+  try {
+    const { data, error } = await supabase.rpc('get_all_communities', {
+      max_results: maxResults,
+    });
+
+    if (error) {
+      console.error('Error fetching all communities:', error.message);
+      return [];
+    }
+
+    return (data || []) as CommunityFullResponse[];
+  } catch (error) {
+    console.error('Unexpected error in getAllCommunitiesSimple:', error);
+    return [];
+  }
+}
+
+// ============================================
+// 6. OBTENER COMUNIDADES CON PAGINACIÓN (RENOMBRADO)
+// ============================================
+
+/**
+ * Obtiene comunidades con paginación.
+ * Útil para listas, tablas, o cuando necesitas cargar datos por partes.
+ */
+export async function getCommunitiesPaginated(
   page: number = 1,
   pageSize: number = 20
 ): Promise<PaginatedResponse<CommunityFullResponse>> {
@@ -159,14 +196,14 @@ export async function getAllCommunities(
       .from('communities')
       .select('*', { count: 'exact', head: true });
 
-    // Obtener las comunidades de la página actual
+    // Obtener las comunidades de la página actual usando la función RPC
     const { data, error } = await supabase.rpc('communities_by_city', {
       city_name: '%',
       max_results: pageSize,
     });
 
     if (error) {
-      console.error('Error fetching all communities:', error.message);
+      console.error('Error fetching paginated communities:', error.message);
       return {
         data: [],
         total: 0,
@@ -182,7 +219,7 @@ export async function getAllCommunities(
       pageSize,
     };
   } catch (error) {
-    console.error('Unexpected error in getAllCommunities:', error);
+    console.error('Unexpected error in getCommunitiesPaginated:', error);
     return {
       data: [],
       total: 0,

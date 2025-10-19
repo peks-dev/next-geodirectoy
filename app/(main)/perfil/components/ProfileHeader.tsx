@@ -3,24 +3,22 @@ import { LogoutButton } from './LogoutButton';
 import { useAuth } from '@/app/components/auth/AuthProvider';
 import FlexBox from '@/app/components/ui/containers/FlexBox';
 import Button from '@/app/components/ui/Button';
+import NavigationButton from '@/app/components/ui/Buttons/NavigationButton';
 import { useRouter } from 'next/navigation';
 
 export default function ProfileHeader() {
   const { user } = useAuth();
   const router = useRouter();
 
-  const handleMapNavigation = () => {
-    router.push('/');
-  };
   function formNavitation() {
     router.push('/contribuir');
   }
   return (
     <header>
       <FlexBox align="center" justify="between">
-        <Button onClick={handleMapNavigation} className="w-min grow-0">
+        <NavigationButton url="/" variant="primary" className="w-min grow-0">
           mapa
-        </Button>
+        </NavigationButton>
         <Button variant="secondary" onClick={formNavitation}>
           contribuir
         </Button>
