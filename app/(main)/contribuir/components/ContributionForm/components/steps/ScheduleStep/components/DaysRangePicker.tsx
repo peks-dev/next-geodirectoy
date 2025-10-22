@@ -17,8 +17,8 @@ const DaysRangePicker = ({ selectedDays, handleInputChange }: Props) => {
   ];
   return (
     <div>
-      <p className="text-center text-sm mb-lg">selecciona los días</p>
-      <ul className="flex flex-wrap items-center justify-center gap-md">
+      <p className="mb-lg text-center text-sm">selecciona los días</p>
+      <ul className="gap-md flex flex-wrap items-center justify-center">
         {days.map((day, index) => (
           <li key={index}>
             <ToggleInput

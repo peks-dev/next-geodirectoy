@@ -311,13 +311,13 @@ export default function TimePickerWheel({
 
     return (
       <div className="flex flex-col items-center">
-        <div className="text-xs font-semibold text-slate-500 mb-4 tracking-wider uppercase">
+        <div className="mb-4 text-xs font-semibold tracking-wider text-slate-500 uppercase">
           {label}
         </div>
 
         <div
           ref={ref}
-          className="relative w-20 h-48 overflow-hidden cursor-grab active:cursor-grabbing"
+          className="relative h-48 w-20 cursor-grab overflow-hidden active:cursor-grabbing"
           style={{ height: '200px' }}
           onMouseDown={(e) => handleDragStart(e, type)}
           onMouseMove={(e) => handleDragMove(e, type)}
@@ -328,18 +328,18 @@ export default function TimePickerWheel({
           onTouchEnd={() => handleDragEnd(type)}
         >
           {/* Máscaras de gradiente */}
-          <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-white via-white/80 to-transparent z-20 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white via-white/80 to-transparent z-20 pointer-events-none" />
+          <div className="pointer-events-none absolute top-0 right-0 left-0 z-20 h-16 bg-gradient-to-b from-white via-white/80 to-transparent" />
+          <div className="pointer-events-none absolute right-0 bottom-0 left-0 z-20 h-16 bg-gradient-to-t from-white via-white/80 to-transparent" />
 
           {/* Indicador central */}
-          <div className="absolute top-1/2 left-1 right-1 h-12 -translate-y-1/2 z-10 pointer-events-none">
-            <div className="h-full bg-gradient-to-r from-violet-100 to-purple-100 border-2 border-violet-300 rounded-xl shadow-lg backdrop-blur-sm" />
+          <div className="pointer-events-none absolute top-1/2 right-1 left-1 z-10 h-12 -translate-y-1/2">
+            <div className="h-full rounded-xl border-2 border-violet-300 bg-gradient-to-r from-violet-100 to-purple-100 shadow-lg backdrop-blur-sm" />
           </div>
 
           {/* Valores */}
           <div
             ref={valuesRef}
-            className="absolute left-0 right-0 will-change-transform"
+            className="absolute right-0 left-0 will-change-transform"
           >
             {/* Renderizar valores extendidos para scroll infinito */}
             {Array.from({ length: array.length * 3 }, (_, i) => {
@@ -353,7 +353,7 @@ export default function TimePickerWheel({
               return (
                 <div
                   key={`${value}-${i}`}
-                  className={`h-12 flex items-center justify-center text-2xl font-bold transition-all duration-200 will-change-transform ${
+                  className={`flex h-12 items-center justify-center text-2xl font-bold transition-all duration-200 will-change-transform ${
                     isCenter
                       ? 'text-violet-600 drop-shadow-sm'
                       : 'text-slate-600'
@@ -377,27 +377,27 @@ export default function TimePickerWheel({
   };
 
   return (
-    <div className="bg-white/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white/20">
+    <div className="rounded-3xl border border-white/20 bg-white/90 p-8 shadow-2xl backdrop-blur-xl">
       {/* Header */}
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent mb-2">
+      <div className="mb-8 text-center">
+        <h2 className="mb-2 bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-2xl font-bold text-transparent">
           Time Picker Premium
         </h2>
-        <p className="text-slate-500 text-sm">
+        <p className="text-sm text-slate-500">
           Arrastra para seleccionar la hora
         </p>
       </div>
 
       {/* Wheels Container */}
-      <div className="flex items-center justify-center space-x-8 mb-8">
+      <div className="mb-8 flex items-center justify-center space-x-8">
         {renderWheelColumn('hours', 'Horas', hoursArray, hours)}
 
         {/* Separador animado */}
         <div
-          className="flex flex-col items-center justify-center h-48"
+          className="flex h-48 flex-col items-center justify-center"
           style={{ height: '200px' }}
         >
-          <div className="text-4xl font-bold text-violet-500 animate-pulse">
+          <div className="animate-pulse text-4xl font-bold text-violet-500">
             :
           </div>
         </div>
@@ -407,13 +407,13 @@ export default function TimePickerWheel({
 
       {/* Display del tiempo */}
       <div className="text-center">
-        <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-violet-50 to-purple-50 border-2 border-violet-200 rounded-2xl px-6 py-4 shadow-lg">
-          <div className="text-3xl font-mono font-bold text-slate-800">
+        <div className="inline-flex items-center space-x-2 rounded-2xl border-2 border-violet-200 bg-gradient-to-r from-violet-50 to-purple-50 px-6 py-4 shadow-lg">
+          <div className="font-mono text-3xl font-bold text-slate-800">
             {hours.toString().padStart(2, '0')}:
             {minutes.toString().padStart(2, '0')}
           </div>
         </div>
-        <div className="text-xs text-slate-400 mt-3 font-medium">
+        <div className="mt-3 text-xs font-medium text-slate-400">
           Formato 24 horas
         </div>
       </div>

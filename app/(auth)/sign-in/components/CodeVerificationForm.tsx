@@ -28,7 +28,7 @@ export default function CodeVerificationForm({
 }: CodeVerificationFormProps) {
   return (
     <FlexBox direction="col" align="stretch" gap="md">
-      <p className="text-xs text-center">
+      <p className="text-center text-xs">
         código de 6 dígitos enviado a: <span>{email}</span>
       </p>
 
@@ -41,7 +41,7 @@ export default function CodeVerificationForm({
         </Button>
       </FlexBox>
 
-      <form onSubmit={onSubmit} className="flex flex-col center">
+      <form onSubmit={onSubmit} className="center flex flex-col">
         <FlexBox direction="col" align="center" gap="md">
           <Input
             type="text"
@@ -49,7 +49,7 @@ export default function CodeVerificationForm({
             value={otp}
             onChange={(e) => onOtpChange(e.target.value)}
             maxLength={6}
-            className="w-full tracking-widest text-center"
+            className="w-full text-center tracking-widest"
             autoFocus
           />
           <div className="text-xs text-gray-500">

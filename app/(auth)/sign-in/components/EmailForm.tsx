@@ -19,7 +19,7 @@ export default function EmailForm({
   return (
     <form onSubmit={onSubmit}>
       <FlexBox direction="col" gap="md">
-        <p className="text-sm text-center">accede a basket places</p>
+        <p className="text-center text-sm">accede a basket places</p>
         <Input
           id="email"
           type="email"
