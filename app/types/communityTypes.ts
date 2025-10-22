@@ -209,10 +209,10 @@ export interface CommunityForMap {
   id: string;
   type: CommunityType;
   name: string;
+  images: string[];
   location: Coordinates;
-  city: string;
-  average_rating: number;
-  total_reviews: number;
+  averageRating: number;
+  ageGroup?: AgeGroup | null;
 }
 
 // ============================================
@@ -237,6 +237,23 @@ export interface MapBounds {
   minLng: number;
   maxLat: number;
   maxLng: number;
+}
+
+// ============================================
+// TIPOS PARA EL MAPA
+// ============================================
+
+export interface CommunityCard {
+  id: string;
+  name: string;
+  images: string[];
+  category?: Category[] | null;
+  ageGroup?: AgeGroup | null;
+  averageRating: number;
+}
+
+export interface CommunitiesOnMap extends CommunityCard {
+  coordinates: Coordinates;
 }
 
 // ============================================

@@ -1,9 +1,14 @@
-import type { CourtId, Coordinates } from '@/app/types/communityTypes';
+import type {
+  CourtId,
+  Coordinates,
+  CommunityForMap,
+} from '@/app/types/communityTypes';
 export interface CommunitieLocation extends CourtId, Coordinates {}
 
 export interface MapProps {
   /** Array de ubicaciones de canchas para renderizar marcadores */
   locations?: CommunitieLocation[];
+  communities?: CommunityForMap[];
   /** Habilita popups al hacer click en marcadores */
   enablePopups?: boolean;
   /** Función para obtener datos del popup cuando se hace click */

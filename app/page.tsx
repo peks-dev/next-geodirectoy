@@ -1,7 +1,7 @@
 import Navbar from './components/ui/Navbar';
 import DynamicMap from '@/components/map/DynamicMap';
 import { getAllCommunitiesSimple } from '@/lib/data/communities';
-import type { CommunitieLocation } from '@/components/map/types';
+import { CommunityForMap } from './types/communityTypes';
 
 /**
  * Página principal con mapa interactivo
@@ -14,15 +14,22 @@ export default async function Home() {
   const communities = await getAllCommunitiesSimple();
 
   // Transformar datos para el componente Map
-  const locations: CommunitieLocation[] = communities.map((community) => ({
+  const cardCommunityData: CommunityForMap[] = communities.map((community) => ({
     id: community.id,
-    lat: community.lat,
-    lng: community.lng,
+    type: community.type,
+    name: community.name,
+    images: community.images,
+    averageRating: community.average_rating,
+    ageGroup: community.age_group,
+    location: {
+      lat: community.lat,
+      lng: community.lng,
+    },
   }));
 
   return (
     <div className="relative h-full w-full">
-      <DynamicMap locations={locations} enablePopups={true} />
+      <DynamicMap communities={cardCommunityData} enablePopups={true} />
       <Navbar />
     </div>
   );

@@ -2,17 +2,17 @@
 
 import { Marker, Popup } from 'react-leaflet';
 import { useMemo } from 'react';
-import { useRouter } from 'next/navigation';
 import { createLeafletIcon } from './iconUtils';
 import MarkerIcon from './MarkerIcon';
 import { useAppTheme } from '@/lib/hooks/useAppTheme';
-import Button from '@/components/ui/Button';
-import type { CommunitieLocation } from './types';
+
+import type { CommunityForMap, Coordinates } from '@/app/types/communityTypes';
+import CommunityCard from '../community/card';
 
 interface CommunitieMarkerProps {
-  location: CommunitieLocation;
+  location: Coordinates;
+  data?: CommunityForMap;
   enablePopup?: boolean;
-  onMarkerClick?: (id: string) => Promise<unknown>;
 }
 
 /**
@@ -23,11 +23,10 @@ interface CommunitieMarkerProps {
  */
 export default function CommunitieMarker({
   location,
+  data,
   enablePopup = false,
-  onMarkerClick,
 }: CommunitieMarkerProps) {
   const { isDark } = useAppTheme();
-  const router = useRouter();
 
   // Crear icono con color dinámico basado en tema
   const icon = useMemo(() => {
@@ -35,38 +34,11 @@ export default function CommunitieMarker({
     return createLeafletIcon(<MarkerIcon />, colorClass);
   }, [isDark]);
 
-  const handleClick = async () => {
-    if (enablePopup && onMarkerClick) {
-      await onMarkerClick(location.id);
-    }
-  };
-
-  const handleNavigate = () => {
-    router.push(`/comunidad/${location.id}`);
-  };
-
   return (
-    <Marker
-      position={[location.lat, location.lng]}
-      icon={icon}
-      eventHandlers={{
-        click: handleClick,
-      }}
-    >
-      {enablePopup && (
-        <Popup>
-          <div className="flex flex-col gap-2 p-2">
-            <p className="text-foreground-primary text-sm font-medium">
-              Ver detalles de la comunidad
-            </p>
-            <Button
-              onClick={handleNavigate}
-              variant="primary"
-              className="w-full"
-            >
-              Ver comunidad
-            </Button>
-          </div>
+    <Marker position={[location.lat, location.lng]} icon={icon}>
+      {enablePopup && data && (
+        <Popup className="custom-popup">
+          <CommunityCard data={data} isPopup />
         </Popup>
       )}
     </Marker>

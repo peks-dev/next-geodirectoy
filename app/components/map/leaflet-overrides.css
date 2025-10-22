@@ -1,0 +1,33 @@
+/* Override default Leaflet popup styles to remove unnecessary styling */
+
+/* Target custom popup class for more specific overrides */
+.custom-popup .leaflet-popup-content-wrapper {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.custom-popup .leaflet-popup-content {
+  margin: 0 !important;
+  line-height: normal !important;
+  min-height: auto !important;
+}
+
+.custom-popup .leaflet-popup-tip {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Ensure popup positioning still works */
+.custom-popup.leaflet-popup {
+  position: absolute !important;
+  z-index: 1000 !important;
+}
+
+/* Remove close button styling if present */
+.custom-popup .leaflet-popup-close-button {
+  display: none !important;
+}

@@ -4,9 +4,10 @@ import { useAppTheme } from '@/lib/hooks/useAppTheme';
 import CommunitieMarker from './CommunitieMarker';
 import type { MapProps } from './types';
 import 'leaflet/dist/leaflet.css';
+import './leaflet-overrides.css';
 
 export default function Map({
-  locations = [],
+  communities = [],
   enablePopups = false,
   onMarkerClick,
   center = { lat: 23.6345, lng: -102.5528 }, // Centro de México por defecto
@@ -48,12 +49,20 @@ export default function Map({
       />
 
       {/* Renderizar marcadores */}
-      {locations.map((location) => (
+      {communities.map((community) => (
         <CommunitieMarker
-          key={location.id}
-          location={location}
+          key={community.id}
+          location={community.location}
           enablePopup={enablePopups}
-          onMarkerClick={onMarkerClick}
+          data={{
+            id: community.id,
+            type: community.type,
+            name: community.name,
+            images: community.images,
+            ageGroup: community.ageGroup,
+            averageRating: community.averageRating,
+            location: community.location,
+          }}
         />
       ))}
 
