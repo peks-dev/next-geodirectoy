@@ -37,8 +37,8 @@ export default function CommunitieMarker({
   return (
     <Marker position={[location.lat, location.lng]} icon={icon}>
       {enablePopup && data && (
-        <Popup className="custom-popup">
-          <CommunityCard data={data} isPopup />
+        <Popup className="custom-popup" minWidth={300} maxWidth={500}>
+          <CommunityCard data={data} />
         </Popup>
       )}
     </Marker>
