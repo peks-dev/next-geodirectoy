@@ -3,6 +3,7 @@ import NavigationButton from '../../ui/Buttons/NavigationButton';
 import CloseIcon from '../../ui/svgs/CloseIcon';
 import Button from '../../ui/Button';
 import StarIcon from '../../ui/svgs/Star';
+import ImageSlider from '../../ui/Sliders/ImageSlider';
 interface Props {
   data: CommunityCard;
   isPopup?: boolean;
@@ -25,13 +26,11 @@ export default function CommunityCard({ data, isPopup = false }: Props) {
         ) : null}
       </header>
       <div className="transparent-container p-md">
-        <div>
-          {/*insertar un slider de swiper-js con deslizamiento vertical */}
-        </div>
-        <footer className="border-border-secondary flex justify-between border-t-2 pt-5">
+        <ImageSlider images={data.images} enableAutoplay enablePagination />
+        <footer className="border-border-secondary mt-5 flex justify-between border-t-2 pt-3">
           <ul className="flex grow items-center gap-12">
             <li className="flex items-center gap-3">
-              <figure className="text-light-4 h-[30px] w-[30px]">
+              <figure className="h-[30px] w-[30px]">
                 <StarIcon />
               </figure>
               <p className="neon-effect font-heading text-sm">
