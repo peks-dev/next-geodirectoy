@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import UserIcon from '../ui/svgs/UserIcon';
+import { UserIcon } from '../ui/svgs/';
 
 interface ProfileBadgeProps {
   imageUrl?: string;

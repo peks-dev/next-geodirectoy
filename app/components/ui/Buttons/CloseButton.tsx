@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '../Button';
-import CloseIcon from '../svgs/CloseIcon';
+import { CloseIcon } from '../svgs/';
 
 interface CloseButtonProps {
   onClick?: () => void;

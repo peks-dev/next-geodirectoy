@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 import { useModalStore } from './useModalStore';
 import Button from '@/components/ui/Button';
 import FlexBox from '../containers/FlexBox';
-import CloseIcon from '../svgs/CloseIcon';
+import { CloseIcon } from '../svgs/';
 
 export const Modal = () => {
   const {

@@ -5,7 +5,7 @@ import Button from '@/app/components/ui/Button';
 import FlexBox from '@/app/components/ui/containers/FlexBox';
 import ScheduleConstructor from './components/ScheduleConstructor';
 import ScheduleItem from '@/app/components/community/schedule/ScheduleItem';
-import CloseIcon from '@/app/components/ui/svgs/CloseIcon';
+import { CloseIcon } from '@/app/components/ui/svgs/';
 import { useContributionStore } from '../../../store/useContributionStore';
 
 const StepSchedule = () => {

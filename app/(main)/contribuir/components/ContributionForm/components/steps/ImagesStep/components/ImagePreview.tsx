@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState, useEffect } from 'react'; // Importamos useState y useEffect
 import FlexBox from '@/app/components/ui/containers/FlexBox';
-import CloseIcon from '@/app/components/ui/svgs/CloseIcon';
+import { CloseIcon } from '@/app/components/ui/svgs/';
 import Button from '@/app/components/ui/Button';
 
 interface ImagePreviewProps {

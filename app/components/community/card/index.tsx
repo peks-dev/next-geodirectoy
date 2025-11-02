@@ -1,8 +1,8 @@
 import type { CommunityCard } from '@/app/types/communityTypes';
 import NavigationButton from '../../ui/Buttons/NavigationButton';
-import CloseIcon from '../../ui/svgs/CloseIcon';
+import { CloseIcon, StarIcon } from '../../ui/svgs/';
 import Button from '../../ui/Button';
-import StarIcon from '../../ui/svgs/Star';
+
 import ImageSlider from '../../ui/Sliders/ImageSlider';
 interface Props {
   data: CommunityCard;

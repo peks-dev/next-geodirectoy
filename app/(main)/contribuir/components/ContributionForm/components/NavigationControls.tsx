@@ -1,9 +1,8 @@
 'use client';
 import Button from '@/app/components/ui/Button';
 import FlexBox from '@/app/components/ui/containers/FlexBox';
-import TriangleIcon from '@/app/components/ui/svgs/Triangle';
-import CloseIcon from '@/app/components/ui/svgs/CloseIcon';
-import SendIcon from '@/app/components/ui/svgs/SendIcon';
+import { TriangleIcon, CloseIcon, SendIcon } from '@/app/components/ui/svgs/';
+
 import { useRouter } from 'next/navigation';
 import { useModal } from '@/components/ui/Modal';
 

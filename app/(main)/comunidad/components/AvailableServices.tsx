@@ -1,7 +1,10 @@
-import TransportIcon from '@/app/components/ui/svgs/TransportIcon';
-import BathroomIcon from '@/app/components/ui/svgs/BathroomIcon';
-import WifiIcon from '@/app/components/ui/svgs/WifiIcon';
-import StoreIcon from '@/app/components/ui/svgs/StoreIcon';
+import {
+  TransportIcon,
+  BathroomIcon,
+  WifiIcon,
+  StoreIcon,
+} from '@/app/components/ui/svgs/';
+
 import type { Service } from '@/app/types/communityTypes';
 import ServiceItem from '@/app/components/ui/ServiceBadge';
 

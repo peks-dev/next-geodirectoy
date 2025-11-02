@@ -1,9 +1,12 @@
 import DinamicSlider from '@/app/components/ui/Sliders/DinamicSlider';
-import TextIcon from '@/app/components/ui/svgs/TextIcon';
-import ClockIcon from '@/app/components/ui/svgs/ClockIcon';
-import TargetIcon from '@/app/components/ui/svgs/LocationIcon';
-import CommentsIcon from '@/app/components/ui/svgs/CommentsIcon';
-import DetailsIcon from '@/app/components/ui/svgs/DetailsIcon';
+import {
+  TextIcon,
+  ClockIcon,
+  CommentsIcon,
+  DetailsIcon,
+  LocationIcon,
+} from '@/app/components/ui/svgs/';
+
 import type { CommunityFullResponse } from '@/app/types/communityTypes';
 
 // sections
@@ -38,7 +41,7 @@ export default function ContentCommunity({
           location={{ lat: community.lat, lng: community.lng }}
         />
       ),
-      icon: <TargetIcon />,
+      icon: <LocationIcon />,
       label: 'ubicación',
     },
     {

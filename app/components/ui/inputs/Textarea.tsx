@@ -1,5 +1,5 @@
 import { TextareaHTMLAttributes, forwardRef } from 'react';
-import Corner from '@/app/components/ui/svgs/Corner';
+import { CornerIcon } from '@/app/components/ui/svgs/';
 
 type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
 
@@ -41,10 +41,14 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <div className={wrapperClasses}>
         <textarea ref={ref} className={textareaClasses} {...props} />
-        <Corner position="top-left" size="small" variant="interactive" />
-        <Corner position="top-right" size="small" variant="interactive" />
-        <Corner position="bottom-left" size="small" variant="interactive" />
-        <Corner position="bottom-right" size="small" variant="interactive" />
+        <CornerIcon position="top-left" size="small" variant="interactive" />
+        <CornerIcon position="top-right" size="small" variant="interactive" />
+        <CornerIcon position="bottom-left" size="small" variant="interactive" />
+        <CornerIcon
+          position="bottom-right"
+          size="small"
+          variant="interactive"
+        />
       </div>
     );
   }

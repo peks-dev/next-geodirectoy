@@ -1,4 +1,4 @@
-const TargetIcon = () => (
+const LocationIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="100%"
@@ -19,4 +19,4 @@ const TargetIcon = () => (
   </svg>
 );
 
-export default TargetIcon;
+export default LocationIcon;

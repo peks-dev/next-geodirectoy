@@ -1,7 +1,7 @@
 import RetasIcon from '@/components/ui/svgs/RetasIcon';
 import ClubIcon from '@/components/ui/svgs/ClubIcon';
 import FlexBox from '@/app/components/ui/containers/FlexBox';
-import CornerIcon from '@/app/components/ui/svgs/Corner';
+import { CornerIcon } from '@/app/components/ui/svgs/';
 import { useContributionStore } from '../../store/useContributionStore';
 import { type CommunityType } from '@/app/types/communityTypes';
 
