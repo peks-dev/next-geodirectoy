@@ -9,10 +9,10 @@ import './leaflet-overrides.css';
 export default function Map({
   communities = [],
   enablePopups = false,
-  onMarkerClick,
   center = { lat: 23.6345, lng: -102.5528 }, // Centro de México por defecto
   zoom = 5, // Zoom país completo por defecto
   children,
+  location = null,
 }: MapProps) {
   const { mounted, isDark } = useAppTheme();
 
@@ -39,7 +39,7 @@ export default function Map({
       zoom={zoom}
       minZoom={5}
       maxZoom={18}
-      className="z-0 h-full w-full"
+      className="swiper-no-swiping z-0 h-full w-full"
       scrollWheelZoom={true}
     >
       <TileLayer
@@ -65,6 +65,9 @@ export default function Map({
           }}
         />
       ))}
+
+      {/* renderizar una ubicacion sencilla */}
+      {location ? <CommunitieMarker location={location} /> : null}
 
       {/* Renderizar DraggableMarker u otros children */}
       {children}
