@@ -1,0 +1,24 @@
+import type { Coordinates } from '@/app/types/communityTypes';
+import DynamicMap from '@/components/map/DynamicMap';
+import HeadingSection from '../HeadingSection';
+import OpenInMaps from '../OpenInMaps';
+
+export default function LocationSection({
+  location,
+}: {
+  location: Coordinates;
+}) {
+  return (
+    <div className="flex h-full w-full flex-col">
+      <HeadingSection text="ubicacion" />
+      <div className="relative h-full w-full grow">
+        <OpenInMaps lat={location.lat} lng={location.lng} />
+        <DynamicMap
+          location={location}
+          center={location}
+          zoom={13}
+        ></DynamicMap>
+      </div>
+    </div>
+  );
+}

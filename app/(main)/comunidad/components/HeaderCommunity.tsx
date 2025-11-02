@@ -1,36 +1,34 @@
 import ImageSlider from '@/app/components/ui/Sliders/ImageSlider';
 import NavigationButton from '@/app/components/ui/Buttons/NavigationButton';
-import type { CommunityType } from '@/app/types/communityTypes';
+import ShareButton from './ShareButton';
 
 interface Props {
   name: string;
   images: string[];
   url: string;
-  type: CommunityType;
+  description: string;
 }
 
 export default function HeaderCommunity(data: Props) {
   return (
-    <section className="flex grow-0 flex-col gap-4 sm:w-full lg:max-w-[700px]">
+    <section className="flex flex-shrink-0 flex-col gap-4 lg:max-w-[700px]">
       <header className="flex justify-between">
-        <div className="flex items-start">
+        <div className="flex items-start gap-6">
           <NavigationButton url="/" variant="primary">
             mapa
           </NavigationButton>
+          <ShareButton
+            name={data.name}
+            url={data.url}
+            description={data.description}
+          />
         </div>
-        <h2 className="flex flex-col items-end gap-2.5">
-          <span className="font-oxanium text-2xl">{data.type}</span>
-          <span className="font-heading neon-effect text-md uppercase">
-            {data.name}
-          </span>
+        <h2 className="font-heading neon-effect text-md uppercase">
+          {data.name}
         </h2>
       </header>
-      <ImageSlider
-        images={data.images}
-        enablePagination
-        enableAutoplay
-        enableNavigation
-      />
+
+      <ImageSlider images={data.images} enablePagination enableAutoplay />
     </section>
   );
 }

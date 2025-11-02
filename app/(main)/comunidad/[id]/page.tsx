@@ -1,3 +1,4 @@
+import { headers } from 'next/headers';
 import { getCommunityById } from '@/lib/data/communities';
 import { notFound } from 'next/navigation';
 import type { CommunityFullResponse } from '@/app/types/communityTypes';
@@ -21,16 +22,22 @@ export default async function CommunityPage({ params }: PageProps) {
     notFound();
   }
 
+  // Construir la URL actual
+  const headersList = await headers();
+  const host = headersList.get('host');
+  const protocol = headersList.get('x-forwarded-proto') ?? 'http';
+  const pathname = `/comunidad/${id}`;
+  const currentUrl = `${protocol}://${host}${pathname}`;
+
   return (
     <div className="gap-lg flex h-full w-full flex-col p-4 lg:flex-row">
-      {/* Header con tipo y nombre */}
       <HeaderCommunity
         name={community.name}
-        type={community.type}
         images={community.images}
-        url={'hola'}
+        description={community.description}
+        url={currentUrl}
       />
-      <ContentCommunity />
+      <ContentCommunity community={community} />
     </div>
   );
 }
