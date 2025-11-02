@@ -6,8 +6,7 @@ const buttonStyles = {
   variants: {
     primary:
       'text-dark-primary px-4 py-2 bg-background-accent w-full text-sm font-bold uppercase hover-neon hover:-translate-y-0.5 active:scale-105',
-    secondary:
-      'bg-transparent text-foreground-accent text-xs hover-neon-text px-4 py-2',
+    secondary: 'text-foreground-accent text-xs hover-neon-text px-4 py-2',
     tertiary:
       'text-xs text-accent-primary hover:text-accent-primary text-foreground-accent',
     delete:
@@ -15,11 +14,12 @@ const buttonStyles = {
     icon: 'self-center p-1 hover:text-foreground-accent text-accent-primary hover-neon-text',
   },
   sizes: {
-    default: 'w-(--icon-small-size) h-(--icon-small-size)', // Tamaño base para icono (ancho/alto)
-    sm: 'w-(--icon-extra-small-size) h-(--icon-extra-small-size)', // Tamaño pequeño para icono
+    default: 'w-(--icon-small-size) h-(--icon-small-size)',
+    sm: 'w-(--icon-extra-small-size) h-(--icon-extra-small-size)',
+    md: 'w-(--icon-md) h-(--icon-md)',
     xsm: 'w-(--icon-xsm) h-(--icon-xsm)',
-    lg: 'w-(--icon-large-size) h-(--icon-large-size)', // Tamaño grande para icono
-    xl: 'w-(--icon-extra-large-size) h-(--icon-extra-large-size)', // Tamaño extra grande para icono
+    lg: 'w-(--icon-large-size) h-(--icon-large-size)',
+    xl: 'w-(--icon-extra-large-size) h-(--icon-extra-large-size)',
   },
 };
 

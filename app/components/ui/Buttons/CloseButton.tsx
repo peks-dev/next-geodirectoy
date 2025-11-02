@@ -1,8 +1,10 @@
+'use client';
+
 import Button from '../Button';
 import CloseIcon from '../svgs/CloseIcon';
 
 interface CloseButtonProps {
-  onClick: () => void;
+  onClick?: () => void;
   'aria-label'?: string;
   className?: string; // Add className prop
 }
@@ -14,7 +16,7 @@ export default function CloseButton({
 }: CloseButtonProps) {
   return (
     <Button
-      variant="icon"
+      variant="delete"
       onClick={onClick}
       aria-label={ariaLabel}
       className={className}
