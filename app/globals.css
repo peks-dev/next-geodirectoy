@@ -83,8 +83,10 @@
   /*tamañode iconos*/
   --icon-small-size: clamp(2rem, 2.3vw, 2.2rem);
   --icon-xsm: clamp(1.5rem, 2vw, 1.9rem);
+  --icon-md: clamp(2.6rem, 3vw, 3rem);
+  --icon-lg: clamp(2.8rem, 3.5vw, 3.5rem);
+  --icon-xl: clamp(4.5rem, 5vw, 5rem);
 
-  /* Radios de borde personalizados */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 1rem;
