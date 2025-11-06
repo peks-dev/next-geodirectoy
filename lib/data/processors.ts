@@ -130,11 +130,11 @@ export function transformToCommunityForMap(
     id: data.id,
     type: data.type,
     name: data.name,
+    images: data.images,
     location: {
       lat: data.lat,
       lng: data.lng,
     },
-    city: data.city,
     average_rating: data.average_rating,
     total_reviews: data.total_reviews,
   };
