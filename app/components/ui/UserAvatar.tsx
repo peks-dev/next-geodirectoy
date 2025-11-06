@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import DefaultUserImage from './DefaultUserImage';
-import { getIconSizeClass } from '@/lib/utils/geIconSize';
+import { getIconSizeClass } from '@/lib/utils/getIconSize';
 
 type IconSize = 'xsm' | 'small' | 'md' | 'lg' | 'xl';
 
@@ -22,7 +22,7 @@ export default function UserAvatar({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-full ${sizeClass} ${className}`}
+      className={`relative flex-shrink-0 overflow-hidden rounded-full ${sizeClass} ${className}`}
     >
       <Image
         src={avatarUrl}

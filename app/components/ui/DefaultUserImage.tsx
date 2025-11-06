@@ -1,5 +1,5 @@
 import { UserIcon } from './svgs';
-import { getIconSizeClass } from '@/lib/utils/geIconSize';
+import { getIconSizeClass } from '@/lib/utils/getIconSize';
 
 type IconSize = 'xsm' | 'small' | 'md' | 'lg' | 'xl';
 
