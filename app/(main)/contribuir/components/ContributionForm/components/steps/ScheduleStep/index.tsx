@@ -5,7 +5,6 @@ import Button from '@/app/components/ui/Button';
 import FlexBox from '@/app/components/ui/containers/FlexBox';
 import ScheduleConstructor from './components/ScheduleConstructor';
 import ScheduleItem from '@/app/components/community/schedule/ScheduleItem';
-import { CloseIcon } from '@/app/components/ui/svgs/';
 import { useContributionStore } from '../../../store/useContributionStore';
 
 const StepSchedule = () => {
@@ -30,15 +29,11 @@ const StepSchedule = () => {
             ) : (
               <FlexBox direction="col" align="center" className="gap-md">
                 {schedule.map((item, index) => (
-                  <ScheduleItem key={index} data={item}>
-                    <Button
-                      variant="delete"
-                      onClick={() => removeSchedule(index)}
-                      aria-label={`Eliminar horario ${index}`}
-                    >
-                      <CloseIcon />
-                    </Button>
-                  </ScheduleItem>
+                  <ScheduleItem
+                    key={index}
+                    data={item}
+                    onDelete={() => removeSchedule(index)}
+                  />
                 ))}
               </FlexBox>
             )}
