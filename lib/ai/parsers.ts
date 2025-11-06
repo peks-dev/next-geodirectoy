@@ -2,6 +2,29 @@ import type { ImageAnalysisResult } from '@/app/(main)/contribuir/analysis/types
 import type { TextAnalysisResult } from '@/app/(main)/contribuir/analysis/types';
 import { AIServiceError } from '@/lib/errors/aiErrors';
 
+export function parseSimpleTextAnalysisResponse(
+  rawResponse: string,
+  providerName: string
+): unknown {
+  try {
+    const cleanResponse = rawResponse
+      .replace(/```json\n?/gi, '')
+      .replace(/```\n?/g, '')
+      .trim();
+
+    if (!cleanResponse) {
+      throw new Error('La respuesta de la IA está vacía.');
+    }
+
+    return JSON.parse(cleanResponse);
+  } catch (error) {
+    throw new AIServiceError(
+      `No se pudo interpretar la respuesta JSON del análisis: ${error instanceof Error ? error.message : 'Respuesta mal formada'}`,
+      providerName
+    );
+  }
+}
+
 export function parseCourtAnalysisResponse(
   rawResponse: string,
   providerName: string

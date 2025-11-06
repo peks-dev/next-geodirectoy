@@ -20,7 +20,7 @@ export class ImageValidationError extends Error {
 }
 
 export class AIUnavailableError extends Error {
-  constructor(provider: string) {
+  constructor(public provider: string) {
     super(`El servicio de IA (${provider}) no está disponible`);
     this.name = 'AIUnavailableError';
   }
