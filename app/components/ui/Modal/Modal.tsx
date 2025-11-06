@@ -23,7 +23,6 @@ export const Modal = () => {
 
   if (!isOpen) return null;
 
-  // ✨ NUEVA FUNCIÓN
   const renderContent = () => {
     if (ContentComponent) {
       return <ContentComponent {...(contentProps || {})} />;
@@ -49,7 +48,9 @@ export const Modal = () => {
           align="center"
           justify="between"
         >
-          <h2 className="neon-effect text-sm font-bold uppercase">{title}</h2>
+          <h2 className="neon-effect text-light-secondary text-sm font-bold uppercase">
+            {title}
+          </h2>
           <Button
             variant="icon"
             onClick={hideConfirmation}
@@ -59,11 +60,12 @@ export const Modal = () => {
           </Button>
         </FlexBox>
         <div className="transparent-container p-sm">
-          {renderContent()} {/* ✨ CAMBIO PRINCIPAL */}
+          {renderContent()}
           <Button
             variant={variant}
             onClick={executeConfirmation}
             disabled={isLoading}
+            className="mt-3"
           >
             {isLoading ? <p>...cargando</p> : confirmText}
           </Button>
