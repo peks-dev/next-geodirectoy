@@ -1,4 +1,3 @@
-import React from 'react';
 import { Category, Gender } from '@/app/types/communityTypes';
 import ItemContainer from '@/components/ui/containers/ItemList';
 
@@ -46,9 +45,11 @@ const getAgeRange = (min: number, max: number | null) => {
   return `${min}-${max}`;
 };
 
-const CategoryCardInfo = ({ category }: CategoryCardInfoProps) => {
+export default function CategoryCardDisplay({
+  category,
+}: CategoryCardInfoProps) {
   return (
-    <ItemContainer className="h-full max-h-[170px] min-w-[130px]">
+    <ItemContainer className="h-full max-h-[170px] max-w-[200px] min-w-[130px]">
       <div className="mb-1.5 text-center">
         <h4 className="text-3xl font-bold uppercase">{category.category}</h4>
         <span className="text-2xl">
@@ -77,6 +78,4 @@ const CategoryCardInfo = ({ category }: CategoryCardInfoProps) => {
       </div>
     </ItemContainer>
   );
-};
-
-export default CategoryCardInfo;
+}

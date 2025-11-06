@@ -3,7 +3,7 @@ import ToggleInput from '@/app/components/ui/inputs/Toggle';
 import { GENDERS, GENDER_LABELS } from './constants';
 import type { Category, Gender } from '@/app/types/communityTypes';
 
-interface CategoryCardProps {
+interface Props {
   category: Omit<Category, 'genders'>;
   isSelected: boolean;
   selectedCat?: Category;
@@ -11,13 +11,13 @@ interface CategoryCardProps {
   onGenderChange: (category: string, gender: Gender, checked: boolean) => void;
 }
 
-export default function CategoryCard({
+export default function CategoryCardSelector({
   category,
   isSelected,
   selectedCat,
   onToggle,
   onGenderChange,
-}: CategoryCardProps) {
+}: Props) {
   return (
     <FlexBox
       className={`py-sm bg-background-interactive text-accent-primary hover:border-accent-primary cursor-pointer border-2 ${

@@ -17,7 +17,7 @@ export default function CategoriesListControllers({
       <div className="flex gap-2">
         <button
           onClick={() => setFilter('all')}
-          className={`cursor-pointer rounded px-2 py-0.5 text-2xl font-bold transition-all ${
+          className={`cursor-pointer px-2 py-0.5 text-2xl font-bold transition-all ${
             filter === 'all'
               ? 'bg-accent-primary text-dark-primary neon-shadow'
               : 'text-accent-primary bg-background-interactive'
@@ -27,7 +27,7 @@ export default function CategoriesListControllers({
         </button>
         <button
           onClick={() => setFilter('male')}
-          className={`rounded px-2 py-0.5 text-2xl font-medium transition-all ${
+          className={`px-2 py-0.5 text-2xl font-medium transition-all ${
             filter === 'male'
               ? 'bg-blue-500 text-white'
               : 'text-accent-primary bg-background-interactive'
@@ -37,7 +37,7 @@ export default function CategoriesListControllers({
         </button>
         <button
           onClick={() => setFilter('female')}
-          className={`rounded px-2 py-0.5 text-2xl font-medium transition-all ${
+          className={`px-2 py-0.5 text-2xl font-medium transition-all ${
             filter === 'female'
               ? 'bg-pink-500 text-white'
               : 'text-accent-primary bg-background-interactive'
@@ -47,7 +47,7 @@ export default function CategoriesListControllers({
         </button>
         <button
           onClick={() => setFilter('mixed')}
-          className={`rounded px-2 py-0.5 text-2xl font-medium transition-all ${
+          className={`px-2 py-0.5 text-2xl font-medium transition-all ${
             filter === 'mixed'
               ? 'bg-purple-500 text-white'
               : 'text-accent-primary bg-background-interactive'

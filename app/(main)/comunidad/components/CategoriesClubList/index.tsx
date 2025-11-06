@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { Category, Gender } from '@/app/types/communityTypes';
-import CategoryCardInfo from '@/app/(main)/comunidad/components/CategoriesClubList/CategoryCardInfo';
+import CategoryCardDisplay from './CategoryCardDisplay';
 import CategoriesListControllers from './CategoriesListControllers';
 
 interface CategoriesInfoProps {
@@ -23,11 +23,11 @@ export default function CategoriesClubList({
       <CategoriesListControllers filter={filter} setFilter={setFilter} />
       {/* Scroll horizontal de categorías */}
       <div className="-mx-3 flex-1 overflow-x-auto overflow-y-hidden px-3">
-        <div className="flex h-full gap-5 pb-2">
+        <ul className="flex h-full gap-5 pb-2">
           {filteredCategories.map((cat, idx) => (
-            <CategoryCardInfo key={idx} category={cat} />
+            <CategoryCardDisplay key={idx} category={cat} />
           ))}
-        </div>
+        </ul>
       </div>
     </div>
   );

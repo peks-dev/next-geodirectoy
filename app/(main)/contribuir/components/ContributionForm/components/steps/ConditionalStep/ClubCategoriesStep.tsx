@@ -1,7 +1,7 @@
 import FlexBox from '@/app/components/ui/containers/FlexBox';
 import { POSSIBLE_CATEGORIES } from './constants';
 import { useCategoriesLogic } from './useCategoriesLogic';
-import CategoryCard from './CategoryCard';
+import CategoryCardSelector from './CategoryCardSelector';
 
 export default function ClubCategoriesStep() {
   const { categories, toggleCategory, handleGenderChange } =
@@ -23,7 +23,7 @@ export default function ClubCategoriesStep() {
             );
 
             return (
-              <CategoryCard
+              <CategoryCardSelector
                 key={cat.category}
                 category={cat}
                 isSelected={isSelected}
