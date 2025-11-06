@@ -1,10 +1,33 @@
-import { TextareaHTMLAttributes, forwardRef } from 'react';
+import {
+  ChangeEvent,
+  TextareaHTMLAttributes,
+  forwardRef,
+  useEffect,
+  useState,
+} from 'react';
 import { CornerIcon } from '@/app/components/ui/svgs/';
 
 type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
 
 const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className = '', ...props }, ref) => {
+  ({ className = '', onChange, ...props }, ref) => {
+    const { maxLength } = props;
+    const [currentLength, setCurrentLength] = useState(
+      (props.value || props.defaultValue || '').toString().length
+    );
+
+    useEffect(() => {
+      if (props.value !== undefined) {
+        setCurrentLength(props.value.toString().length);
+      }
+    }, [props.value]);
+
+    const handleOnChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+      setCurrentLength(event.target.value.length);
+      if (onChange) {
+        onChange(event);
+      }
+    };
     const wrapperClasses = [
       'group',
       'relative',
@@ -32,15 +55,19 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       'outline-none',
       'border-none',
       'bg-transparent',
-      'text-foreground',
-      'text-inherit',
-      'placeholder:text-[--color-border]',
+      'text-foreground-on-interactive',
+      'placeholder:text-(--color-border)',
       'resize-none', // Prevent resizing
     ].join(' ');
 
     return (
       <div className={wrapperClasses}>
-        <textarea ref={ref} className={textareaClasses} {...props} />
+        <textarea
+          ref={ref}
+          className={textareaClasses}
+          onChange={handleOnChange}
+          {...props}
+        />
         <CornerIcon position="top-left" size="small" variant="interactive" />
         <CornerIcon position="top-right" size="small" variant="interactive" />
         <CornerIcon position="bottom-left" size="small" variant="interactive" />
@@ -49,6 +76,11 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           size="small"
           variant="interactive"
         />
+        {maxLength && (
+          <span className="text-foreground-on-interactive absolute right-3 bottom-2 text-xs transition-colors duration-200 ease-in-out">
+            {currentLength}/{maxLength}
+          </span>
+        )}
       </div>
     );
   }
