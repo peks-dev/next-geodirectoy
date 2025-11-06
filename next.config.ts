@@ -5,9 +5,16 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'bvvmbnevtogthudqnjjv.supabase.co', // El ID de tu proyecto de Supabase
+        hostname: 'bvvmbnevtogthudqnjjv.supabase.co',
         port: '',
-        pathname: '/storage/v1/object/public/community-images/**', // Sé específico sobre la ruta del bucket
+        pathname: '/storage/v1/object/public/community-images/**',
+      },
+      // Nueva regla para el bucket de avatares
+      {
+        protocol: 'https',
+        hostname: 'bvvmbnevtogthudqnjjv.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/avatars/**',
       },
     ],
   },
