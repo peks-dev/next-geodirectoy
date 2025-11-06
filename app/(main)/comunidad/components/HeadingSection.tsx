@@ -1,7 +1,14 @@
-export default function HeadingSection({ text }: { text: string }) {
+import React from 'react';
+interface Props {
+  children?: React.ReactNode;
+  text: string;
+}
+
+export default function HeadingSection({ text, children }: Props) {
   return (
-    <h2 className="border-border-secondary text-md text-border mb-4 flex-shrink-0 border-b-2 uppercase">
-      {text}
-    </h2>
+    <div className="border-border-secondary mb-4 flex flex-shrink-0 justify-between border-b-2 p-2">
+      <h2 className="text-md text-border uppercase">{text}</h2>
+      {children}
+    </div>
   );
 }

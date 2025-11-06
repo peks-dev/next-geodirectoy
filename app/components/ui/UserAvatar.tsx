@@ -16,7 +16,6 @@ export default function UserAvatar({
   className = '',
 }: UserAvatarProps) {
   const sizeClass = getIconSizeClass(size);
-  console.log(avatarUrl);
   if (!avatarUrl) {
     return <DefaultUserImage size={size} />;
   }

@@ -1,6 +1,7 @@
 import HeadingSection from '../HeadingSection';
 import CategoriesClubList from '../CategoriesClubList';
-import UserBadge from '@/components/profile/UserBadge';
+import DetailsBar from '@/app/components/ui/DetailsBar';
+
 import type {
   AgeGroup,
   CommunityType,
@@ -38,32 +39,15 @@ export default function DescriptionSection({
     <section className="flex h-full w-full flex-col">
       <div className="grow">
         <HeadingSection text="general" />
-        <div className="gap-md bg-background border-border mb-md flex justify-around rounded-md p-2">
-          <p className="flex flex-wrap items-center justify-center gap-2">
-            <span className="font-heading text-center text-2xl uppercase">
-              tipo:
-            </span>
-            <span className="font-heading neon-effect text-4xl uppercase">
-              {LABELS.types[type]}
-            </span>
-          </p>
-          {ageGroup && (
-            <p className="flex flex-wrap items-center justify-center gap-2">
-              <span className="font-heading text-center text-2xl uppercase">
-                edades:
-              </span>
-              <span className="font-heading neon-effect text-4xl uppercase">
-                {LABELS.ageGroups[ageGroup]}
-              </span>
-            </p>
-          )}
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            <span className="font-heading text-center text-2xl uppercase">
-              autor:
-            </span>
-            <UserBadge name="peks" />
-          </div>
-        </div>
+        <DetailsBar
+          data={[
+            { label: 'tipo', value: LABELS.types[type] },
+            ...(ageGroup
+              ? [{ label: 'edades', value: LABELS.ageGroups[ageGroup] }]
+              : []),
+            { label: 'autor', value: 'peks' },
+          ]}
+        />
         <p>{description}</p>
       </div>
       {categories && <CategoriesClubList categories={categories} />}

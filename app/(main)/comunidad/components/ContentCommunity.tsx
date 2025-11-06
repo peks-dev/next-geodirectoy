@@ -13,7 +13,7 @@ import type { CommunityFullResponse } from '@/app/types/communityTypes';
 import DescriptionSection from './sections/Description';
 import LocationSection from './sections/Location';
 import ScheduleSection from './sections/Schedule';
-import CommentsSection from './sections/Comments';
+import ReviewsSection from './sections/Reviews';
 import DetailsSection from './sections/Details';
 
 export default function ContentCommunity({
@@ -52,7 +52,13 @@ export default function ContentCommunity({
     },
     {
       id: 'comments',
-      component: <CommentsSection />,
+      component: (
+        <ReviewsSection
+          average_rating={community.average_rating}
+          total_reviews={community.total_reviews}
+          community_id={community.id}
+        />
+      ),
       icon: <CommentsIcon />,
       label: 'comentarios',
     },

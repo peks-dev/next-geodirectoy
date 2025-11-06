@@ -173,6 +173,7 @@ export interface CommunityNearbyResponse {
 export interface CommunityMapResponse {
   id: string;
   type: CommunityType;
+  images: string[];
   name: string;
   lat: number;
   lng: number;
@@ -211,8 +212,8 @@ export interface CommunityForMap {
   name: string;
   images: string[];
   location: Coordinates;
-  averageRating: number;
-  ageGroup?: AgeGroup | null;
+  average_rating: number;
+  total_reviews: number;
 }
 
 // ============================================
