@@ -23,7 +23,7 @@ export default function ServiceItem({
         </div>
         <div className="flex-1">
           <div className="flex">
-            <p className={`font-heading text-5x1 text-center uppercase`}>
+            <p className={`font-heading text-center text-sm uppercase`}>
               {label}
             </p>
           </div>

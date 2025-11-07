@@ -49,10 +49,10 @@ export default function CategoryCardDisplay({
   category,
 }: CategoryCardInfoProps) {
   return (
-    <ItemContainer className="h-full max-h-[170px] max-w-[200px] min-w-[130px]">
+    <ItemContainer className="h-full max-h-[250px] max-w-[160px] min-w-[130px]">
       <div className="mb-1.5 text-center">
-        <h4 className="text-3xl font-bold uppercase">{category.category}</h4>
-        <span className="text-2xl">
+        <h4 className="text-md font-bold uppercase">{category.category}</h4>
+        <span className="text-xs font-bold">
           {getAgeRange(category.min_age, category.max_age)} años
         </span>
       </div>
@@ -69,7 +69,7 @@ export default function CategoryCardDisplay({
               <span className={`text-3xl ${details.iconClass}`}>
                 {details.icon}
               </span>
-              <span className={`text-2xl font-bold ${details.textClass}`}>
+              <span className={`p-1 text-xs font-bold ${details.textClass}`}>
                 {details.label}
               </span>
             </div>

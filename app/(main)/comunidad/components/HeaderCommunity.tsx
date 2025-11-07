@@ -23,7 +23,7 @@ export default function HeaderCommunity(data: Props) {
             description={data.description}
           />
         </div>
-        <h2 className="font-heading neon-effect text-md uppercase">
+        <h2 className="font-heading neon-effect text-lg uppercase">
           {data.name}
         </h2>
       </header>

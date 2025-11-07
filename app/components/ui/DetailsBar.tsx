@@ -13,10 +13,10 @@ export default function DetailsBar({ data }: Props) {
           key={index}
           className="flex flex-wrap items-center justify-center gap-2"
         >
-          <span className="font-heading text-light-secondary text-center text-2xl uppercase">
-            {stat.label}
+          <span className="font-heading text-light-secondary text-center text-xs uppercase">
+            {`${stat.label}:`}
           </span>
-          <span className="font-heading neon-effect text-light-secondary text-4xl uppercase">
+          <span className="font-heading neon-effect text-light-secondary text-sm uppercase">
             {stat.value}
           </span>
         </p>

@@ -11,12 +11,12 @@ export default function ScheduleItem({ data, onDelete }: Props) {
   return (
     <ItemContainer deleteFn={onDelete && onDelete}>
       <div>
-        <p className="text-sm">{data.days.join(', ')}</p>
-        <div className="gap-md mt-1 flex items-center">
+        <p className="text-sm font-bold">{data.days.join(', ')}</p>
+        <div className="gap-md mt-2 flex items-center">
           <figure className="h-[20px] w-[20px]">
             <ClockIcon />
           </figure>
-          <p>
+          <p className="text-base">
             {data.time.start} - {data.time.end}
           </p>
         </div>

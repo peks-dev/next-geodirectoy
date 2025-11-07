@@ -1,8 +1,5 @@
 /* Importa las capacidades de Tailwind v4. Esto también maneja @tailwind base, components, utilities. */
 @import 'tailwindcss';
-:root {
-  font-size: 10px;
-}
 
 /* --- CONFIGURACIÓN DE THEME PARA TAILWIND V4 --- */
 @theme {
@@ -147,6 +144,9 @@
 
 /* --- RESET CSS --- */
 @layer base {
+  :root {
+    font-size: 10px !important;
+  }
   * {
     box-sizing: border-box;
     margin: 0;

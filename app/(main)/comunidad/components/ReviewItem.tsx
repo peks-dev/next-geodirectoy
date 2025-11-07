@@ -19,8 +19,8 @@ export default function ReviewItem({ data, user, onDelete }: ReviewItemProps) {
       <div className="gap-md flex">
         <UserAvatar avatarUrl={data.profiles.avatar_url} size="md" />
         <div>
-          <h3 className="text-4xl uppercase">{data.profiles.name}</h3>
-          <p className="text-2xs">{data.comment}</p>
+          <h3 className="text-md uppercase">{data.profiles.name}</h3>
+          <p className="text-base">{data.comment}</p>
         </div>
       </div>
     </ItemContainer>
