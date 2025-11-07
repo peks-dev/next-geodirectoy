@@ -165,7 +165,9 @@ export default function ReviewsSection({
           { label: 'valoración promedio', value: average_rating },
         ]}
       />
-      <div className="grow overflow-auto">{renderContent()}</div>
+      <ul className="gap-md flex grow flex-col overflow-auto pb-4">
+        {renderContent()}
+      </ul>
     </div>
   );
 }
