@@ -12,7 +12,7 @@ export default function DefaultUserImage({
 }: DefaultUserImageProps) {
   const sizeClass = getIconSizeClass(size);
   return (
-    <figure className={sizeClass}>
+    <figure className={`flex-shrink-0 ${sizeClass}`}>
       <UserIcon />
     </figure>
   );
