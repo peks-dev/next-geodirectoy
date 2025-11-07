@@ -27,8 +27,8 @@ interface Props {
 }
 
 export default function ReviewsSection({
-  average_rating,
-  total_reviews,
+  average_rating: initialAverageRating,
+  total_reviews: initialTotalReviews,
   community_id,
 }: Props) {
   const { showConfirmation } = useModalStore();
@@ -36,6 +36,10 @@ export default function ReviewsSection({
   const [reviews, setReviews] = useState<DbReviewResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Estados locales para el conteo y promedio de valoraciones
+  const [totalReviews, setTotalReviews] = useState(initialTotalReviews);
+  const [averageRating, setAverageRating] = useState(initialAverageRating);
 
   // Obtener valoraciones
   const fetchReviews = useCallback(async () => {
@@ -56,6 +60,15 @@ export default function ReviewsSection({
 
   // Modal de confirmación para eliminar valoracion
   const handleDeleteReview = (reviewId: string) => {
+    const reviewToDelete = reviews.find((review) => review.id === reviewId);
+    if (!reviewToDelete) {
+      showErrorToast(
+        'Error',
+        'No se pudo encontrar el comentario para eliminar.'
+      );
+      return;
+    }
+
     showConfirmation({
       title: 'eliminar comentario',
       message: '¿quieres eliminar tu comentario? esto no es revertible',
@@ -73,6 +86,17 @@ export default function ReviewsSection({
           setReviews((currentReviews) =>
             currentReviews.filter((review) => review.id !== reviewId)
           );
+
+          // Actualiza el estado local de total y promedio
+          const newTotal = totalReviews - 1;
+          const newAverage =
+            newTotal > 0
+              ? (averageRating * totalReviews - reviewToDelete.rating) /
+                newTotal
+              : 0;
+
+          setTotalReviews(newTotal);
+          setAverageRating(parseFloat(newAverage.toFixed(2)));
         } else {
           showErrorToast(
             'Error al eliminar',
@@ -85,16 +109,14 @@ export default function ReviewsSection({
 
   // Modal de confirmación para crear valoración
   const handleCommunityRating = () => {
-    // 1. Verificar si el usuario está logueado ANTES de mostrar el modal.
     if (!user) {
       showErrorToast(
         'Acción requerida',
         'Debes iniciar sesión para poder valorar la comunidad.'
       );
-      return; // Detenemos la ejecución aquí si no hay usuario.
+      return;
     }
 
-    // 2. Si el usuario existe, procedemos a mostrar el modal.
     showConfirmation({
       title: 'valorar la comunidad',
       confirmText: 'enviar valoración',
@@ -110,6 +132,15 @@ export default function ReviewsSection({
             'Valoración enviada',
             result.message || '¡Gracias por tu aportación!'
           );
+
+          // Actualizamos el total y promedio localmente para una UX instantánea
+          const newTotal = totalReviews + 1;
+          const newAverage = (averageRating * totalReviews + rating) / newTotal;
+
+          setTotalReviews(newTotal);
+          setAverageRating(parseFloat(newAverage.toFixed(2)));
+
+          // Recargamos las reseñas desde el backend para mostrar la nueva
           await fetchReviews();
         } else {
           showErrorToast(
@@ -161,8 +192,8 @@ export default function ReviewsSection({
       </HeadingSection>
       <DetailsBar
         data={[
-          { label: 'cantidad', value: total_reviews },
-          { label: 'valoración promedio', value: average_rating },
+          { label: 'cantidad', value: totalReviews },
+          { label: 'valoración promedio', value: averageRating },
         ]}
       />
       <ul className="gap-md flex grow flex-col overflow-auto pb-4">
