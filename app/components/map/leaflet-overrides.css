@@ -14,8 +14,8 @@
   margin: 0 !important;
   line-height: normal !important;
   min-height: auto !important;
-  min-width: 300px;
-  max-width: 500px;
+  max-width: 500px !important;
+  min-width: min(90vw, 500px) !important;
   p {
     margin: 0;
   }

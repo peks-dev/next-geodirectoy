@@ -202,20 +202,6 @@ export interface NearbyCommunity {
   images: string[];
 }
 
-/**
- * Comunidad simplificada para mostrar en mapas.
- * Solo contiene datos necesarios para renderizar marcadores.
- */
-export interface CommunityForMap {
-  id: string;
-  type: CommunityType;
-  name: string;
-  images: string[];
-  location: Coordinates;
-  average_rating: number;
-  total_reviews: number;
-}
-
 // ============================================
 // TIPOS UTILITARIOS
 // ============================================
@@ -247,10 +233,14 @@ export interface MapBounds {
 export interface CommunityCard {
   id: string;
   name: string;
+  type: CommunityType;
   images: string[];
-  category?: Category[] | null;
-  ageGroup?: AgeGroup | null;
-  averageRating: number;
+  average_rating: number;
+  total_reviews: number;
+}
+
+export interface CommunityForMap extends CommunityCard {
+  location: Coordinates;
 }
 
 export interface CommunitiesOnMap extends CommunityCard {

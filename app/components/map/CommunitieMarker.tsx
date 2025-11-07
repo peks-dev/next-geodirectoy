@@ -1,13 +1,12 @@
 'use client';
 
 import { Marker, Popup } from 'react-leaflet';
-import { useMemo } from 'react';
-import { createLeafletIcon } from './iconUtils';
 import MarkerIcon from './MarkerIcon';
-import { useAppTheme } from '@/lib/hooks/useAppTheme';
-
-import type { CommunityForMap, Coordinates } from '@/app/types/communityTypes';
 import CommunityCard from '../community/card';
+import { createLeafletIcon } from './iconUtils';
+import { useMemo } from 'react';
+import { useAppTheme } from '@/lib/hooks/useAppTheme';
+import type { CommunityForMap, Coordinates } from '@/app/types/communityTypes';
 
 interface CommunitieMarkerProps {
   location: Coordinates;
@@ -15,12 +14,6 @@ interface CommunitieMarkerProps {
   enablePopup?: boolean;
 }
 
-/**
- * Componente individual de marcador de comunidad
- *
- * Renderiza un marcador con icono personalizado que se adapta al tema.
- * Incluye un popup con un botón para navegar a la página individual de la comunidad.
- */
 export default function CommunitieMarker({
   location,
   data,
@@ -37,7 +30,7 @@ export default function CommunitieMarker({
   return (
     <Marker position={[location.lat, location.lng]} icon={icon}>
       {enablePopup && data && (
-        <Popup className="custom-popup" minWidth={300} maxWidth={500}>
+        <Popup className="custom-popup">
           <CommunityCard data={data} />
         </Popup>
       )}

@@ -48,21 +48,13 @@ export default function Map({
         key={isDark ? 'dark' : 'light'}
       />
 
-      {/* Renderizar marcadores */}
+      {/* Renderizar marcadores con popup */}
       {communities.map((community) => (
         <CommunitieMarker
           key={community.id}
           location={community.location}
           enablePopup={enablePopups}
-          data={{
-            id: community.id,
-            type: community.type,
-            name: community.name,
-            images: community.images,
-            ageGroup: community.ageGroup,
-            averageRating: community.averageRating,
-            location: community.location,
-          }}
+          data={community}
         />
       ))}
 

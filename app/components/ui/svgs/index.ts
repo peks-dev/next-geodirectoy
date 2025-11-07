@@ -18,6 +18,7 @@ import TriangleIcon from './TriangleIcon';
 import UserIcon from './UserIcon';
 import WarningIcon from './WarningIcon';
 import WifiIcon from './WifiIcon';
+import PeopleIcon from './PeopleIcon';
 
 export {
   BathroomIcon,
@@ -40,4 +41,5 @@ export {
   UserIcon,
   WarningIcon,
   WifiIcon,
+  PeopleIcon,
 };
