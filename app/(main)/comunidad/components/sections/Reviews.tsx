@@ -19,6 +19,7 @@ import {
   showErrorToast,
   showSuccessToast,
 } from '@/app/components/toast/notificationService';
+import SectionWrapper from './SectionWrapper';
 
 interface Props {
   average_rating: number;
@@ -135,6 +136,7 @@ export default function ReviewsSection({
 
           // Actualizamos el total y promedio localmente para una UX instantánea
           const newTotal = totalReviews + 1;
+
           const newAverage = (averageRating * totalReviews + rating) / newTotal;
 
           setTotalReviews(newTotal);
@@ -184,7 +186,7 @@ export default function ReviewsSection({
   };
 
   return (
-    <div className="flex h-full w-full flex-col">
+    <SectionWrapper>
       <HeadingSection text="comentarios">
         <Button className="w-min" onClick={handleCommunityRating}>
           valorar
@@ -199,6 +201,6 @@ export default function ReviewsSection({
       <ul className="gap-md flex grow flex-col overflow-auto pb-4">
         {renderContent()}
       </ul>
-    </div>
+    </SectionWrapper>
   );
 }

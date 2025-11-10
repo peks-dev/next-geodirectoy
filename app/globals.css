@@ -235,7 +235,7 @@
   }
 
   .transparent-container {
-    backdrop-filter: blur(1px);
+    backdrop-filter: blur(3px);
     box-shadow: inset 0 0 100px #ffffff1a;
     border: 2px solid var(--color-border-secondary);
   }

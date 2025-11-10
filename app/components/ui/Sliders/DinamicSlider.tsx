@@ -56,7 +56,7 @@ export default function DinamicSlider({
 
   return (
     <div
-      className={`dinamic-slider-container gap-md flex h-full min-h-[400px] w-full flex-col p-4 ${className}`}
+      className={`dinamic-slider-container gap-md flex w-full grow flex-col ${className}`}
     >
       {/* Sección 1: Área del componente */}
       <div className="dinamic-slider-content relative grow overflow-hidden">
@@ -75,7 +75,7 @@ export default function DinamicSlider({
         >
           {slides.map((slide) => (
             <SwiperSlide key={slide.id}>
-              <div className="flex h-full w-full items-center justify-center">
+              <div className="flex h-full w-full items-center justify-center p-4">
                 {slide.component}
               </div>
             </SwiperSlide>
@@ -84,7 +84,7 @@ export default function DinamicSlider({
       </div>
 
       {/* Sección 2: Controles de navegación con iconos */}
-      <nav className="dinamic-slider-navigation bg-dark-primary flex items-center justify-center">
+      <nav className="dinamic-slider-navigation bg-dark-primary mx-4 mb-4 flex flex-shrink-0 items-center justify-center">
         <ul className="flex w-full justify-around">
           {slides.map((slide, index) => (
             <li

@@ -1,6 +1,7 @@
 import HeadingSection from '../HeadingSection';
 import CategoriesClubList from '../CategoriesClubList';
 import DetailsBar from '@/app/components/ui/DetailsBar';
+import SectionWrapper from './SectionWrapper';
 
 import type {
   AgeGroup,
@@ -36,8 +37,8 @@ export default function DescriptionSection({
   };
 
   return (
-    <section className="flex h-full w-full flex-col">
-      <div className="grow">
+    <SectionWrapper>
+      <div className="gap-md flex h-full flex-col">
         <HeadingSection text="general" />
         <DetailsBar
           data={[
@@ -48,9 +49,11 @@ export default function DescriptionSection({
             { label: 'autor', value: 'peks' },
           ]}
         />
-        <p>{description}</p>
+        <div className="overflow auto">
+          <p>{description}</p>
+        </div>
       </div>
       {categories && <CategoriesClubList categories={categories} />}
-    </section>
+    </SectionWrapper>
   );
 }

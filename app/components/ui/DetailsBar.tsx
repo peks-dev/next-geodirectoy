@@ -7,7 +7,7 @@ interface Props {
 }
 export default function DetailsBar({ data }: Props) {
   return (
-    <div className="gap-md bg-background border-border mb-md flex justify-around p-2">
+    <div className="gap-md bg-background border-border flex justify-around p-2">
       {data.map((stat, index) => (
         <p
           key={index}
