@@ -1,4 +1,4 @@
-type IconSize = 'xsm' | 'small' | 'md' | 'lg' | 'xl';
+export type IconSize = 'xsm' | 'small' | 'md' | 'lg' | 'xl';
 
 export const getIconSizeClass = (size: IconSize) => {
   const sizeMap: Record<IconSize, string> = {
