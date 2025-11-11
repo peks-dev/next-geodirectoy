@@ -1,6 +1,7 @@
 'use client';
 import { Toaster } from 'sonner';
 import { Modal } from '@/components/ui/Modal';
+import GlobalMenu from './Menu';
 
 export default function ClientProviders({
   children,
@@ -12,6 +13,7 @@ export default function ClientProviders({
       <Toaster position="top-center" />
       {children}
       <Modal />
+      <GlobalMenu />
     </>
   );
 }

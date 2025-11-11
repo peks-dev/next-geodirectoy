@@ -1,22 +1,11 @@
 'use client';
-import { useRouter } from 'next/navigation';
-import Button from '@/components/ui/Button';
-import FlexBox from '@/components/ui/containers/FlexBox';
-import { ThemeToggle } from '@/components/theme/ThemeToggle';
+
+import OpenMenuBtn from '../Menu/OpenMenuBtn';
 
 export default function Navbar() {
-  const route = useRouter();
-
-  function profileNavigation() {
-    route.push('/perfil');
-  }
   return (
-    <FlexBox direction="col" gap="md" className="absolute top-0 right-0 z-10">
-      <Button variant="secondary" onClick={profileNavigation}>
-        perfil
-      </Button>
-
-      <ThemeToggle />
-    </FlexBox>
+    <div className="absolute right-3 bottom-20 z-10 flex flex-col">
+      <OpenMenuBtn variant="icon" />
+    </div>
   );
 }
