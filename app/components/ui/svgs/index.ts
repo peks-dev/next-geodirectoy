@@ -19,6 +19,10 @@ import UserIcon from './UserIcon';
 import WarningIcon from './WarningIcon';
 import WifiIcon from './WifiIcon';
 import PeopleIcon from './PeopleIcon';
+import ProfileIcon from './ProfileIcon';
+import ThemeIcon from './ThemeIcon';
+import GearIcon from './GearIcon';
+import SiteIcon from './SiteLogo';
 
 export {
   BathroomIcon,
@@ -42,4 +46,8 @@ export {
   WarningIcon,
   WifiIcon,
   PeopleIcon,
+  ProfileIcon,
+  ThemeIcon,
+  GearIcon,
+  SiteIcon,
 };
