@@ -1,5 +1,5 @@
 'use client';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import { useAppTheme } from '@/lib/hooks/useAppTheme';
 import CommunitieMarker from './CommunitieMarker';
 import type { MapProps } from './types';
@@ -41,7 +41,9 @@ export default function Map({
       maxZoom={18}
       className="swiper-no-swiping z-0 h-full w-full"
       scrollWheelZoom={true}
+      zoomControl={false}
     >
+      <ZoomControl position="bottomright" />
       <TileLayer
         attribution={isDark ? darkAttribution : lightAttribution}
         url={isDark ? darkTileUrl : lightTileUrl}
