@@ -23,7 +23,7 @@ const OpenInMaps = ({ lat, lng }: Coordinates) => {
     <Button
       onClick={handleClick}
       variant="secondary"
-      className="bg-background-interactive absolute bottom-1 left-1 z-50"
+      className="bg-background-interactive hover:bg-accent-primary hover:text-dark-primary absolute bottom-5 left-5 z-50"
     >
       Abrir en Mapas
     </Button>
