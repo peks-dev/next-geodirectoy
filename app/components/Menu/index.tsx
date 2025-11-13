@@ -2,6 +2,7 @@
 import { ProfileIcon, MapIcon, ThemeIcon, GearIcon } from '../ui/svgs';
 import OptionMenu from './OptionMenu';
 import Button from '../ui/Button';
+import { CornerIcon } from '../ui/svgs';
 import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { useEffect, useState, useRef } from 'react';
@@ -137,18 +138,38 @@ export default function GlobalMenu() {
           ref={headerRef}
           className="menu-header bg-dark-secondary border-accent-primary border-t-2"
         >
-          <span className="font-heading neon-effect text-accent-primary px-4 py-2 text-lg uppercase">
+          <span className="font-heading neon-effect text-light-secondary px-4 py-2 text-lg uppercase">
             menu
           </span>
         </header>
 
         {/* Contenido principal */}
         <div className="menu-links transparent-container grow p-4">
-          <div className="gap-xl mt-20 flex flex-col">
+          <div className="gap-xl relative flex grow flex-col p-4">
+            <CornerIcon
+              position="top-left"
+              size="small"
+              className="text-light-primary"
+            />
+            <CornerIcon
+              position="top-right"
+              size="small"
+              className="text-light-primary"
+            />
+            <CornerIcon
+              position="bottom-left"
+              size="small"
+              className="text-light-primary"
+            />
+            <CornerIcon
+              position="bottom-right"
+              size="small"
+              className="text-light-primary"
+            />
             {/* Sección Tema */}
             <nav
               ref={themeNavRef}
-              className="before:text-foreground before:font-heading px-4 before:mb-10 before:block before:text-sm before:uppercase before:content-['tema']"
+              className="before:text-light-primary before:font-heading px-4 before:mb-10 before:block before:text-sm before:uppercase before:content-['tema']"
             >
               <ul className="gap-lg flex flex-col items-center">
                 <OptionMenu
@@ -172,7 +193,7 @@ export default function GlobalMenu() {
             {/* Sección Navegación */}
             <nav
               ref={navigationNavRef}
-              className="before:text-foreground before:font-heading px-4 before:mb-10 before:block before:text-sm before:uppercase before:content-['navegacion']"
+              className="before:text-light-primary before:font-heading px-4 before:mb-10 before:block before:text-sm before:uppercase before:content-['navegacion']"
             >
               <ul className="gap-lg flex flex-col items-center">
                 <OptionMenu
@@ -194,12 +215,12 @@ export default function GlobalMenu() {
             <div className="divider bg-border-secondary mx-auto mt-20 h-0.5 w-[90%]"></div>
             <nav className="my-5 flex items-center justify-around">
               <li>
-                <button className="hover:text-accent-primary active:text-accent-primary cursor-pointer text-xs active:scale-105">
+                <button className="text-light-primary active:text-accent-primary hover-neon-text cursor-pointer text-xs active:scale-105">
                   condiciones
                 </button>
               </li>
               <li>
-                <button className="hover:text-accent-primary active:text-accent-primary cursor-pointer text-xs active:scale-105">
+                <button className="text-light-primary active:text-accent-primary hover-neon-text cursor-pointer text-xs active:scale-105">
                   privacidad
                 </button>
               </li>

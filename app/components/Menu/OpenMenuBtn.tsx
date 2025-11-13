@@ -20,10 +20,12 @@ export default function OpenMenuBtn({ variant = 'primary' }: Props) {
       size={variant === 'icon' ? 'lg' : undefined}
     >
       {variant === 'primary' ? (
-        <span>{isMenuOpen ? 'abierto' : 'menu'}</span>
+        <span>menu</span>
       ) : (
-        <div className="bg-background-interactive rounded-[50%] border-2 p-4">
-          <IconBox icon={<SiteIcon />} size="lg" />
+        <div className="border-accent-primary rounded-[50%] border-2 p-2">
+          <div className="bg-background-interactive rounded-[50%] p-2">
+            <IconBox icon={<SiteIcon />} size="md" />
+          </div>
         </div>
       )}
     </Button>
