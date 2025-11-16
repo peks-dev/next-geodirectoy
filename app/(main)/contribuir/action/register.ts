@@ -2,8 +2,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import type { CommunityFormData } from '@/app/types/communityTypes';
 import { createClient } from '@/lib/supabase/server';
-import { uploadImage, deleteImages } from '@/lib/supabase/storage';
-import { extractFileName } from '@/lib/utils/images/extractFileName';
+import { uploadImage, deleteImage } from '@/lib/supabase/storage';
 
 export async function registerCommunity(formData: CommunityFormData): Promise<{
   success: boolean;
@@ -38,12 +37,13 @@ export async function registerCommunity(formData: CommunityFormData): Promise<{
 
     // 3. Subir imágenes
     const uploadResults = await Promise.all(
-      imageFiles.map((file) =>
-        uploadImage(file, 'COMMUNITIES', {
-          userId: user.id,
-          communityId,
-        })
-      )
+      imageFiles.map((file) => {
+        const fileExtension = file.name.split('.').pop() || 'jpg';
+        const fileName = `${uuidv4()}.${fileExtension}`;
+        const filePath = `${user.id}/${communityId}/${fileName}`;
+
+        return uploadImage(file, 'COMMUNITIES', filePath);
+      })
     );
 
     const failed = uploadResults.find((r) => !r.success);
@@ -52,10 +52,10 @@ export async function registerCommunity(formData: CommunityFormData): Promise<{
     }
 
     const imageUrls = uploadResults.map((r) => r.url!);
+    const imagePaths = uploadResults.map((r) => r.path!);
 
     // 4. Preparar datos para inserción
     const { location, ...restData } = formData;
-
     const dataToInsert = {
       id: communityId,
       user_id: user.id, // Del servidor (seguro), no del cliente
@@ -82,10 +82,9 @@ export async function registerCommunity(formData: CommunityFormData): Promise<{
 
     if (insertError) {
       // Rollback: eliminar imágenes subidas
-      const filePaths = imageUrls.map(
-        (url) => `${user.id}/${communityId}/${extractFileName(url)}`
-      );
-      await deleteImages(filePaths, 'COMMUNITIES').catch(console.error);
+      await Promise.all(
+        imagePaths.map((path) => deleteImage(path, 'COMMUNITIES'))
+      ).catch(console.error);
 
       throw new Error(`Error al registrar: ${insertError.message}`);
     }
@@ -95,8 +94,6 @@ export async function registerCommunity(formData: CommunityFormData): Promise<{
       message: 'Comunidad registrada correctamente',
     };
   } catch (error) {
-    console.error('Error en registerCommunity:', error);
-
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Error desconocido',

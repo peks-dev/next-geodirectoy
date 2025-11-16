@@ -1,7 +1,8 @@
 'use server';
+import { v4 as uuidv4 } from 'uuid';
 import type { CommunityFormData } from '@/app/types/communityTypes';
 import { createClient } from '@/lib/supabase/server';
-import { uploadImage, deleteImages } from '@/lib/supabase/storage';
+import { uploadImage, deleteImage } from '@/lib/supabase/storage';
 import { getCommunityById } from '@/lib/data/communities';
 import { extractStoragePath } from '@/lib/utils/extractStoragePath';
 
@@ -29,7 +30,6 @@ export async function updateCommunity(formData: CommunityFormData): Promise<{
 
     // 3. Verificar propiedad de la comunidad
     const existingCommunity = await getCommunityById(formData.id);
-
     if (!existingCommunity) {
       throw new Error('Comunidad no encontrada');
     }
@@ -54,23 +54,26 @@ export async function updateCommunity(formData: CommunityFormData): Promise<{
 
     // 5. Eliminar imágenes no mantenidas
     const urlsToDelete = oldUrls.filter((url) => !keptUrls.includes(url));
-
     if (urlsToDelete.length > 0) {
       const pathsToDelete = urlsToDelete.map(extractStoragePath);
-      await deleteImages(pathsToDelete, 'COMMUNITIES');
+      await Promise.all(
+        pathsToDelete.map((path) => deleteImage(path, 'COMMUNITIES'))
+      );
     }
 
     // 6. Subir nuevas imágenes
     let uploadedUrls: string[] = [];
+    let uploadedPaths: string[] = [];
 
     if (newFiles.length > 0) {
       const uploadResults = await Promise.all(
-        newFiles.map((file) =>
-          uploadImage(file, 'COMMUNITIES', {
-            userId: user.id,
-            communityId: formData.id!,
-          })
-        )
+        newFiles.map((file) => {
+          const fileExtension = file.name.split('.').pop() || 'jpg';
+          const fileName = `${uuidv4()}.${fileExtension}`;
+          const filePath = `${user.id}/${formData.id}/${fileName}`;
+
+          return uploadImage(file, 'COMMUNITIES', filePath);
+        })
       );
 
       const failed = uploadResults.find((r) => !r.success);
@@ -79,11 +82,11 @@ export async function updateCommunity(formData: CommunityFormData): Promise<{
       }
 
       uploadedUrls = uploadResults.map((r) => r.url!);
+      uploadedPaths = uploadResults.map((r) => r.path!);
     }
 
     // 7. Preparar datos para actualización
     const { location, ...restData } = formData;
-
     const dataToUpdate = {
       type: restData.type,
       name: restData.name,
@@ -109,9 +112,10 @@ export async function updateCommunity(formData: CommunityFormData): Promise<{
 
     if (updateError) {
       // Rollback: eliminar imágenes recién subidas
-      if (uploadedUrls.length > 0) {
-        const rollbackPaths = uploadedUrls.map(extractStoragePath);
-        await deleteImages(rollbackPaths, 'COMMUNITIES').catch(console.error);
+      if (uploadedPaths.length > 0) {
+        await Promise.all(
+          uploadedPaths.map((path) => deleteImage(path, 'COMMUNITIES'))
+        ).catch(console.error);
       }
 
       throw new Error(`Error actualizando: ${updateError.message}`);
@@ -123,7 +127,6 @@ export async function updateCommunity(formData: CommunityFormData): Promise<{
     };
   } catch (error) {
     console.error('Error en updateCommunity:', error);
-
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Error desconocido',
