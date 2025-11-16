@@ -1,11 +1,12 @@
 // Útil para validaciones previas o mostrar preview
-
-export async function getImageInfo(file: File): Promise<{
+export interface ImageInfo {
   width: number;
   height: number;
   size: number;
   type: string;
-}> {
+}
+
+export async function getImageInfo(file: File): Promise<ImageInfo> {
   return new Promise((resolve, reject) => {
     const img = new Image();
 
