@@ -5,19 +5,18 @@
 export async function fileToBase64(file: File): Promise<string> {
   // En el servidor (Node.js)
   if (typeof window === 'undefined') {
-    // Convertir File a ArrayBuffer y luego a Buffer
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-    return buffer.toString('base64');
+    // Agregar el prefijo data URL
+    return `data:${file.type};base64,${buffer.toString('base64')}`;
   }
 
   // En el navegador
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
-      // Eliminar el prefijo "data:image/jpeg;base64," para obtener solo el base64
-      const base64 = (reader.result as string).split(',')[1];
-      resolve(base64);
+      // Mantener el resultado completo con el prefijo
+      resolve(reader.result as string);
     };
     reader.onerror = reject;
     reader.readAsDataURL(file);
@@ -40,4 +39,13 @@ export async function fileToBase64Server(file: File): Promise<string> {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
   return buffer.toString('base64');
+}
+
+/**
+ * Convierte base64 string a Buffer para subirlo a Supabase Storage
+ */
+export function base64ToBuffer(base64: string): Buffer {
+  // Extraer solo la parte base64 (sin el prefijo "data:image/...;base64,")
+  const base64Data = base64.split(',')[1];
+  return Buffer.from(base64Data, 'base64');
 }
