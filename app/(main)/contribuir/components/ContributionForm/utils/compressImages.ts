@@ -1,4 +1,4 @@
-import { compressImagesClient } from '@/lib/utils/images/compressImages';
+import { compressImage } from '@/lib/utils/images/compressImage';
 import type { CommunityFormData } from '@/app/types/communityTypes';
 
 export interface CompressImagesResult {
@@ -26,19 +26,22 @@ export async function compressAndUpdateImages(
       return { compressedImages: imageStrings };
     }
 
-    const compressedImages = await compressImagesClient(imageFiles, {
-      quality: 0.85,
-      maxWidth: 1024,
-      maxHeight: 1024,
-      maxSizeBytes: 400 * 1024, // 400KB máximo por imagen
-    });
+    const compressedImages = await Promise.all(
+      imageFiles.map((file) =>
+        compressImage(file, {
+          quality: 0.85,
+          maxWidth: 1024,
+          maxHeight: 1024,
+          targetSize: 400 * 1024, // 400KB máximo por imagen
+        })
+      )
+    );
 
     // Combinar imágenes string existentes con las nuevas comprimidas
     const allImages = [...imageStrings, ...compressedImages];
 
     return { compressedImages: allImages };
   } catch (error) {
-    console.error('Error comprimiendo imágenes:', error);
     throw error; // Re-lanzar para que handleSubmit pueda manejar el error
   }
 }
