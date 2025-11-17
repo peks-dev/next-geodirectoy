@@ -2,43 +2,50 @@
 
 import { useRouter } from 'next/navigation';
 import Button from '@/app/components/ui/Button';
+import { LogoutIcon } from '@/app/components/ui/svgs';
 import { useAuth } from '@/app/components/auth/AuthProvider';
-import { toast } from 'sonner';
+import { useModalStore } from '@/app/components/ui/Modal/useModalStore';
 
-export function LogoutButton() {
+import {
+  showErrorToast,
+  showSuccessToast,
+} from '@/app/components/toast/notificationService';
+
+export default function LogoutButton() {
   const router = useRouter();
-  const { logout, loading } = useAuth(); // Ahora usa loading del contexto
+  const { logout, loading } = useAuth();
+  const { showConfirmation } = useModalStore();
 
-  async function handleLogout() {
-    try {
-      const { error } = await logout();
-      if (error) {
-        toast.error('Error al cerrar sesión', {
-          description: error,
-        });
-        return;
-      }
+  const handleLogout = () => {
+    showConfirmation({
+      title: 'cerrar sesión',
+      message: '¿deseas salir de tu cuenta?',
+      confirmText: 'si salir',
+      onConfirm: async () => {
+        try {
+          const { error } = await logout();
+          if (!error) {
+            showSuccessToast('Sesión cerrada correctamente');
 
-      toast.success('Sesión cerrada correctamente');
-
-      // Redirigir al home
-      router.push('/');
-      router.refresh(); // Opcional: fuerza refresh para limpiar estado
-    } catch (error) {
-      toast.error('Error inesperado al cerrar sesión');
-      console.error('Logout error:', error);
-    }
-  }
+            // Redirigir al home
+            router.push('/');
+            router.refresh(); // Opcional: fuerza refresh para limpiar estado
+          }
+        } catch (error) {
+          showErrorToast('Error inesperado al cerrar sesión');
+        }
+      },
+    });
+  };
 
   return (
     <Button
-      variant="secondary"
+      variant="icon"
       size="default"
-      loading={loading} // Usa el loading global del contexto
+      loading={loading}
       onClick={handleLogout}
-      className="grow-0"
     >
-      Cerrar sesión
+      <LogoutIcon />
     </Button>
   );
 }
