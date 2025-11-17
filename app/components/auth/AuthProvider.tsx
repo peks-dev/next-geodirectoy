@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { authService } from '@/lib/supabase/authService';
+import { useProfileStore } from '@/app/(main)/perfil/stores/useProfileStore';
 import type { User, AuthChangeEvent, Session } from '@/lib/supabase/types';
 
 interface AuthContextType {
@@ -33,6 +34,8 @@ export function AuthProvider({
   const [user, setUser] = useState<User | null>(initialUser);
   const [loading, setLoading] = useState(false);
 
+  const clearProfile = useProfileStore((state) => state.clearProfile);
+
   const router = useRouter();
   const pathname = usePathname();
 
@@ -42,6 +45,7 @@ export function AuthProvider({
       (event: AuthChangeEvent, session: Session | null) => {
         if (event === 'SIGNED_OUT' || !session) {
           setUser(null);
+          clearProfile();
           // Define las rutas públicas aquí
           const publicRoutes = ['/']; // ['/', '/about']
 
@@ -78,6 +82,7 @@ export function AuthProvider({
         console.error('Error al cerrar sesión:', result.error);
         return { error: result.error };
       }
+      clearProfile();
       return { error: null };
     } catch (error) {
       console.error('Unexpected error during logout:', error);
