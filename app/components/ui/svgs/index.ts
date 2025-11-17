@@ -23,6 +23,10 @@ import ProfileIcon from './ProfileIcon';
 import ThemeIcon from './ThemeIcon';
 import GearIcon from './GearIcon';
 import SiteIcon from './SiteLogo';
+import LogoutIcon from './LogoutIcon';
+import EditProfile from './EditProfile';
+import AddCommunityIcon from './AddCommunityIcon';
+import DeleteIcon from './DeleteIcon';
 
 export {
   BathroomIcon,
@@ -50,4 +54,8 @@ export {
   ThemeIcon,
   GearIcon,
   SiteIcon,
+  LogoutIcon,
+  EditProfile,
+  AddCommunityIcon,
+  DeleteIcon,
 };
