@@ -1,6 +1,6 @@
 // Pagina para registrar comunidades de basketball
 
-import { ProtectedWrapper } from '@/app/components/auth/ProtectedWrapper';
+import { ProtectedWrapper } from '@/app/(auth)/components/ProtectedWrapper';
 import ContributionForm from './components/ContributionForm';
 
 export default async function ContributionPage() {

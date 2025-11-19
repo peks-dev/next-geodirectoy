@@ -1,6 +1,6 @@
 'use server';
 import { createClient } from '@/lib/supabase/server';
-import { deleteAccountFromDb } from '@/lib/data/profiles';
+import { deleteAccountFromDb } from '@/app/(auth)/services/authService.server';
 import { ProfileDbResponse } from '../types/updateProfileTypes';
 import { deleteImage } from '@/lib/supabase/storage';
 

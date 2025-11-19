@@ -1,4 +1,4 @@
-import AuthForm from './components/AuthForm';
+import AuthForm from './components/AuthForm/index';
 
 export default function SignInPage() {
   return (

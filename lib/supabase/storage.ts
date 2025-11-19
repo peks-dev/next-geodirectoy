@@ -48,7 +48,6 @@ export async function uploadImage(
       path: data.path,
     };
   } catch (error) {
-    console.error('Error inesperado en uploadImage:', error);
     const errorMessage =
       error instanceof Error ? error.message : 'Error desconocido';
     return {

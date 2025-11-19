@@ -1,20 +1,10 @@
 'use client';
 
 import UserAvatar from '@/app/components/ui/UserAvatar';
-import type { ProfileDbResponse } from '../types/updateProfileTypes';
-import { useEffect } from 'react';
 import { useProfileStore } from '../stores/useProfileStore';
 
-export default function ProfileBanner({
-  profileData,
-}: {
-  profileData: ProfileDbResponse;
-}) {
-  const { profile, updateProfile } = useProfileStore();
-
-  useEffect(() => {
-    updateProfile(profileData);
-  }, [updateProfile, profileData]);
+export default function ProfileBanner() {
+  const { profile } = useProfileStore();
 
   return (
     <div className="gap-md flex items-center">

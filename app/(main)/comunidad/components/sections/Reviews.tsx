@@ -14,12 +14,13 @@ import { useRatingFormStore } from '../RatingForm/useRatingStore';
 import { getReviews } from '../../action/getReviews';
 import { createReview } from '../../action/createReview';
 import { deleteReview } from '../../action/deleteReview';
-import { useAuth } from '@/app/components/auth/AuthProvider';
+import { useAuth } from '@/app/(auth)/components/AuthProvider';
 import {
   showErrorToast,
   showSuccessToast,
 } from '@/app/components/toast/notificationService';
 import SectionWrapper from './SectionWrapper';
+import { useRouter, usePathname } from 'next/navigation';
 
 interface Props {
   average_rating: number;
@@ -37,6 +38,8 @@ export default function ReviewsSection({
   const [reviews, setReviews] = useState<DbReviewResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const pathname = usePathname();
+  const router = useRouter();
 
   // Estados locales para el conteo y promedio de valoraciones
   const [totalReviews, setTotalReviews] = useState(initialTotalReviews);
@@ -115,6 +118,9 @@ export default function ReviewsSection({
         'Acción requerida',
         'Debes iniciar sesión para poder valorar la comunidad.'
       );
+      // ✅ Redirige a sign-in con la URL actual como returnUrl
+      const returnUrl = encodeURIComponent(pathname);
+      router.push(`/sign-in?returnUrl=${returnUrl}`);
       return;
     }
 

@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import Button from '@/app/components/ui/Button';
 import { LogoutIcon } from '@/app/components/ui/svgs';
-import { useAuth } from '@/app/components/auth/AuthProvider';
+import { useAuth } from '@/app/(auth)/components/AuthProvider';
 import { useModalStore } from '@/app/components/ui/Modal/useModalStore';
 
 import {
@@ -32,7 +32,11 @@ export default function LogoutButton() {
             router.refresh(); // Opcional: fuerza refresh para limpiar estado
           }
         } catch (error) {
-          showErrorToast('Error inesperado al cerrar sesión');
+          showErrorToast(
+            error instanceof Error
+              ? error.message
+              : 'Error inesperado al cerrar sesión'
+          );
         }
       },
     });

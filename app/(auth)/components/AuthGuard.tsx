@@ -1,4 +1,5 @@
 'use client';
+// Componente para proteger UI que requieren Auth en paginas publicas
 import { useAuth } from './AuthProvider';
 import { ReactNode } from 'react';
 

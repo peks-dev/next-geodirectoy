@@ -1,7 +1,7 @@
 'use server';
 
 import { v4 as uuidv4 } from 'uuid';
-import { createClient } from '@/lib/supabase/server';
+import { getCurrentUser } from '@/app/(auth)/services/authService.server';
 import {
   updateProfileServerSchema,
   type UpdateProfileActionInput,
@@ -13,7 +13,8 @@ import type {
 } from '../types/updateProfileTypes';
 
 import { base64ToBuffer } from '@/lib/utils/images/imagesTransform';
-import { updateProfileDb } from '@/lib/data/profiles';
+
+import { updateProfileDb } from '../services/profileRepository';
 import { uploadImage, deleteImage } from '@/lib/supabase/storage';
 
 export async function updateProfile(
@@ -25,11 +26,7 @@ export async function updateProfile(
     const validated = updateProfileServerSchema.parse(input);
 
     // 2. Verificar autenticación
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    const { data: user, error: authError } = await getCurrentUser();
 
     if (authError || !user) {
       throw new Error('Debes iniciar sesión para editar el perfil');
@@ -77,7 +74,11 @@ export async function updateProfile(
         uploadedFilePath = uploadResult.path!;
         avatarUrl = uploadResult.url!;
       } catch (uploadError) {
-        throw new Error('Error al procesar la imagen');
+        throw new Error(
+          uploadError instanceof Error
+            ? uploadError.message
+            : 'Error al procesar la imagen'
+        );
       }
     }
 
@@ -104,9 +105,9 @@ export async function updateProfile(
     }
 
     // Llamar a la accion de servidor
-    const profileData = await updateProfileDb(updateData);
+    const profileResponse = await updateProfileDb(updateData);
 
-    if (!profileData) {
+    if (!profileResponse.data) {
       // Rollback: eliminar avatar recién subido
       if (uploadedFilePath) {
         await deleteImage(uploadedFilePath, 'AVATARS').catch(console.error);
@@ -129,9 +130,9 @@ export async function updateProfile(
     return {
       success: true,
       data: {
-        name: profileData.name,
-        avatar_url: profileData.avatar_url,
-        user_id: profileData.user_id,
+        name: profileResponse.data.name,
+        avatar_url: profileResponse.data.avatar_url,
+        user_id: profileResponse.data.user_id,
       },
       message: 'Perfil actualizado correctamente',
     };

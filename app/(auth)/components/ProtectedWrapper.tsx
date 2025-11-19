@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useAuth } from './AuthProvider';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
 
 interface ProtectedWrapperProps {
@@ -17,21 +17,25 @@ export function ProtectedWrapper({
   redirectTo = '/sign-in',
 }: ProtectedWrapperProps) {
   const { user, loading } = useAuth();
+
   const router = useRouter();
+  const pathname = usePathname();
 
   // evitar llamadas durante render
   useEffect(() => {
     if (!user && !loading) {
-      router.push(redirectTo);
+      // ✅ Guarda la URL actual como parámetro de retorno
+      const returnUrl = encodeURIComponent(pathname);
+      router.push(`${redirectTo}?returnUrl=${returnUrl}`);
     }
-  }, [user, loading, router, redirectTo]);
+  }, [user, loading, router, redirectTo, pathname]);
 
   // Loading state
   if (loading) {
     return (
       fallback || (
         <div className="flex h-full items-center justify-center">
-          <div className="h-32 w-32 animate-spin rounded-full border-b-2 border-orange-500"></div>
+          <div className="border-accent-primary h-32 w-32 animate-spin rounded-full border-b-2"></div>
         </div>
       )
     );

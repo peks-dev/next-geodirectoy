@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { Iceland, Oxanium } from 'next/font/google';
 import './globals.css';
 import BackgroundLines from '@/components/ui/BackgroundLines';
-import { AuthProvider } from '@/components/auth/AuthProvider';
-import { createClient } from '@/lib/supabase/server';
+import { AuthProvider } from '@/app/(auth)/components/AuthProvider';
+import { getCurrentUser } from './(auth)/services/authService.server';
 import ClientProviders from '@/components/ClientProviders';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 
@@ -32,10 +32,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: user } = await getCurrentUser();
 
   return (
     <html lang="en" suppressHydrationWarning>

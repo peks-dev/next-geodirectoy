@@ -1,12 +1,12 @@
 'use client';
 
 import React from 'react';
-import { useAuthFlow } from '../hooks/useAuthFlow';
-import { useAuthTimer } from '../hooks/useAuthTimer';
+import { useAuthFlow } from '../../hooks/useAuthFlow';
+import { useAuthTimer } from '../../hooks/useAuthTimer';
 import HeaderContainer from '@/components/ui/Header';
-import EmailForm from './EmailForm';
-import CodeVerificationForm from './CodeVerificationForm';
-import ExpiredCodeMessage from './ExpiredCodeMessage';
+import EmailForm from './components/EmailForm';
+import CodeVerificationForm from './components/CodeVerificationForm';
+import ExpiredCodeMessage from './components/ExpiredCodeMessage';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 /**

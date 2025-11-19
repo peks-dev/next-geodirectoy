@@ -1,3 +1,4 @@
+// components/auth/AuthProvider.tsx
 'use client';
 
 import {
@@ -6,20 +7,23 @@ import {
   useState,
   useEffect,
   ReactNode,
+  useCallback,
+  useRef,
 } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { authService } from '@/lib/supabase/authService';
+import {
+  onAuthStateChange,
+  logout as logoutService,
+} from '../services/authService.browser';
 import { useProfileStore } from '@/app/(main)/perfil/stores/useProfileStore';
 import type { User, AuthChangeEvent, Session } from '@/lib/supabase/types';
 
 interface AuthContextType {
-  // Estado del usuario
   user: User | null;
   loading: boolean;
-
-  // Solo métodos que afectan directamente el estado
   logout: () => Promise<{ error: string | null }>;
-  signOut: () => Promise<{ error: string | null }>; // Para compatibilidad
+  signOut: () => Promise<{ error: string | null }>;
+  waitForAuth: () => Promise<User | null>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -33,34 +37,47 @@ export function AuthProvider({
 }) {
   const [user, setUser] = useState<User | null>(initialUser);
   const [loading, setLoading] = useState(false);
-
   const clearProfile = useProfileStore((state) => state.clearProfile);
-
   const router = useRouter();
   const pathname = usePathname();
 
-  // Escuchar cambios de auth usando authService
+  const authResolvers = useRef<Array<(user: User | null) => void>>([]);
+
   useEffect(() => {
-    const subscription = authService.onAuthStateChange(
+    const subscription = onAuthStateChange(
       (event: AuthChangeEvent, session: Session | null) => {
         if (event === 'SIGNED_OUT' || !session) {
           setUser(null);
           clearProfile();
-          // Define las rutas públicas aquí
-          const publicRoutes = ['/']; // ['/', '/about']
 
-          // Solo redirige si la ruta actual NO es pública
+          authResolvers.current.forEach((resolve) => resolve(null));
+          authResolvers.current = [];
+
+          const publicRoutes = ['/'];
           const isOnPublicRoute =
             publicRoutes.includes(pathname) ||
             publicRoutes.some((route) => pathname.startsWith(route));
+
           if (!isOnPublicRoute) {
             router.push('/sign-in');
           }
-        } else if (event === 'SIGNED_IN' && session) {
-          setUser({
+        }
+        // ✅ CLAVE: Manejar SIGNED_IN e INITIAL_SESSION
+        else if (
+          (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') &&
+          session
+        ) {
+          const newUser = {
             id: session.user.id,
             email: session.user.email,
-          } as User);
+          } as User;
+
+          setUser(newUser);
+
+          // ✅ Resuelve todas las promises esperando
+          authResolvers.current.forEach((resolve) => resolve(newUser));
+          authResolvers.current = [];
+
           router.refresh();
         }
       }
@@ -71,13 +88,12 @@ export function AuthProvider({
         subscription.data.subscription.unsubscribe();
       }
     };
-  }, [router, pathname]);
+  }, [router, pathname, clearProfile]);
 
-  // Solo logout porque afecta directamente el estado del usuario
   const logout = async (): Promise<{ error: string | null }> => {
     setLoading(true);
     try {
-      const result = await authService.logout();
+      const result = await logoutService();
       if (result.error) {
         console.error('Error al cerrar sesión:', result.error);
         return { error: result.error };
@@ -92,7 +108,33 @@ export function AuthProvider({
     }
   };
 
-  // Método heredado para compatibilidad
+  const waitForAuth = useCallback((): Promise<User | null> => {
+    if (user) {
+      return Promise.resolve(user);
+    }
+
+    return new Promise((resolve) => {
+      // Timeout de seguridad
+      const timeoutId = setTimeout(() => {
+        const index = authResolvers.current.indexOf(resolve);
+        if (index > -1) {
+          authResolvers.current.splice(index, 1);
+        }
+
+        resolve(null);
+      }, 2000);
+
+      // ✅ Wrapper que limpia el timeout al resolver
+      const wrappedResolve = (user: User | null) => {
+        clearTimeout(timeoutId);
+        resolve(user);
+      };
+
+      // Agrega el resolver wrapped
+      authResolvers.current.push(wrappedResolve);
+    });
+  }, [user]);
+
   const signOut = logout;
 
   return (
@@ -102,6 +144,7 @@ export function AuthProvider({
         loading,
         logout,
         signOut,
+        waitForAuth,
       }}
     >
       {children}
