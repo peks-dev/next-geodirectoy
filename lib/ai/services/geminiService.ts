@@ -113,10 +113,16 @@ export class GeminiService implements BaseAIService {
     // Agregar imágenes primero (como en el ejemplo de la docs)
     for (const image of images) {
       const base64Data = await fileToBase64(image);
+
+      // Remover el prefijo data URL si existe (para Gemini)
+      const base64Pure = base64Data.includes(',')
+        ? base64Data.split(',')[1]
+        : base64Data;
+
       parts.push({
         inline_data: {
           mime_type: image.type,
-          data: base64Data,
+          data: base64Pure,
         },
       });
     }
