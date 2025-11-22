@@ -1,14 +1,15 @@
 import NavigationButton from '../../ui/Buttons/NavigationButton';
+import DeleteCommunityBtn from '@/app/(main)/comunidad/components/DeleteCommunityBtn';
 import ImageSlider from '../../ui/Sliders/ImageSlider';
 import type { CommunityCard } from '@/app/types/communityTypes';
-import { StarIcon, CommentsIcon, PeopleIcon } from '../../ui/svgs/';
+import { StarIcon, CommentsIcon, PeopleIcon, EditIcon } from '../../ui/svgs/';
 
 interface Props {
   data: CommunityCard;
   isPopup?: boolean;
 }
 
-export default function CommunityCard({ data, isPopup = false }: Props) {
+export default function CommunityCard({ data, isPopup = true }: Props) {
   const footerData = [
     { icon: <PeopleIcon />, value: data.type },
     { icon: <StarIcon />, value: data.average_rating },
@@ -22,7 +23,21 @@ export default function CommunityCard({ data, isPopup = false }: Props) {
           {data.name}
         </h2>
       </header>
-      <div className="transparent-container p-md">
+      <div className="transparent-container p-md relative">
+        {/*profile buttons*/}
+        {isPopup === false && (
+          <div className="gap-md absolute top-10 right-8 z-50 flex flex-col">
+            <NavigationButton
+              url={`/contribuir/editar/${data.id}`}
+              variant="icon"
+              className="bg-background-interactive p-4"
+            >
+              <EditIcon />
+            </NavigationButton>
+            <DeleteCommunityBtn communityId={data.id} />
+          </div>
+        )}
+
         <ImageSlider images={data.images} enableAutoplay enablePagination />
         <footer className="border-border-secondary mt-5 flex justify-between border-t-2 pt-3">
           <ul className="flex grow items-center gap-6">
