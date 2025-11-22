@@ -1,6 +1,6 @@
 'use server';
 import { v4 as uuidv4 } from 'uuid';
-import type { CommunityFormData } from '@/app/types/communityTypes';
+import type { CommunityFormData, Community } from '@/app/types/communityTypes';
 import { createClient } from '@/lib/supabase/server';
 import { uploadImage, deleteImage } from '@/lib/supabase/storage';
 import { getCommunityById } from '@/lib/data/communities';
@@ -9,6 +9,7 @@ import { extractStoragePath } from '@/lib/utils/extractStoragePath';
 export async function updateCommunity(formData: CommunityFormData): Promise<{
   success: boolean;
   message: string;
+  data: Community | null;
 }> {
   const supabase = await createClient();
 
@@ -105,10 +106,12 @@ export async function updateCommunity(formData: CommunityFormData): Promise<{
     };
 
     // 8. Actualizar en base de datos
-    const { error: updateError } = await supabase
+    const { data: communityUpdated, error: updateError } = await supabase
       .from('communities')
       .update(dataToUpdate)
-      .eq('id', formData.id);
+      .eq('id', formData.id)
+      .select()
+      .single();
 
     if (updateError) {
       // Rollback: eliminar imágenes recién subidas
@@ -124,12 +127,14 @@ export async function updateCommunity(formData: CommunityFormData): Promise<{
     return {
       success: true,
       message: 'Comunidad actualizada correctamente',
+      data: communityUpdated,
     };
   } catch (error) {
     console.error('Error en updateCommunity:', error);
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Error desconocido',
+      data: null,
     };
   }
 }

@@ -1,12 +1,13 @@
 'use server';
 import { v4 as uuidv4 } from 'uuid';
-import type { CommunityFormData } from '@/app/types/communityTypes';
+import type { CommunityFormData, Community } from '@/app/types/communityTypes';
 import { createClient } from '@/lib/supabase/server';
 import { uploadImage, deleteImage } from '@/lib/supabase/storage';
 
 export async function registerCommunity(formData: CommunityFormData): Promise<{
   success: boolean;
   message: string;
+  data: Community | null;
 }> {
   const supabase = await createClient();
 
@@ -76,9 +77,11 @@ export async function registerCommunity(formData: CommunityFormData): Promise<{
     };
 
     // 5. Insertar en base de datos
-    const { error: insertError } = await supabase
+    const { data: communityInserted, error: insertError } = await supabase
       .from('communities')
-      .insert(dataToInsert);
+      .insert(dataToInsert)
+      .select()
+      .single();
 
     if (insertError) {
       // Rollback: eliminar imágenes subidas
@@ -92,11 +95,13 @@ export async function registerCommunity(formData: CommunityFormData): Promise<{
     return {
       success: true,
       message: 'Comunidad registrada correctamente',
+      data: communityInserted,
     };
   } catch (error) {
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Error desconocido',
+      data: null,
     };
   }
 }
