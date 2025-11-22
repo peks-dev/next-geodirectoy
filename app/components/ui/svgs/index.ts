@@ -28,6 +28,7 @@ import EditProfile from './EditProfile';
 import AddCommunityIcon from './AddCommunityIcon';
 import DeleteIcon from './DeleteIcon';
 import BackboardIcon from './BackboardIcon';
+import EditIcon from './EditIcon';
 
 export {
   BathroomIcon,
@@ -60,4 +61,5 @@ export {
   AddCommunityIcon,
   DeleteIcon,
   BackboardIcon,
+  EditIcon,
 };
