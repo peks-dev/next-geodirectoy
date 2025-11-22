@@ -4,11 +4,15 @@ import { registerCommunity } from '../../../action/register';
 import { updateCommunity } from '../../../action/update';
 import { compressAndUpdateImages } from '../utils/compressImages';
 import { validateFormData } from '../utils/validateForm';
-import type { CommunityFormData } from '@/app/types/communityTypes';
+import type { CommunityFormData, Community } from '@/app/types/communityTypes';
 
 interface UseFormSubmissionReturn {
   isLoading: boolean;
-  handleSubmit: () => Promise<{ success: boolean; message?: string }>;
+  handleSubmit: () => Promise<{
+    success: boolean;
+    message?: string;
+    data: Community | null;
+  }>;
 }
 
 export function useFormSubmission(): UseFormSubmissionReturn {
@@ -55,7 +59,7 @@ export function useFormSubmission(): UseFormSubmissionReturn {
         throw new Error(result.message || 'Error del servidor');
       }
 
-      return { success: true, message: result.message };
+      return { success: true, message: result.message, data: result.data };
     } catch (error) {
       throw error;
     } finally {

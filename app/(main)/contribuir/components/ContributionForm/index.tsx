@@ -8,6 +8,7 @@ import StepRenderer from './components/StepRenderer';
 import { useNavigationStore } from './store/useNavigationStore';
 import { useContributionStore } from './store/useContributionStore';
 import { useFormSubmission } from './hooks/useFormSubmission';
+import { useCommunitiesProfileStore } from '@/app/(main)/perfil/stores/useCommunitiesProfileStore';
 import {
   showSuccessToast,
   handleSubmissionError,
@@ -23,24 +24,25 @@ export default function ContributionForm({ initialData }: Props) {
     useNavigationStore();
   const { reset, setFormData } = useContributionStore();
   const { isLoading, handleSubmit: performSubmit } = useFormSubmission();
+  const addCommunity = useCommunitiesProfileStore(
+    (state) => state.addCommunity
+  );
 
-  // 1. Usamos useRef para garantizar que la inicialización ocurra solo una vez.
   const isInitialized = useRef(false);
 
-  // 2. Lógica de inicialización del store.
-  // Esto se ejecuta en el primer render, antes del useEffect.
-  if (initialData && !isInitialized.current) {
-    // Sincronizamos el store con los datos iniciales del servidor.
-    setFormData(initialData);
-    // Marcamos como inicializado para que no se vuelva a ejecutar.
-    isInitialized.current = true;
-  }
+  useEffect(() => {
+    if (initialData) {
+      setFormData(initialData);
+      isInitialized.current = true;
+    }
+  }, [initialData, setFormData]);
 
-  // 3. El useEffect ahora solo se encarga de la limpieza.
+  // Limpieza al desmontar
   useEffect(() => {
     return () => {
       reset();
       resetToStart();
+      isInitialized.current = false;
     };
   }, [reset, resetToStart]);
 
@@ -48,7 +50,8 @@ export default function ContributionForm({ initialData }: Props) {
     e.preventDefault();
     try {
       const result = await performSubmit();
-      if (result.success) {
+      if (result.success && result.data) {
+        addCommunity(result.data);
         showSuccessToast(
           `Comunidad ${initialData ? 'actualizada' : 'registrada'} con éxito`,
           result.message
@@ -59,7 +62,6 @@ export default function ContributionForm({ initialData }: Props) {
     }
   };
 
-  // El resto del componente permanece igual...
   return (
     <FlexBox
       direction="col"
