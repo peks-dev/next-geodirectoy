@@ -42,7 +42,7 @@ export default function ImageSlider({
   }
 
   return (
-    <div className="w-full" style={{ height: 'clamp(18rem, 27vh, 25rem)' }}>
+    <div className="h-[20rem] w-full md:h-[35rem]">
       <Swiper
         modules={modules}
         spaceBetween={0}
