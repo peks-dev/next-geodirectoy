@@ -16,6 +16,7 @@ import {
   logout as logoutService,
 } from '../services/authService.browser';
 import { useProfileStore } from '@/app/(main)/perfil/stores/useProfileStore';
+import { useCommunitiesProfileStore } from '@/app/(main)/perfil/stores/useCommunitiesProfileStore';
 import type { User, AuthChangeEvent, Session } from '@/lib/supabase/types';
 
 interface AuthContextType {
@@ -40,6 +41,7 @@ export function AuthProvider({
   const clearProfile = useProfileStore((state) => state.clearProfile);
   const router = useRouter();
   const pathname = usePathname();
+  const { clearCommunities } = useCommunitiesProfileStore.getState();
 
   const authResolvers = useRef<Array<(user: User | null) => void>>([]);
 
@@ -98,7 +100,10 @@ export function AuthProvider({
         console.error('Error al cerrar sesión:', result.error);
         return { error: result.error };
       }
+      // Limpieza de datos del usuario logeado
       clearProfile();
+      clearCommunities();
+
       return { error: null };
     } catch (error) {
       console.error('Unexpected error during logout:', error);
