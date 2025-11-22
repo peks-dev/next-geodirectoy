@@ -1,6 +1,6 @@
 // geodirectory/app/(main)/contribuir/editar/[id]/page.tsx
 import ContributionForm from '@/app/(main)/contribuir/components/ContributionForm';
-import { ProtectedWrapper } from '@/app/components/auth/ProtectedWrapper';
+import { ProtectedWrapper } from '@/app/(auth)/components/ProtectedWrapper';
 import { getCommunityById } from '@/lib/data/communities';
 import { transformResponseToFormData } from '@/lib/data/processors';
 import { notFound } from 'next/navigation';
