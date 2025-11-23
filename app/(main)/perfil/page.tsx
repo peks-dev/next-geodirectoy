@@ -23,13 +23,16 @@ export default async function ProfilePage() {
           </div>
         </header>
         <ProfileCommunities />
-        <NavigationButton
-          url="/contribuir"
-          className="bg-background-interactive border-accent-primary absolute right-16 bottom-15 rounded-[50%] border-2 p-4"
-          variant="icon"
-        >
-          <AddCommunityIcon />
-        </NavigationButton>
+        <div className="border-accent-primary active:scale:110 absolute right-16 bottom-15 overflow-hidden rounded-[50%] border-2 p-2">
+          <NavigationButton
+            url="/contribuir"
+            className="bg-background-interactive rounded-[50%] p-4"
+            variant="icon"
+            size="md"
+          >
+            <AddCommunityIcon />
+          </NavigationButton>
+        </div>
       </div>
     </ProtectedWrapper>
   );

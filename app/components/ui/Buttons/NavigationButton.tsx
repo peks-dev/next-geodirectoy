@@ -3,7 +3,7 @@ import Button from '../Button';
 import { useRouter } from 'next/navigation';
 
 type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'delete' | 'icon';
-type ButtonSize = 'default' | 'sm' | 'xsm' | 'lg' | 'xl';
+type ButtonSize = 'default' | 'sm' | 'xsm' | 'lg' | 'xl' | 'md';
 
 interface NavigationButtonProps {
   url: string;
