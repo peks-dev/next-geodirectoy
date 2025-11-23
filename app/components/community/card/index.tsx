@@ -2,7 +2,13 @@ import NavigationButton from '../../ui/Buttons/NavigationButton';
 import DeleteCommunityBtn from '@/app/(main)/comunidad/components/DeleteCommunityBtn';
 import ImageSlider from '../../ui/Sliders/ImageSlider';
 import type { CommunityCard } from '@/app/types/communityTypes';
-import { StarIcon, CommentsIcon, PeopleIcon, EditIcon } from '../../ui/svgs/';
+import {
+  StarIcon,
+  CommentsIcon,
+  PeopleIcon,
+  EditIcon,
+  CornerIcon,
+} from '../../ui/svgs/';
 
 interface Props {
   data: CommunityCard;
@@ -17,29 +23,32 @@ export default function CommunityCard({ data, isPopup = true }: Props) {
   ];
 
   return (
-    <article className="gap-md flex w-full flex-col">
-      <header className="bg-dark-primary p-sm border-accent-primary flex justify-between border-x-2">
-        <h2 className="text-md text-light-secondary neon-effect uppercase">
-          {data.name}
-        </h2>
-      </header>
-      <div className="transparent-container p-md relative">
-        {/*profile buttons*/}
-        {isPopup === false && (
-          <div className="gap-md absolute top-10 right-8 z-50 flex flex-col">
-            <NavigationButton
-              url={`/contribuir/editar/${data.id}`}
-              variant="icon"
-              className="bg-background-interactive p-4"
-            >
-              <EditIcon />
-            </NavigationButton>
-            <DeleteCommunityBtn communityId={data.id} />
-          </div>
-        )}
+    <article className="p-lg text-foreground w-full">
+      <div className="transparent-container p-md flex flex-col gap-5">
+        <header className="bg-border-secondary py-1">
+          <h2 className="text-md text-foreground neon-effect text-center uppercase">
+            {data.name}
+          </h2>
+        </header>
 
-        <ImageSlider images={data.images} enableAutoplay enablePagination />
-        <footer className="border-border-secondary mt-5 flex justify-between border-t-2 pt-3">
+        <div className="relative">
+          {/*profile buttons*/}
+          {isPopup === false && (
+            <div className="gap-md absolute top-5 right-5 z-50 flex flex-col">
+              <NavigationButton
+                url={`/contribuir/editar/${data.id}`}
+                variant="icon"
+                className="bg-background-interactive p-4"
+              >
+                <EditIcon />
+              </NavigationButton>
+              <DeleteCommunityBtn communityId={data.id} />
+            </div>
+          )}
+          <ImageSlider images={data.images} enableAutoplay enablePagination />
+        </div>
+
+        <footer className="border-border-secondary flex justify-between border-t-2 pt-3">
           <ul className="flex grow items-center gap-6">
             {footerData.map((e, i) => (
               <li key={i} className="flex items-center gap-3">
@@ -57,6 +66,30 @@ export default function CommunityCard({ data, isPopup = true }: Props) {
           </NavigationButton>
         </footer>
       </div>
+      <CornerIcon
+        size="medium"
+        position="top-left"
+        variant="static"
+        className="text-foreground"
+      />
+      <CornerIcon
+        size="medium"
+        position="top-right"
+        variant="static"
+        className="text-foreground"
+      />
+      <CornerIcon
+        size="medium"
+        position="bottom-left"
+        variant="static"
+        className="text-foreground"
+      />
+      <CornerIcon
+        size="medium"
+        position="bottom-right"
+        variant="static"
+        className="text-foreground"
+      />
     </article>
   );
 }
