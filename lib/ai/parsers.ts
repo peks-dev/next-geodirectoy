@@ -1,6 +1,6 @@
 import type { ImageAnalysisResult } from '@/app/(main)/contribuir/analysis/types';
 import type { TextAnalysisResult } from '@/app/(main)/contribuir/analysis/types';
-import { AIServiceError } from '@/lib/errors/aiErrors';
+import { AIServiceError } from '@/lib/ai/aiErrors';
 
 export function parseSimpleTextAnalysisResponse(
   rawResponse: string,

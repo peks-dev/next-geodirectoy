@@ -1,12 +1,10 @@
-import { ImageValidationError, AI_ERROR_MESSAGES } from '@/lib/errors/aiErrors';
+import { ImageValidationError, AI_ERROR_MESSAGES } from '@/lib/ai/aiErrors';
 import type {
   ImageAnalysisResult,
   ValidationResult,
-} from '../types/imageAnalysis';
-import type {
   TextAnalysisResult,
   TextValidationResult,
-} from '../types/imageAnalysis';
+} from './types';
 
 export function validateCourtAnalysis(
   analysis: ImageAnalysisResult

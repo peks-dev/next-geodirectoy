@@ -3,7 +3,7 @@ import { parseTextAnalysisResponse } from '@/lib/ai/parsers';
 import { validateTextAnalysis } from './validators';
 import { COMMUNITY_TEXT_ANALYSIS_PROMPT } from './prompts';
 import type { CommunityTextAnalysisResult } from '../analysis/types';
-import { AIUnavailableError, AIServiceError } from '@/lib/errors/aiErrors';
+import { AIUnavailableError, AIServiceError } from '@/lib/ai/aiErrors';
 
 export interface CommunityTexts {
   name: string;

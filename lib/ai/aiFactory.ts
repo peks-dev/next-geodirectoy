@@ -1,6 +1,6 @@
 import type { BaseAIService, AIProvider } from './types';
 import { GeminiService } from './services/geminiService';
-import { AIUnavailableError } from '@/lib/errors/aiErrors';
+import { AIUnavailableError } from '@/lib/ai/aiErrors';
 
 function createAIService(): BaseAIService {
   // Lee el proveedor desde variables de entorno (default: gemini)

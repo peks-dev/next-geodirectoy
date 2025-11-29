@@ -3,7 +3,7 @@ import { parseCourtAnalysisResponse } from '@/lib/ai/parsers';
 import { validateCourtAnalysis } from './validators';
 import { COURT_ANALYSIS_PROMPT } from './prompts';
 import type { CourtImageAnalysisResult } from './types';
-import { AIUnavailableError } from '@/lib/errors/aiErrors';
+import { AIUnavailableError } from '@/lib/ai/aiErrors';
 
 export async function analyzeCourtImages(
   images: File[]

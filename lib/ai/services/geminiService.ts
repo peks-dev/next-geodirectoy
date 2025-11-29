@@ -1,6 +1,6 @@
 import type { GeminiRequest, GeminiResponse, GeminiPart } from './types';
 import type { BaseAIService } from '../types';
-import { AIServiceError } from '@/lib/errors/aiErrors';
+import { AIServiceError } from '@/lib/ai/aiErrors';
 import { fileToBase64 } from '@/lib/utils/images/imagesTransform';
 
 // Configurar y ejecutar llamadas a la REST API de Gemini
