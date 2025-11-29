@@ -3,7 +3,7 @@ import { parseTextAnalysisResponse } from '@/lib/ai/parsers';
 import { validateTextAnalysis } from '@/app/(main)/contribuir/analysis/validators';
 import { COMMUNITY_TEXT_ANALYSIS_PROMPT } from '@/app/(main)/contribuir/analysis/prompts';
 import { CommunityTextAnalysisResult } from '@/app/(main)/contribuir/analysis/types';
-import { AIUnavailableError, AIServiceError } from '@/lib/errors/aiErrors';
+import { AIUnavailableError, AIServiceError } from '@/lib/ai/aiErrors';
 
 // Tipos para un resultado de validación más estricto y claro.
 // Esto nos permite evitar `any` y `unknown` más adelante.
