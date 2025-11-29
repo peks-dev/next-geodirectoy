@@ -2,7 +2,7 @@ import { analyzeImages } from '@/lib/services/ai/analyzers/imageAnalyzer';
 import { parseJSONResponse } from '@/lib/services/ai/utils/parsers';
 import { COURT_ANALYSIS_PROMPT } from './prompts';
 import { validateCourtAnalysis } from './validators';
-import type { CourtImageAnalysisRaw, CourtImageAnalysisResult } from '../types';
+import type { CourtImageAnalysisRaw, CourtImageAnalysisResult } from './types';
 
 /**
  * Función pública para analizar imágenes de canchas

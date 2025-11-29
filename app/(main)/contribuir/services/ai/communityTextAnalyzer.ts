@@ -6,7 +6,7 @@ import type {
   CommunityTextAnalysisRaw,
   CommunityTextAnalysisResult,
   CommunityTexts,
-} from '../types';
+} from './types';
 
 /**
  * Textos a analizar
