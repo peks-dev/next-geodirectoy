@@ -6,7 +6,6 @@ export const coordinatesSchema = z
     lat: z.number().min(-90).max(90, 'Latitud debe estar entre -90 y 90'),
     lng: z.number().min(-180).max(180, 'Longitud debe estar entre -180 y 180'),
   })
-  .nullable()
   .refine((data) => data !== null, { message: 'marca una ubicacion' });
 
 // Schema para servicios
@@ -45,8 +44,8 @@ export const categorySchema = z.object({
     .min(1, 'Debe seleccionar al menos un género'),
 });
 
-// 👇 NUEVO: Schema flexible para imágenes (File o string)
-const imageSchema = z.union([
+// Schema flexible para imágenes (File o string) - EXPORTADO para updateCommunitySchema
+export const imageSchema = z.union([
   z.instanceof(File),
   z.string().url('URL de imagen inválida'),
 ]);

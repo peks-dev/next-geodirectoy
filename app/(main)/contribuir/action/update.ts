@@ -1,56 +1,64 @@
 'use server';
 import { v4 as uuidv4 } from 'uuid';
-import type { CommunityFormData, Community } from '@/app/types/communityTypes';
+import type {
+  CommunityFormData,
+  CommunityFullResponse,
+} from '@/app/types/communityTypes';
 import { createClient } from '@/lib/supabase/server';
 import { uploadImage, deleteImage } from '@/lib/supabase/storage';
 import { getCommunityById } from '@/lib/data/communities';
 import { extractStoragePath } from '@/lib/utils/extractStoragePath';
+import { type Result, ok, fail } from '@/lib/types/result';
+import { handleServiceError } from '@/lib/errors/handler';
+import { ErrorCodes } from '@/lib/errors/codes';
+import { updateCommunitySchema } from '@/app/(main)/contribuir/schemas/updateCommunitySchema';
+import { validateOrThrow } from '@/lib/errors/zodHandler';
+import { DatabaseError } from '@/lib/errors/database';
 
-export async function updateCommunity(formData: CommunityFormData): Promise<{
-  success: boolean;
-  message: string;
-  data: Community | null;
-}> {
+export async function updateCommunity(
+  formData: CommunityFormData // TODO: Cambiar a UpdateCommunityFormData cuando se exporte desde types
+): Promise<Result<CommunityFullResponse>> {
   const supabase = await createClient();
 
   try {
-    // 1. Validar autenticación (ÚNICA validación confiable)
+    // 1. Validar schema
+    const validated = validateOrThrow(updateCommunitySchema, formData);
+
+    // 2. Validar autenticación
     const {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      throw new Error('No autorizado');
-    }
-
-    // 2. Validaciones básicas
-    if (!formData.id || !formData.location) {
-      throw new Error('Datos incompletos');
+      return fail(ErrorCodes.UNAUTHORIZED, 'No autorizado');
     }
 
     // 3. Verificar propiedad de la comunidad
-    const existingCommunity = await getCommunityById(formData.id);
+    const existingCommunity = await getCommunityById(validated.id);
     if (!existingCommunity) {
-      throw new Error('Comunidad no encontrada');
+      return fail(ErrorCodes.COMMUNITY_NOT_FOUND, 'Comunidad no encontrada');
     }
 
     if (existingCommunity.user_id !== user.id) {
-      throw new Error('No autorizado');
+      return fail(ErrorCodes.FORBIDDEN, 'No autorizado');
     }
 
     // 4. Procesar imágenes
     const oldUrls = existingCommunity.images;
-    const newFiles = formData.images.filter(
+    const newFiles = validated.images.filter(
       (img): img is File => img instanceof File
     );
-    const keptUrls = formData.images.filter(
+    const keptUrls = validated.images.filter(
       (img): img is string => typeof img === 'string'
     );
 
     const totalImages = keptUrls.length + newFiles.length;
     if (totalImages < 2 || totalImages > 4) {
-      throw new Error('Entre 2 y 4 imágenes requeridas');
+      return fail(
+        ErrorCodes.BUSINESS_RULE_VIOLATION,
+        'Entre 2 y 4 imágenes requeridas'
+      );
     }
 
     // 5. Eliminar imágenes no mantenidas
@@ -71,7 +79,7 @@ export async function updateCommunity(formData: CommunityFormData): Promise<{
         newFiles.map((file) => {
           const fileExtension = file.name.split('.').pop() || 'jpg';
           const fileName = `${uuidv4()}.${fileExtension}`;
-          const filePath = `${user.id}/${formData.id}/${fileName}`;
+          const filePath = `${user.id}/${validated.id}/${fileName}`;
 
           return uploadImage(file, 'COMMUNITIES', filePath);
         })
@@ -79,7 +87,10 @@ export async function updateCommunity(formData: CommunityFormData): Promise<{
 
       const failed = uploadResults.find((r) => !r.success);
       if (failed) {
-        throw new Error(`Error subiendo imagen: ${failed.error}`);
+        return fail(
+          ErrorCodes.STORAGE_ERROR,
+          `Error subiendo imagen: ${failed.error}`
+        );
       }
 
       uploadedUrls = uploadResults.map((r) => r.url!);
@@ -87,29 +98,28 @@ export async function updateCommunity(formData: CommunityFormData): Promise<{
     }
 
     // 7. Preparar datos para actualización
-    const { location, ...restData } = formData;
     const dataToUpdate = {
-      type: restData.type,
-      name: restData.name,
-      description: restData.description,
-      country: restData.country,
-      state: restData.state,
-      city: restData.city,
-      floor_type: restData.floor_type,
-      is_covered: restData.is_covered,
-      schedule: restData.schedule,
-      services: restData.services,
-      age_group: restData.age_group,
-      categories: restData.categories,
+      type: validated.type,
+      name: validated.name,
+      description: validated.description,
+      country: validated.country,
+      state: validated.state,
+      city: validated.city,
+      floor_type: validated.floor_type,
+      is_covered: validated.is_covered,
+      schedule: validated.schedule,
+      services: validated.services,
+      age_group: validated.age_group,
+      categories: validated.categories,
       images: [...keptUrls, ...uploadedUrls],
-      location: `POINT(${location.lng} ${location.lat})`,
+      location: `POINT(${validated.location.lng} ${validated.location.lat})`,
     };
 
     // 8. Actualizar en base de datos
     const { data: communityUpdated, error: updateError } = await supabase
       .from('communities')
       .update(dataToUpdate)
-      .eq('id', formData.id)
+      .eq('id', validated.id)
       .select()
       .single();
 
@@ -121,20 +131,15 @@ export async function updateCommunity(formData: CommunityFormData): Promise<{
         ).catch(console.error);
       }
 
-      throw new Error(`Error actualizando: ${updateError.message}`);
+      throw new DatabaseError(
+        `Error actualizando: ${updateError.message}`,
+        ErrorCodes.DATABASE_ERROR,
+        updateError
+      );
     }
 
-    return {
-      success: true,
-      message: 'Comunidad actualizada correctamente',
-      data: communityUpdated,
-    };
+    return ok(communityUpdated as CommunityFullResponse);
   } catch (error) {
-    console.error('Error en updateCommunity:', error);
-    return {
-      success: false,
-      message: error instanceof Error ? error.message : 'Error desconocido',
-      data: null,
-    };
+    return handleServiceError(error);
   }
 }
