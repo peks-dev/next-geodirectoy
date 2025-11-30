@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { sendCommunityReview } from '../dbQueries';
 import { createClient } from '@/lib/supabase/server';
 import { reviewForm } from '../schemas/reviewSchema';
-import { analyzeUserComment } from '../utils/analyzeUserComment'; // <-- 1. Importar la función
+import { analyzeUserComment } from '../services/analyzeComment';
 import type { ReviewFormData, ReviewToSend } from '../types';
 import type { ActionResponse } from '@/app/types/ActionTypes';
 
