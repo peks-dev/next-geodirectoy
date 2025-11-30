@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { toast } from 'sonner';
-import { useContributionStore } from '@/app/(main)/contribuir/stores/useContributionStore';
+import { useContributionStore } from '@/contribuir/stores/useContributionStore';
 import ImagePreview from './components/ImagePreview';
 import FlexBox from '@/app/components/ui/containers/FlexBox';
 import Button from '@/app/components/ui/Button';

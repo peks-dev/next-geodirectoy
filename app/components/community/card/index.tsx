@@ -36,7 +36,7 @@ export default function CommunityCard({ data, isPopup = true }: Props) {
           {isPopup === false && (
             <div className="gap-md absolute top-5 right-5 z-50 flex flex-col">
               <NavigationButton
-                url={`/contribuir/editar/${data.id}`}
+                url={`/comunidad/contribuir/editar/${data.id}`}
                 variant="icon"
                 className="bg-background-interactive p-4"
               >

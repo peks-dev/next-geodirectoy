@@ -1,7 +1,7 @@
 import FlexBox from '@/app/components/ui/containers/FlexBox';
 import WarningIcon from '@/app/components/ui/svgs/WarningIcon';
 import Button from '@/app/components/ui/Button';
-import { useNavigationStore } from '@/app/(main)/contribuir/stores/useNavigationStore';
+import { useNavigationStore } from '@/contribuir/stores/useNavigationStore';
 
 export default function NoTypeSelectedStep() {
   const { setCurrentStep } = useNavigationStore();

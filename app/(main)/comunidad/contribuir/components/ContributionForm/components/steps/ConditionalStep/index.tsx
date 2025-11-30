@@ -1,4 +1,4 @@
-import { useContributionStore } from '@/app/(main)/contribuir/stores/useContributionStore';
+import { useContributionStore } from '@/contribuir/stores/useContributionStore';
 import ClubCategoriesStep from './ClubCategoriesStep';
 import PickupAgeGroupStep from './PickupAgeGroupStep';
 import NoTypeSelectedStep from './NoTypeSelectedStep';

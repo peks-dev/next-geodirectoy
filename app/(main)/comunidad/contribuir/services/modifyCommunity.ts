@@ -1,5 +1,5 @@
 import type { CommunityFullResponse } from '@/app/types/communityTypes';
-import type { CourtImageAnalysisResult } from '@/app/(main)/contribuir/services/analyzeCommunity/types';
+import type { CourtImageAnalysisResult } from '@/contribuir/services/analyzeCommunity/types';
 import { UpdateCommunityFormData } from '../schemas/updateCommunitySchema';
 import { updateCommunityById } from '@/app/(main)/comunidad/dbQueries';
 import { CommunityUpdateData } from '@/app/types/communityTypes';

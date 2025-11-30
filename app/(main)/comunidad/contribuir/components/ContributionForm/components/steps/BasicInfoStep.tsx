@@ -1,7 +1,7 @@
 import Input from '@/app/components/ui/inputs/Text';
 import Textarea from '@/app/components/ui/inputs/Textarea';
 import FlexBox from '@/app/components/ui/containers/FlexBox';
-import { useContributionStore } from '@/app/(main)/contribuir/stores/useContributionStore';
+import { useContributionStore } from '@/contribuir/stores/useContributionStore';
 
 export default function BasicInfoStep() {
   const { name, description, updateFormField } = useContributionStore();

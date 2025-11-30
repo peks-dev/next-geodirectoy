@@ -7,7 +7,7 @@ import { type Result, ok, fail } from '@/lib/types/result';
 import { handleServiceError } from '@/lib/errors/handler';
 import { ErrorCodes } from '@/lib/errors/codes';
 import { DatabaseError } from '@/lib/errors/database';
-import { updateCommunitySchema } from '@/app/(main)/contribuir/schemas/updateCommunitySchema';
+import { updateCommunitySchema } from '@/contribuir/schemas/updateCommunitySchema';
 import { validateOrThrow } from '@/lib/errors/zodHandler';
 import { separateNewAndExistingImages } from '../utils/imageSplitter';
 import * as contributionService from '../services/index';

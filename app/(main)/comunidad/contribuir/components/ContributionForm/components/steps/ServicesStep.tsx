@@ -1,5 +1,5 @@
 import FlexBox from '@/app/components/ui/containers/FlexBox';
-import { useContributionStore } from '@/app/(main)/contribuir/stores/useContributionStore';
+import { useContributionStore } from '@/contribuir/stores/useContributionStore';
 import ToggleInput from '@/app/components/ui/inputs/Toggle';
 
 const serviceLabels = {

@@ -1,4 +1,4 @@
-import ContributionForm from '@/app/(main)/contribuir/components/ContributionForm';
+import ContributionForm from '@/contribuir/components/ContributionForm';
 import { ProtectedWrapper } from '@/app/(auth)/components/ProtectedWrapper';
 import { getCommunityById } from '@/lib/data/communities';
 import { transformResponseToFormData } from '@/lib/data/processors';
