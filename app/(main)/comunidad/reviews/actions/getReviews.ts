@@ -1,6 +1,6 @@
 'use server';
-import { getCommunityReviews } from '@/lib/data/reviews';
-import type { DbReviewResponse } from '@/app/types/reviewTypes';
+import { getCommunityReviews } from '../dbQueries';
+import type { DbReviewResponse } from '../types';
 import type { ActionResponse } from '@/app/types/ActionTypes';
 
 export async function getReviews(

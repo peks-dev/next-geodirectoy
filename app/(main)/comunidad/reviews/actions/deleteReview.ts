@@ -1,6 +1,6 @@
 'use server';
 import type { ActionResponse } from '@/app/types/ActionTypes';
-import { deleteUserReview } from '@/lib/data/reviews';
+import { deleteUserReview } from '../dbQueries';
 import { createClient } from '@/lib/supabase/server';
 
 export async function deleteReview(

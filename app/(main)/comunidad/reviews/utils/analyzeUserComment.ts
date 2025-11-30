@@ -1,21 +1,40 @@
 import { analyzeText } from '@/lib/services/ai/analyzers/textAnalyzer';
 import { COMMENT_ANALYSIS_PROMPT } from '../prompts';
-import { parseSimpleTextAnalysisResponse } from '@/lib/ai/parsers'; // <-- 1. Usar el nuevo parser
 
 // Definimos la "forma" del objeto que esperamos recibir de la validación.
 interface TextAnalysisData {
   isLegitimate: boolean;
 }
 
-// 2. Definimos un tipo de resultado de validación para mayor claridad.
-type ValidationResult<T> =
-  | { success: true; data: T }
-  | { success: false; errors: string[] };
+// Creamos un parser que convierte la respuesta en el tipo esperado
+function parseCommentAnalysisResponse(
+  rawResponse: string,
+  _providerName: string
+): unknown {
+  try {
+    const cleanResponse = rawResponse
+      .replace(/```json\n?/gi, '')
+      .replace(/```\n?/g, '')
+      .trim();
 
-// 3. Creamos un validador simple y específico para esta tarea.
+    if (!cleanResponse) {
+      throw new Error('La respuesta de la IA está vacía.');
+    }
+
+    return JSON.parse(cleanResponse);
+  } catch (error) {
+    throw new Error(
+      `No se pudo interpretar la respuesta JSON: ${error instanceof Error ? error.message : 'Error desconocido'}`
+    );
+  }
+}
+
+// Creamos un validador simple y específico para esta tarea.
 function validateCommentAnalysis(
   parsedData: unknown
-): ValidationResult<TextAnalysisData> {
+):
+  | { success: true; data: TextAnalysisData }
+  | { success: false; errors: string[] } {
   // Comprobamos si el dato es un objeto y tiene la propiedad 'isLegitimate' de tipo booleano.
   if (
     typeof parsedData === 'object' &&
@@ -37,13 +56,14 @@ function validateCommentAnalysis(
 }
 
 export async function analyzeUserComment(commentText: string) {
-  const prompt = COMMENT_ANALYSIS_PROMPT.replace('{comment}', commentText);
-
   try {
-    // 4. Llamamos a analyzeText con el NUEVO parser y el NUEVO validador.
-    const result = await analyzeText<TextAnalysisData>(
-      prompt,
-      parseSimpleTextAnalysisResponse,
+    // Llamamos a analyzeText con el parser y validador personalizados.
+    const result = await analyzeText<unknown, TextAnalysisData>(
+      {
+        prompt: COMMENT_ANALYSIS_PROMPT,
+        texts: { comment: commentText },
+      },
+      parseCommentAnalysisResponse,
       validateCommentAnalysis
     );
 

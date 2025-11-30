@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-import type { DbReviewResponse, ReviewToSend } from '@/app/types/reviewTypes';
+import type { DbReviewResponse, ReviewToSend } from './types';
 import type { ActionResponse } from '@/app/types/ActionTypes';
 
 export async function getCommunityReviews(

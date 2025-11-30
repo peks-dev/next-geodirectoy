@@ -1,11 +1,11 @@
 'use server';
 import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
-import { sendCommunityReview } from '@/lib/data/reviews';
+import { sendCommunityReview } from '../dbQueries';
 import { createClient } from '@/lib/supabase/server';
 import { reviewForm } from '../schemas/reviewSchema';
 import { analyzeUserComment } from '../utils/analyzeUserComment'; // <-- 1. Importar la función
-import type { ReviewFormData, ReviewToSend } from '@/app/types/reviewTypes';
+import type { ReviewFormData, ReviewToSend } from '../types';
 import type { ActionResponse } from '@/app/types/ActionTypes';
 
 export async function createReview(

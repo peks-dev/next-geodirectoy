@@ -1,19 +1,16 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import HeadingSection from '../HeadingSection';
+import HeadingSection from '@/app/(main)/comunidad/components/HeadingSection';
 import Button from '@/app/components/ui/Button';
-import RatingForm from '../RatingForm';
+import RatingForm from './RatingForm';
 import DetailsBar from '@/app/components/ui/DetailsBar';
-import ReviewItem from '../ReviewItem';
-import type {
-  DbReviewResponse,
-  ReviewFormState,
-} from '@/app/types/reviewTypes';
+import ReviewItem from './ReviewItem';
+import type { DbReviewResponse, ReviewFormState } from '../types';
 import { useModalStore } from '@/app/components/ui/Modal/useModalStore';
-import { useRatingFormStore } from '../RatingForm/useRatingStore';
-import { getReviews } from '../../action/getReviews';
-import { createReview } from '../../action/createReview';
-import { deleteReview } from '../../action/deleteReview';
+import { useRatingFormStore } from './RatingForm/useRatingStore';
+import { getReviews } from '../actions/getReviews';
+import { createReview } from '../actions/createReview';
+import { deleteReview } from '../actions/deleteReview';
 import { useAuth } from '@/app/(auth)/components/AuthProvider';
 import {
   showErrorToast,
