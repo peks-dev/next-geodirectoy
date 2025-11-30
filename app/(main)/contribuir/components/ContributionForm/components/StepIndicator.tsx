@@ -1,7 +1,10 @@
 'use client';
+
 import FlexBox from '@/app/components/ui/containers/FlexBox';
-import { useNavigationStore } from '../store/useNavigationStore';
-import type { StepNumber } from '../store/useNavigationStore';
+import {
+  useNavigationStore,
+  type StepNumber,
+} from '../../../stores/useNavigationStore';
 
 interface StepIndicatorProps {
   currentStep: number; // 1-7 (pasos visibles para el usuario)

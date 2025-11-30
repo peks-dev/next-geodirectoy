@@ -1,4 +1,4 @@
-// /home/peks/Documents/projects/refactor-bp/geodirectory/app/types/communityTypes.ts
+import { UpdateCommunityFormData } from '../(main)/contribuir/schemas/updateCommunitySchema';
 
 // ============================================
 // TIPOS BASE
@@ -81,11 +81,22 @@ export interface CommunityInsertData
     CommunityFormData,
     'user_id' | 'images' | 'floor_type' | 'id' | 'location'
   > {
+  id: string; // Requerido
   user_id: string; // Requerido
   images: string[]; // Solo URLs después de subir a storage
   floor_type: FloorType; // Requerido después de análisis de AI
   location: `POINT(${number} ${number})`; // Formato PostGIS WKT
 }
+
+export type CommunityUpdateData = Omit<
+  UpdateCommunityFormData,
+  'id' | 'images' | 'location'
+> & {
+  images: string[]; // Final array para DB
+  location: `POINT(${number} ${number})`; // Formato PostGIS WKT
+  floor_type: FloorType; // AI result (no null)
+  is_covered: boolean; // AI result
+};
 
 // ============================================
 // DATOS COMPLETOS DESDE LA BASE DE DATOS
@@ -125,7 +136,6 @@ export interface Community {
 /**
  * Respuesta completa de las funciones RPC:
  * - get_community_by_id
- * - communities_by_city
  */
 export interface CommunityFullResponse {
   id: string;
@@ -152,22 +162,6 @@ export interface CommunityFullResponse {
 }
 
 /**
- * Respuesta de la función nearby_communities (antes de transformar)
- */
-export interface CommunityNearbyResponse {
-  id: string;
-  type: CommunityType;
-  name: string;
-  lat: number;
-  lng: number;
-  city: string;
-  distance_meters: number;
-  average_rating: number;
-  total_reviews: number;
-  images: string[];
-}
-
-/**
  * Respuesta de la función communities_in_view (antes de transformar)
  */
 export interface CommunityMapResponse {
@@ -186,50 +180,6 @@ export interface CommunityMapResponse {
 // TIPOS TRANSFORMADOS PARA USO EN COMPONENTES
 // ============================================
 
-/**
- * Comunidad cercana con distancia calculada.
- * Usado en búsquedas geoespaciales.
- */
-export interface NearbyCommunity {
-  id: string;
-  type: CommunityType;
-  name: string;
-  location: Coordinates;
-  city: string;
-  distance_meters: number;
-  average_rating: number;
-  total_reviews: number;
-  images: string[];
-}
-
-// ============================================
-// TIPOS UTILITARIOS
-// ============================================
-
-/**
- * Respuesta paginada genérica
- */
-export interface PaginatedResponse<T> {
-  data: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-}
-
-/**
- * Bounding box para consultas de mapas
- */
-export interface MapBounds {
-  minLat: number;
-  minLng: number;
-  maxLat: number;
-  maxLng: number;
-}
-
-// ============================================
-// TIPOS PARA EL MAPA
-// ============================================
-
 export interface CommunityCard {
   id: string;
   name: string;
@@ -239,12 +189,12 @@ export interface CommunityCard {
   total_reviews: number;
 }
 
+// ============================================
+// TIPOS PARA EL MAPA
+// ============================================
+
 export interface CommunityForMap extends CommunityCard {
   location: Coordinates;
-}
-
-export interface CommunitiesOnMap extends CommunityCard {
-  coordinates: Coordinates;
 }
 
 // ============================================

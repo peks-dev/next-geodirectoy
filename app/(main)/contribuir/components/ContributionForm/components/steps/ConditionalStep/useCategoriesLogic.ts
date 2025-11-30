@@ -1,4 +1,4 @@
-import { useContributionStore } from '../../../store/useContributionStore';
+import { useContributionStore } from '@/app/(main)/contribuir/stores/useContributionStore';
 import { POSSIBLE_CATEGORIES } from './constants';
 import type { Gender } from '@/app/types/communityTypes';
 

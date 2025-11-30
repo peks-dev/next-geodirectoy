@@ -1,6 +1,6 @@
 import FlexBox from '@/app/components/ui/containers/FlexBox';
 import ToggleInput from '@/app/components/ui/inputs/Toggle';
-import { useContributionStore } from '../../../store/useContributionStore';
+import { useContributionStore } from '@/app/(main)/contribuir/stores/useContributionStore';
 import { AGE_GROUP_OPTIONS } from './constants';
 import type { AgeGroup } from '@/app/types/communityTypes';
 

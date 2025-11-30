@@ -1,4 +1,3 @@
-// geodirectory/app/(main)/contribuir/editar/[id]/page.tsx
 import ContributionForm from '@/app/(main)/contribuir/components/ContributionForm';
 import { ProtectedWrapper } from '@/app/(auth)/components/ProtectedWrapper';
 import { getCommunityById } from '@/lib/data/communities';
@@ -6,9 +5,9 @@ import { transformResponseToFormData } from '@/lib/data/processors';
 import { notFound } from 'next/navigation';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // Esta es una página de servidor (Server Component) para buscar los datos
@@ -23,7 +22,7 @@ export default async function EditContributionPage({ params }: PageProps) {
     notFound();
   }
 
-  // 3. Transformar a formato de formulario solo cuando sea necesario
+  // 3. Transformar a formato de formulario
   const formData = transformResponseToFormData(communityResponse);
 
   // 4. Renderizamos el mismo componente de formulario, pasándole los datos iniciales

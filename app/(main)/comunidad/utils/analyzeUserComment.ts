@@ -1,4 +1,4 @@
-import { analyzeText } from '@/lib/utils/textAnalizer';
+import { analyzeText } from '@/lib/services/ai/analyzers/textAnalyzer';
 import { COMMENT_ANALYSIS_PROMPT } from '../prompts';
 import { parseSimpleTextAnalysisResponse } from '@/lib/ai/parsers'; // <-- 1. Usar el nuevo parser
 

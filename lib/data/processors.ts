@@ -1,11 +1,7 @@
-// /home/peks/Documents/projects/refactor-bp/geodirectory/lib/transforms/communityTransforms.ts
-
 import type {
   Community,
   CommunityFullResponse,
   CommunityFormData,
-  CommunityNearbyResponse,
-  NearbyCommunity,
   CommunityMapResponse,
   CommunityForMap,
 } from '@/app/types/communityTypes';
@@ -94,28 +90,6 @@ export function transformResponseToFormData(
     age_group: data.age_group,
     categories: data.categories,
     user_id: data.user_id,
-    images: data.images,
-  };
-}
-
-/**
- * Transforma respuesta nearby a NearbyCommunity
- */
-export function transformToNearbyCommunity(
-  data: CommunityNearbyResponse
-): NearbyCommunity {
-  return {
-    id: data.id,
-    type: data.type,
-    name: data.name,
-    location: {
-      lat: data.lat,
-      lng: data.lng,
-    },
-    city: data.city,
-    distance_meters: data.distance_meters,
-    average_rating: data.average_rating,
-    total_reviews: data.total_reviews,
     images: data.images,
   };
 }

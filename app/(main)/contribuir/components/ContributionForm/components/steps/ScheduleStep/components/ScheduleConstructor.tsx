@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { useContributionStore } from '@/app/(main)/contribuir/components/ContributionForm/store/useContributionStore';
+import { useContributionStore } from '@/app/(main)/contribuir/stores/useContributionStore';
 import type { Schedule } from '@/app/types/communityTypes';
 import DaysRangePicker from './DaysRangePicker';
 import TimeRangePicker from './TimeRangePicker';

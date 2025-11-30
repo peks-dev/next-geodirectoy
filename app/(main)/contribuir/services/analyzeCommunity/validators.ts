@@ -8,9 +8,10 @@ import type {
   CommunityTextAnalysisResult,
   CourtImageAnalysisRaw,
   CourtImageAnalysisResult,
-} from '../types';
+} from './types';
 
-import { ImageValidationError, AI_ERROR_MESSAGES } from '@/lib/errors/aiErrors';
+import { AI_ERROR_MESSAGES } from '@/lib/services/ai/errors/messages';
+import { ImageValidationError } from '@/lib/services/ai/errors/custom';
 
 /**
  * Validador específico del dominio de comunidades
