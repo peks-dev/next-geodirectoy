@@ -1,108 +1,90 @@
 import { createClient } from '@/lib/supabase/server';
 import type { DbReviewResponse, ReviewToSend } from './types';
-import type { ActionResponse } from '@/app/types/ActionTypes';
+import { fromSupabaseError } from '@/lib/errors/database';
+import { ErrorCodes } from '@/lib/errors/codes';
 
-export async function getCommunityReviews(
+/**
+ * Data layer puro - Obtiene las reseñas de una comunidad
+ * Throw pattern: Promise<DbReviewResponse[]> | throw DatabaseError
+ */
+export async function fetchCommunityReviews(
   communityId: string
-): Promise<ActionResponse<DbReviewResponse[]>> {
+): Promise<DbReviewResponse[]> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from('reviews')
     .select(
       `
-      id,
-      rating,
-      comment,
-      created_at,
-      updated_at,
-      user_id,
-      community_id,
-      profiles!user_id (
+      *,
+      profiles (
         name,
         avatar_url
       )
     `
     )
     .eq('community_id', communityId)
-    .order('created_at', { ascending: false })
-    .limit(10);
+    .order('created_at', { ascending: false });
 
   if (error) {
-    console.error('Error fetching community reviews:', error);
-    return {
-      success: false,
-      data: null,
-      message: 'No se pudieron cargar los comentarios.',
-    };
+    throw fromSupabaseError(
+      error,
+      'Error fetching community reviews',
+      ErrorCodes.DATABASE_ERROR
+    );
   }
 
-  const reviews = (data || []) as unknown as DbReviewResponse[];
-  return {
-    success: true,
-    data: reviews,
-    message: null,
-  };
+  return (data || []) as unknown as DbReviewResponse[];
 }
 
-export async function sendCommunityReview(
+/**
+ * Data layer puro - Envía una reseña para una comunidad
+ * Throw pattern: Promise<void> | throw DatabaseError
+ */
+export async function insertCommunityReview(
   review: ReviewToSend
-): Promise<ActionResponse<null>> {
+): Promise<void> {
   const supabase = await createClient();
 
   const { error } = await supabase.from('reviews').insert(review);
 
   if (error) {
-    console.error('Error sending review:', error);
-    return {
-      success: false,
-      data: null,
-      message: 'No se pudo enviar tu valoración. Intenta de nuevo.',
-    };
+    throw fromSupabaseError(
+      error,
+      'Error creating community review',
+      ErrorCodes.DATABASE_ERROR
+    );
   }
-
-  return {
-    success: true,
-    data: null,
-    message: '¡Gracias por tu aportación!',
-  };
 }
 
-// Agrega esta función al final del archivo geodirectory/lib/data/reviews.ts
-
-export async function deleteUserReview(
+/**
+ * Data layer puro - Elimina una reseña del usuario
+ * Throw pattern: Promise<void> | throw DatabaseError
+ */
+export async function deleteCommunityReview(
   reviewId: string,
   userId: string
-): Promise<ActionResponse<null>> {
+): Promise<void> {
   const supabase = await createClient();
 
   const { error, count } = await supabase
     .from('reviews')
     .delete()
-    .match({ id: reviewId, user_id: userId }); // <-- ¡Importante!
+    .match({ id: reviewId, user_id: userId });
 
   if (error) {
-    console.error('Error deleting review:', error);
-    return {
-      success: false,
-      data: null,
-      message: 'No se pudo eliminar tu valoración. Intenta de nuevo.',
-    };
+    throw fromSupabaseError(
+      error,
+      'Error deleting review',
+      ErrorCodes.DATABASE_ERROR
+    );
   }
 
   if (count === 0) {
-    // Esto puede pasar si la review ya fue borrada o si el usuario no es el propietario
-    return {
-      success: false,
-      data: null,
-      message:
-        'No se encontró la valoración o no tienes permiso para eliminarla.',
-    };
+    throw fromSupabaseError(
+      { message: 'Review not found or user not owner' },
+      'Reseña no encontrada o no tienes permiso para eliminarla',
+      ErrorCodes.NOT_FOUND
+    );
   }
-
-  return {
-    success: true,
-    data: null,
-    message: 'Tu valoración ha sido eliminada con éxito.',
-  };
 }

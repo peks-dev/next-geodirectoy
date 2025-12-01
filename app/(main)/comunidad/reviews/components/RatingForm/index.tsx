@@ -1,6 +1,6 @@
 import Textarea from '@/app/components/ui/inputs/Textarea';
 import { InputSelector } from '@/app/components/ui/inputs/Selector';
-import { useRatingFormStore } from './useRatingStore';
+import { useRatingFormStore } from '../../stores/useRatingStore';
 import { useEffect } from 'react';
 
 export default function RatingForm() {

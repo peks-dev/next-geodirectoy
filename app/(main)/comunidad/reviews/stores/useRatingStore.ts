@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ReviewFormState } from '../../types';
+import type { ReviewFormState } from '../types';
 
 export const useRatingFormStore = create<ReviewFormState>((set) => ({
   comment: '',
