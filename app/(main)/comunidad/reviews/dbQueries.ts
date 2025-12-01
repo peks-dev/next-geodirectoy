@@ -58,33 +58,53 @@ export async function insertCommunityReview(
 }
 
 /**
- * Data layer puro - Elimina una reseña del usuario
- * Throw pattern: Promise<void> | throw DatabaseError
+ * Data layer puro - Obtiene una reseña por ID
+ * Throw pattern: Promise<DbReviewResponse | null> | throw DatabaseError
  */
-export async function deleteCommunityReview(
-  reviewId: string,
-  userId: string
-): Promise<void> {
+export async function fetchReviewById(
+  reviewId: string
+): Promise<DbReviewResponse | null> {
   const supabase = await createClient();
 
-  const { error, count } = await supabase
+  const { data, error } = await supabase
     .from('reviews')
-    .delete()
-    .match({ id: reviewId, user_id: userId });
+    .select(
+      `
+      *,
+      profiles (
+        name,
+        avatar_url
+      )
+    `
+    )
+    .eq('id', reviewId)
+    .single();
+
+  if (error && error.code !== 'PGRST116') {
+    throw fromSupabaseError(
+      error,
+      'Error fetching review by ID',
+      ErrorCodes.DATABASE_ERROR
+    );
+  }
+
+  return data as unknown as DbReviewResponse | null;
+}
+
+/**
+ * Data layer puro - Elimina una reseña (sin validaciones)
+ * Throw pattern: Promise<void> | throw DatabaseError
+ */
+export async function deleteReview(reviewId: string): Promise<void> {
+  const supabase = await createClient();
+
+  const { error } = await supabase.from('reviews').delete().eq('id', reviewId);
 
   if (error) {
     throw fromSupabaseError(
       error,
       'Error deleting review',
       ErrorCodes.DATABASE_ERROR
-    );
-  }
-
-  if (count === 0) {
-    throw fromSupabaseError(
-      { message: 'Review not found or user not owner' },
-      'Reseña no encontrada o no tienes permiso para eliminarla',
-      ErrorCodes.NOT_FOUND
     );
   }
 }

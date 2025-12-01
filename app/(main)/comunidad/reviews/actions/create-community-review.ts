@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { insertCommunityReview } from '../dbQueries';
 import { createClient } from '@/lib/supabase/server';
 import { reviewForm } from '../schemas/reviewSchema';
-import { analyzeUserComment } from '../services/analyzeComment';
+import { analyzeUserComment, checkExistingReview } from '../services/';
 import type { ReviewFormData, ReviewToSend } from '../types';
 import { type Result, ok, fail } from '@/lib/types/result';
 import { ErrorCodes } from '@/lib/errors/codes';
@@ -15,22 +15,9 @@ export async function createCommunityReview(
   review: ReviewFormData
 ): Promise<Result<null>> {
   try {
-    // 1. Validar los datos de entrada con Zod
-    validateOrThrow(reviewForm, review);
-
-    // 2. Analizar el contenido del comentario con IA
-    const analysis = await analyzeUserComment(review.comment);
-    if (!analysis.isSafe) {
-      // Si el análisis se completó pero el texto no es seguro
-      const message = analysis.success
-        ? 'Tu comentario ha sido rechazado por nuestro sistema de moderación.'
-        : 'No se pudo analizar tu comentario. Inténtalo de nuevo más tarde.';
-      return fail(ErrorCodes.BUSINESS_RULE_VIOLATION, message);
-    }
-
     const supabase = await createClient();
 
-    // 3. Verificar la autenticación del usuario
+    // 1. Verificar la autenticación del usuario
     const {
       data: { user },
       error: authError,
@@ -43,28 +30,14 @@ export async function createCommunityReview(
       );
     }
 
-    // 4. Verificar si el usuario ya ha valorado esta comunidad
-    const { data: existingReview, error: existingReviewError } = await supabase
-      .from('reviews')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('community_id', review.community_id)
-      .single();
+    // 2. Validar los datos de entrada con Zod
+    validateOrThrow(reviewForm, review);
 
-    if (existingReview) {
-      return fail(
-        ErrorCodes.REVIEW_ALREADY_EXISTS,
-        'Ya has enviado una valoración para esta comunidad.'
-      );
-    }
+    // 3. Verificar si el usuario ya ha valorado esta comunidad
+    await checkExistingReview(user.id, review.community_id);
 
-    if (existingReviewError && existingReviewError.code !== 'PGRST116') {
-      console.error('Error checking for existing review:', existingReviewError);
-      return fail(
-        ErrorCodes.DATABASE_ERROR,
-        'No se pudo verificar si ya has valorado esta comunidad.'
-      );
-    }
+    // 4. Analizar el contenido del comentario con IA
+    await analyzeUserComment(review.comment);
 
     // 5. Preparar y enviar la nueva valoración
     const dataToSend: ReviewToSend = {
@@ -73,6 +46,7 @@ export async function createCommunityReview(
       user_id: user.id,
     };
 
+    // 6. Mandar a supabase
     await insertCommunityReview(dataToSend);
 
     return ok(null);

@@ -1,6 +1,7 @@
 'use server';
 
-import { deleteCommunityReview } from '../dbQueries';
+import { fetchReviewById } from '../dbQueries';
+import { deleteUserReview } from '../services';
 import { createClient } from '@/lib/supabase/server';
 import { type Result, ok, fail } from '@/lib/types/result';
 import { ErrorCodes } from '@/lib/errors/codes';
@@ -25,9 +26,15 @@ export async function removeCommunityReview(
       );
     }
 
-    // 2. Llamar a la función de base de datos para eliminar la review
-    // La verificación de que el usuario es el creador ocurre en deleteCommunityReview
-    await deleteCommunityReview(reviewId, user.id);
+    // 2. Obtener la reseña para validar ownership
+    const review = await fetchReviewById(reviewId);
+
+    if (!review) {
+      return fail(ErrorCodes.NOT_FOUND, 'Reseña no encontrada.');
+    }
+
+    // 3. Llamar al servicio para eliminar (el servicio verifica ownership)
+    await deleteUserReview(review, user.id);
 
     return ok(null);
   } catch (error) {
