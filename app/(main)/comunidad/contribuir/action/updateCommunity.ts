@@ -2,7 +2,7 @@
 
 import type { CommunityFormData, Community } from '@/comunidad/types';
 import { createClient } from '@/lib/supabase/server';
-import { getCommunityById } from '@/lib/data/communities';
+import { getCommunityById } from '@/app/(main)/comunidad/dbQueries';
 import { type Result, ok, fail } from '@/lib/types/result';
 import { handleServiceError } from '@/lib/errors/handler';
 import { ErrorCodes } from '@/lib/errors/codes';

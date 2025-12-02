@@ -1,5 +1,5 @@
 import { headers } from 'next/headers';
-import { getCommunityById } from '@/lib/data/communities';
+import { getCommunityById } from '@/app/(main)/comunidad/dbQueries';
 import { notFound } from 'next/navigation';
 import type { CommunityFullResponse } from '@/comunidad/types';
 import HeaderCommunity from '../components/HeaderCommunity';

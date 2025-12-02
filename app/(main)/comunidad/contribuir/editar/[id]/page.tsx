@@ -1,7 +1,7 @@
 import ContributionForm from '@/contribuir/components/ContributionForm';
 import { ProtectedWrapper } from '@/app/(auth)/components/ProtectedWrapper';
-import { getCommunityById } from '@/lib/data/communities';
-import { transformResponseToFormData } from '@/lib/data/processors';
+import { getCommunityById } from '@/app/(main)/comunidad/dbQueries';
+import { transformResponseToFormData } from '@/app/(main)/comunidad/transformers';
 import { notFound } from 'next/navigation';
 
 interface PageProps {

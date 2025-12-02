@@ -5,6 +5,33 @@ import { ErrorCodes } from '@/lib/errors/codes';
 import { CommunityUpdateData, CommunityInsertData } from '@/comunidad/types';
 
 /**
+ * Obtiene todas las comunidades directamente desde la tabla
+ * sin paginación. Útil para mostrar todos los marcadores en el mapa.
+ *
+ * IMPORTANTE: Esta función trae TODOS los registros.
+ * Úsala solo cuando sea necesario (ej: mapa principal).
+ */
+export async function fetchAllCommunitiesForMap(
+  maxResults: number | null = null
+): Promise<CommunityFullResponse[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.rpc('get_all_communities', {
+    max_results: maxResults,
+  });
+
+  if (error) {
+    throw fromSupabaseError(
+      error,
+      'Error al obtener comunidades',
+      ErrorCodes.DATABASE_ERROR
+    );
+  }
+
+  return (data || []) as CommunityFullResponse[];
+}
+
+/**
  * Data layer puro - Actualiza comunidad en base de datos
  * Throw pattern: Promise<Data> | throw DatabaseError
  */
