@@ -1,4 +1,4 @@
-import ScheduleItem from '@/app/components/community/schedule/ScheduleItem';
+import ScheduleItem from '@/comunidad/components/ScheduleItem';
 import HeadingSection from '../HeadingSection';
 import type { Schedule } from '@/comunidad/types';
 import SectionWrapper from './SectionWrapper';

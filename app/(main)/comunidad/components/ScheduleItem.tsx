@@ -1,6 +1,6 @@
 import type { Schedule } from '@/comunidad/types';
-import ItemContainer from '../../ui/containers/ItemList';
-import ClockIcon from '../../ui/svgs/ClockIcon';
+import ItemContainer from '../../../components/ui/containers/ItemList';
+import ClockIcon from '../../../components/ui/svgs/ClockIcon';
 
 interface Props {
   data: Schedule;

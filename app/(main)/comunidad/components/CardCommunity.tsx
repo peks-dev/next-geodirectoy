@@ -1,6 +1,6 @@
-import NavigationButton from '../../ui/Buttons/NavigationButton';
-import DeleteCommunityBtn from '@/app/(main)/comunidad/components/DeleteCommunityBtn';
-import ImageSlider from '../../ui/Sliders/ImageSlider';
+import NavigationButton from '../../../components/ui/Buttons/NavigationButton';
+import DeleteCommunityBtn from '@/comunidad/components/DeleteCommunityBtn';
+import ImageSlider from '../../../components/ui/Sliders/ImageSlider';
 import type { CommunityCard } from '@/comunidad/types';
 import {
   StarIcon,
@@ -8,14 +8,14 @@ import {
   PeopleIcon,
   EditIcon,
   CornerIcon,
-} from '../../ui/svgs/';
+} from '../../../components/ui/svgs/';
 
 interface Props {
   data: CommunityCard;
   isPopup?: boolean;
 }
 
-export default function CommunityCard({ data, isPopup = true }: Props) {
+export default function CardCommunity({ data, isPopup = true }: Props) {
   const footerData = [
     { icon: <PeopleIcon />, value: data.type },
     { icon: <StarIcon />, value: data.average_rating },
