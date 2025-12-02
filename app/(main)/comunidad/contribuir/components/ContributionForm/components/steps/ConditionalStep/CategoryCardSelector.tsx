@@ -1,7 +1,7 @@
 import FlexBox from '@/app/components/ui/containers/FlexBox';
 import ToggleInput from '@/app/components/ui/inputs/Toggle';
 import { GENDERS, GENDER_LABELS } from './constants';
-import type { Category, Gender } from '@/app/types/communityTypes';
+import type { Category, Gender } from '@/comunidad/types';
 
 interface Props {
   category: Omit<Category, 'genders'>;

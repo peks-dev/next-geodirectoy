@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useContributionStore } from '@/contribuir/stores/useContributionStore';
-import type { Schedule } from '@/app/types/communityTypes';
+import type { Schedule } from '@/comunidad/types';
 import DaysRangePicker from './DaysRangePicker';
 import TimeRangePicker from './TimeRangePicker';
 // import WheelTimePicker from './WheelTimePicker';

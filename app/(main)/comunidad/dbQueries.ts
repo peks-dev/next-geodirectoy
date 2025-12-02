@@ -1,14 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
-import type {
-  CommunityFullResponse,
-  Community,
-} from '@/app/types/communityTypes';
+import type { CommunityFullResponse, Community } from '@/comunidad/types';
 import { fromSupabaseError } from '@/lib/errors/database';
 import { ErrorCodes } from '@/lib/errors/codes';
-import {
-  CommunityUpdateData,
-  CommunityInsertData,
-} from '@/app/types/communityTypes';
+import { CommunityUpdateData, CommunityInsertData } from '@/comunidad/types';
 
 /**
  * Data layer puro - Actualiza comunidad en base de datos

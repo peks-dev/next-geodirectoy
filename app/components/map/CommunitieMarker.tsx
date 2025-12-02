@@ -6,7 +6,7 @@ import CommunityCard from '../community/card';
 import { createLeafletIcon } from './iconUtils';
 import { useMemo } from 'react';
 import { useAppTheme } from '@/lib/hooks/useAppTheme';
-import type { CommunityForMap, Coordinates } from '@/app/types/communityTypes';
+import type { CommunityForMap, Coordinates } from '@/comunidad/types';
 
 interface CommunitieMarkerProps {
   location: Coordinates;

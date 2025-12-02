@@ -1,5 +1,5 @@
-import type { ImageAnalysisResult } from '@/app/(main)/contribuir/analysis/types';
-import type { TextAnalysisResult } from '@/app/(main)/contribuir/analysis/types';
+import type { CourtImageAnalysisResult } from '@/comunidad/contribuir/services/analyzeCommunity/types';
+import type { CommunityTextAnalysisResult } from '@/comunidad/contribuir/services/analyzeCommunity/types';
 import { AIServiceError } from '@/lib/ai/aiErrors';
 
 export function parseSimpleTextAnalysisResponse(
@@ -28,7 +28,7 @@ export function parseSimpleTextAnalysisResponse(
 export function parseCourtAnalysisResponse(
   rawResponse: string,
   providerName: string
-): ImageAnalysisResult {
+): CourtImageAnalysisResult {
   try {
     const cleanResponse = rawResponse
       .replace(/```json\n?/gi, '')
@@ -45,7 +45,7 @@ export function parseCourtAnalysisResponse(
       throw new Error('Respuesta inválida de la IA');
     }
 
-    return parsed as ImageAnalysisResult;
+    return parsed as CourtImageAnalysisResult;
   } catch (error) {
     throw new AIServiceError(
       `No se pudo interpretar la respuesta: ${error instanceof Error ? error.message : 'Error desconocido'}`,
@@ -57,7 +57,7 @@ export function parseCourtAnalysisResponse(
 export function parseTextAnalysisResponse(
   rawResponse: string,
   providerName: string
-): TextAnalysisResult {
+): CommunityTextAnalysisResult {
   try {
     const cleanResponse = rawResponse
       .replace(/```json\n?/gi, '')
@@ -76,7 +76,7 @@ export function parseTextAnalysisResponse(
       throw new Error('Respuesta inválida de la IA para análisis de texto');
     }
 
-    return parsed as TextAnalysisResult;
+    return parsed as CommunityTextAnalysisResult;
   } catch (error) {
     throw new AIServiceError(
       `No se pudo interpretar la respuesta del análisis de texto: ${error instanceof Error ? error.message : 'Error desconocido'}`,

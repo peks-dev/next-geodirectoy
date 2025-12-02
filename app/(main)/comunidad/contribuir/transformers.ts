@@ -2,7 +2,7 @@ import type {
   Community,
   CommunityFullResponse,
   Coordinates,
-} from '@/app/types/communityTypes';
+} from '@/comunidad/types';
 
 /**
  * Transforma CommunityFullResponse (lat/lng separados) a Community (location: Coordinates)

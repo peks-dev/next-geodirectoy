@@ -1,7 +1,7 @@
 import { analyzeText } from '@/lib/services/ai/analyzers/textAnalyzer';
 import { analyzeImages } from '@/lib/services/ai/analyzers/imageAnalyzer';
 import { parseJSONResponse } from '@/lib/services/ai/utils/parsers';
-import type { FloorType } from '@/app/types/communityTypes';
+import type { FloorType } from '@/comunidad/types';
 import { ErrorCodes } from '@/lib/services/ai/errors/codes';
 import { AIServiceError } from '@/lib/services/ai/errors/custom';
 import {

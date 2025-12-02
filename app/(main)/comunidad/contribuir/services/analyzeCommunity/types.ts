@@ -1,4 +1,4 @@
-import type { FloorType } from '@/app/types/communityTypes';
+import type { FloorType } from '@/comunidad/types';
 
 // ============================================
 // AI ANALYSIS

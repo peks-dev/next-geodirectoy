@@ -1,8 +1,5 @@
 import { create } from 'zustand';
-import type {
-  CommunityFormData,
-  CommunityType,
-} from '@/app/types/communityTypes';
+import type { CommunityFormData, CommunityType } from '@/comunidad/types';
 
 const INITIAL_FORM_STATE: CommunityFormData = {
   id: null,

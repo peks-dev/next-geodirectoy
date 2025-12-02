@@ -1,6 +1,6 @@
 'use server';
 
-import type { CommunityFormData, Community } from '@/app/types/communityTypes';
+import type { CommunityFormData, Community } from '@/comunidad/types';
 import { createClient } from '@/lib/supabase/server';
 import { v4 as uuidv4 } from 'uuid';
 import { type Result, ok, fail } from '@/lib/types/result';

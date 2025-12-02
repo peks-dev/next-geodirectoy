@@ -1,8 +1,8 @@
-import type { CommunityFullResponse } from '@/app/types/communityTypes';
+import type { CommunityFullResponse } from '@/comunidad/types';
 import type { CourtImageAnalysisResult } from '@/contribuir/services/analyzeCommunity/types';
 import { UpdateCommunityFormData } from '../schemas/updateCommunitySchema';
 import { updateCommunityById } from '@/app/(main)/comunidad/dbQueries';
-import { CommunityUpdateData } from '@/app/types/communityTypes';
+import { CommunityUpdateData } from '@/comunidad/types';
 
 /**
  * Servicio para actualizar comunidad en base de datos

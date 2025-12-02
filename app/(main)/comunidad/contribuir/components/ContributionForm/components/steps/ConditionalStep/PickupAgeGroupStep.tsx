@@ -2,7 +2,7 @@ import FlexBox from '@/app/components/ui/containers/FlexBox';
 import ToggleInput from '@/app/components/ui/inputs/Toggle';
 import { useContributionStore } from '@/contribuir/stores/useContributionStore';
 import { AGE_GROUP_OPTIONS } from './constants';
-import type { AgeGroup } from '@/app/types/communityTypes';
+import type { AgeGroup } from '@/comunidad/types';
 
 export default function PickupAgeGroupStep() {
   const { age_group, updateFormField } = useContributionStore();

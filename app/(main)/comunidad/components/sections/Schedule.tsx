@@ -1,6 +1,6 @@
 import ScheduleItem from '@/app/components/community/schedule/ScheduleItem';
 import HeadingSection from '../HeadingSection';
-import type { Schedule } from '@/app/types/communityTypes';
+import type { Schedule } from '@/comunidad/types';
 import SectionWrapper from './SectionWrapper';
 
 export default function ScheduleSection({

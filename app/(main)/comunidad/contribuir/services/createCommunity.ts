@@ -1,7 +1,7 @@
 import type {
   CommunityFullResponse,
   CommunityInsertData,
-} from '@/app/types/communityTypes';
+} from '@/comunidad/types';
 import type { CourtImageAnalysisResult } from './analyzeCommunity/types';
 import { RegisterCommunityFormData } from '../schemas/registerCommunitySchema';
 import { insertCommunity } from '@/app/(main)/comunidad/dbQueries';

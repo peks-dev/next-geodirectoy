@@ -24,10 +24,7 @@ export async function deleteAccount(currentProfile: ProfileDbResponse) {
     // 2. PRIMERO: Eliminar imágenes del storage (mientras aún tienes sesión válida)
     if (currentProfile.avatar_url) {
       const filePath = currentProfile.avatar_url.split('/avatars/')[1];
-      const result = await deleteImage(filePath, 'AVATARS');
-      if (!result.success) {
-        throw new Error(result.error);
-      }
+      await deleteImage(filePath, 'AVATARS');
     }
 
     // 3. DESPUÉS: Eliminar cuenta de la base de datos

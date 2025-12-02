@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-import type { CommunityFullResponse } from '@/app/types/communityTypes';
+import type { CommunityFullResponse } from '@/comunidad/types';
 import { fromSupabaseError } from '@/lib/errors/database';
 import { ErrorCodes } from '@/lib/errors/codes';
 

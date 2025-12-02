@@ -6,7 +6,7 @@ import type { Marker as LeafletMarker } from 'leaflet';
 import { createLeafletIcon } from './iconUtils';
 import MarkerIcon from './MarkerIcon';
 import { useAppTheme } from '@/lib/hooks/useAppTheme';
-import type { Coordinates } from '@/app/types/communityTypes';
+import type { Coordinates } from '@/comunidad/types';
 
 interface DraggableMarkerProps {
   initialPosition?: Coordinates;

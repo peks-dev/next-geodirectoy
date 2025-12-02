@@ -6,7 +6,7 @@ import NavigationControls from './components/NavigationControls';
 import StepRenderer from './components/StepRenderer';
 import LoadingSpinner from '@/app/components/ui/LoadingSpinner';
 import RedirectionStep from './components/steps/RedirectionStep';
-import type { CommunityFormData } from '@/app/types/communityTypes';
+import type { CommunityFormData } from '@/comunidad/types';
 import { useContributionForm } from '../../hooks/useContributionForm';
 
 interface Props {

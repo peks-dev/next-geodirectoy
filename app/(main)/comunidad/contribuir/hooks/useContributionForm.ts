@@ -10,7 +10,7 @@ import {
   showSuccessToast,
   showErrorToast,
 } from '@/app/components/toast/notificationService';
-import type { CommunityFormData } from '@/app/types/communityTypes';
+import type { CommunityFormData } from '@/comunidad/types';
 
 interface UseContributionFormProps {
   initialData?: CommunityFormData;

@@ -1,7 +1,7 @@
 import NavigationButton from '../../ui/Buttons/NavigationButton';
 import DeleteCommunityBtn from '@/app/(main)/comunidad/components/DeleteCommunityBtn';
 import ImageSlider from '../../ui/Sliders/ImageSlider';
-import type { CommunityCard } from '@/app/types/communityTypes';
+import type { CommunityCard } from '@/comunidad/types';
 import {
   StarIcon,
   CommentsIcon,

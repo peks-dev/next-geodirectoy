@@ -4,7 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CommunityCard from '@/app/components/community/card';
 import { useCommunitiesProfileStore } from '../../perfil/stores/useCommunitiesProfileStore';
-import { Community } from '@/app/types/communityTypes';
+import { Community } from '@/comunidad/types';
 
 gsap.registerPlugin(ScrollTrigger);
 

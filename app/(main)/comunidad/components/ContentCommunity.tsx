@@ -7,7 +7,7 @@ import {
   LocationIcon,
 } from '@/app/components/ui/svgs/';
 
-import type { CommunityFullResponse } from '@/app/types/communityTypes';
+import type { CommunityFullResponse } from '@/comunidad/types';
 
 // sections
 import DescriptionSection from './sections/Description';

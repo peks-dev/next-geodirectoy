@@ -3,7 +3,7 @@ import ClubIcon from '@/components/ui/svgs/ClubIcon';
 import FlexBox from '@/app/components/ui/containers/FlexBox';
 import { CornerIcon } from '@/app/components/ui/svgs/';
 import { useContributionStore } from '@/contribuir/stores/useContributionStore';
-import { type CommunityType } from '@/app/types/communityTypes';
+import { type CommunityType } from '@/comunidad/types';
 
 export default function TypeStep() {
   const { type, updateFormField } = useContributionStore();

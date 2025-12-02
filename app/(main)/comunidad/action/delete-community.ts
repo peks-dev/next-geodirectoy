@@ -5,10 +5,11 @@ import { createClient } from '@/lib/supabase/server';
 import { type Result, ok, fail } from '@/lib/types/result';
 import { ErrorCodes } from '@/lib/errors/codes';
 import { handleServiceError } from '@/lib/errors/handler';
+import type { CommunityFullResponse } from '@/comunidad/types';
 
 export async function deleteCommunity(
   communityId: string
-): Promise<Result<null>> {
+): Promise<Result<CommunityFullResponse>> {
   try {
     const supabase = await createClient();
 
@@ -43,7 +44,7 @@ export async function deleteCommunity(
     // 4. Eliminar la comunidad
     await deleteCommunityById(communityId);
 
-    return ok(null);
+    return ok(community);
   } catch (error) {
     return handleServiceError(error);
   }

@@ -1,4 +1,4 @@
-import type { Schedule } from '@/app/types/communityTypes';
+import type { Schedule } from '@/comunidad/types';
 import ItemContainer from '../../ui/containers/ItemList';
 import ClockIcon from '../../ui/svgs/ClockIcon';
 

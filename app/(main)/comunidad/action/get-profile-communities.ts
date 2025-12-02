@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { type Result, ok, fail } from '@/lib/types/result';
 import { ErrorCodes } from '@/lib/errors/codes';
 import { handleServiceError } from '@/lib/errors/handler';
-import type { Community } from '@/app/types/communityTypes';
+import type { Community } from '@/comunidad/types';
 
 export async function getProfileCommunities(): Promise<Result<Community[]>> {
   try {

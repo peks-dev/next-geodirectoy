@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import DynamicMap from '@/components/map/DynamicMap';
 import DynamicDraggableMarker from '@/components/map/DynamicDraggableMarker';
-import type { Coordinates } from '@/app/types/communityTypes';
+import type { Coordinates } from '@/comunidad/types';
 import { useContributionStore } from '@/contribuir/stores/useContributionStore';
 import { useDebounce } from '@/lib/hooks/useDebounce';
 // 1. Importa tu función de geocodificación directamente

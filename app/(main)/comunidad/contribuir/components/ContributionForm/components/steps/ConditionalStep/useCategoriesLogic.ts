@@ -1,6 +1,6 @@
 import { useContributionStore } from '@/contribuir/stores/useContributionStore';
 import { POSSIBLE_CATEGORIES } from './constants';
-import type { Gender } from '@/app/types/communityTypes';
+import type { Gender } from '@/comunidad/types';
 
 export const useCategoriesLogic = () => {
   const { categories, updateFormField } = useContributionStore();

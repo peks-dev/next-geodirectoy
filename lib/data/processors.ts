@@ -4,7 +4,7 @@ import type {
   CommunityFormData,
   CommunityMapResponse,
   CommunityForMap,
-} from '@/app/types/communityTypes';
+} from '@/comunidad/types';
 
 // ============================================
 // TRANSFORMACIONES DE COMUNIDADES

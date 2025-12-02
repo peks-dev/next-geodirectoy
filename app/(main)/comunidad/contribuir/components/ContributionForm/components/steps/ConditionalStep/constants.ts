@@ -1,4 +1,4 @@
-import type { Category, AgeGroup, Gender } from '@/app/types/communityTypes';
+import type { Category, AgeGroup, Gender } from '@/comunidad/types';
 
 // Tipo específico para las opciones del formulario
 export interface AgeGroupOption {

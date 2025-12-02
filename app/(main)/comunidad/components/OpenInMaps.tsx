@@ -1,6 +1,6 @@
 'use client';
 import Button from '@/app/components/ui/Button';
-import type { Coordinates } from '@/app/types/communityTypes';
+import type { Coordinates } from '@/comunidad/types';
 
 const OpenInMaps = ({ lat, lng }: Coordinates) => {
   const handleClick = () => {

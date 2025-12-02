@@ -1,4 +1,4 @@
-import type { Coordinates, CommunityForMap } from '@/app/types/communityTypes';
+import type { Coordinates, CommunityForMap } from '@/comunidad/types';
 
 export interface MapProps {
   location?: Coordinates | null;
