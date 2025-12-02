@@ -2,7 +2,7 @@
 import Button from '@/app/components/ui/Button';
 import { DeleteIcon } from '@/app/components/ui/svgs';
 import { useModalStore } from '@/app/components/ui/Modal/useModalStore';
-import { deleteCommunityAction } from '../action/deleteCommunity.action';
+import { deleteCommunity } from '../action/delete-community';
 import { useCommunitiesProfileStore } from '../../perfil/stores/useCommunitiesProfileStore';
 import {
   showErrorToast,
@@ -25,7 +25,7 @@ export default function DeleteCommunityBtn({
       message: 'esta acción es irreversible y permanente',
       confirmText: 'si, eliminar',
       onConfirm: async () => {
-        const result = await deleteCommunityAction(communityId);
+        const result = await deleteCommunity(communityId);
         if (!result.success) {
           showErrorToast('algo salio mal', result.error.message);
         } else {

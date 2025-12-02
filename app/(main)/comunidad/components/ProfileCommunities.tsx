@@ -1,4 +1,4 @@
-import { getProfileCommunities } from '@/app/(main)/comunidad/action/getProfileCommunitiesAction';
+import { getProfileCommunities } from '@/app/(main)/comunidad/action/get-profile-communities';
 import { WarningIcon, BackboardIcon } from '@/app/components/ui/svgs';
 // Importamos el componente cliente que acabamos de crear
 import CommunitiesScrollList from './CommunitiesScrollList'; // Ajusta la ruta según donde lo creaste

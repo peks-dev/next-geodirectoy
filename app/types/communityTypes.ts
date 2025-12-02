@@ -1,4 +1,4 @@
-import { UpdateCommunityFormData } from '../(main)/contribuir/schemas/updateCommunitySchema';
+import { UpdateCommunityFormData } from '@/contribuir/schemas/updateCommunitySchema';
 
 // ============================================
 // TIPOS BASE
