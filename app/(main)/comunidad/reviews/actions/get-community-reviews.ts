@@ -2,12 +2,12 @@
 
 import { fetchCommunityReviews } from '../dbQueries';
 import { type Result, ok } from '@/lib/types/result';
-import { DbReviewResponse } from '../types';
+import { ReviewDatabase } from '../types';
 import { handleServiceError } from '@/lib/errors/handler';
 
 export async function getCommunityReviews(
   communityId: string
-): Promise<Result<DbReviewResponse[]>> {
+): Promise<Result<ReviewDatabase[]>> {
   try {
     const reviews = await fetchCommunityReviews(communityId);
 

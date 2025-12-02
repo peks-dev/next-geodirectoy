@@ -4,7 +4,7 @@ import { deleteReview } from '../dbQueries';
 import { type Result, ok, fail } from '@/lib/types/result';
 import { ErrorCodes } from '@/lib/errors/codes';
 import { handleServiceError } from '@/lib/errors/handler';
-import type { DbReviewResponse } from '../types';
+import type { ReviewDatabase } from '../types';
 
 /**
  * Service layer - Elimina una reseña del usuario actual
@@ -12,7 +12,7 @@ import type { DbReviewResponse } from '../types';
  * Throw pattern: Promise<Result<null>> | throw ServiceError
  */
 export async function deleteUserReview(
-  review: DbReviewResponse,
+  review: ReviewDatabase,
   userId: string
 ): Promise<Result<null>> {
   try {

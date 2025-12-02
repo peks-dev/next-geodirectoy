@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import type { DbReviewResponse, ReviewFormState } from '../types';
+import type { ReviewDatabase, ReviewFormState } from '../types';
 import type { User } from '@supabase/supabase-js';
-import RatingForm from '../components/RatingForm';
+import ReviewForm from '../components/ReviewForm';
 import { useModalStore } from '@/app/components/ui/Modal/useModalStore';
-import { useRatingFormStore } from '../stores/useRatingStore';
+import { useReviewFormStore } from '../stores/useReviewStore';
 import {
   createCommunityReview,
   removeCommunityReview,
@@ -27,7 +27,7 @@ interface UseReviewsProps {
 
 interface UseReviewsReturn {
   // Estados
-  reviews: DbReviewResponse[];
+  reviews: ReviewDatabase[];
   isLoading: boolean;
   error: string | null;
   totalReviews: number;
@@ -47,7 +47,7 @@ export function useReviews({
 }: UseReviewsProps): UseReviewsReturn {
   const { showConfirmation } = useModalStore();
   const { user: userLogged } = useAuth();
-  const [reviews, setReviews] = useState<DbReviewResponse[]>([]);
+  const [reviews, setReviews] = useState<ReviewDatabase[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const pathname = usePathname();
@@ -143,10 +143,10 @@ export function useReviews({
     showConfirmation({
       title: 'valorar la comunidad',
       confirmText: 'enviar valoración',
-      ContentComponent: RatingForm,
+      ContentComponent: ReviewForm,
       onConfirm: async () => {
         const { comment, rating }: ReviewFormState =
-          useRatingFormStore.getState();
+          useReviewFormStore.getState();
 
         const result = await createCommunityReview({
           comment,

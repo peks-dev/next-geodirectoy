@@ -1,15 +1,15 @@
 import { createClient } from '@/lib/supabase/server';
-import type { DbReviewResponse, ReviewToSend } from './types';
+import type { ReviewDatabase, ReviewToSend } from './types';
 import { fromSupabaseError } from '@/lib/errors/database';
 import { ErrorCodes } from '@/lib/errors/codes';
 
 /**
  * Data layer puro - Obtiene las reseñas de una comunidad
- * Throw pattern: Promise<DbReviewResponse[]> | throw DatabaseError
+ * Throw pattern: Promise<ReviewDatabase[]> | throw DatabaseError
  */
 export async function fetchCommunityReviews(
   communityId: string
-): Promise<DbReviewResponse[]> {
+): Promise<ReviewDatabase[]> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -34,7 +34,7 @@ export async function fetchCommunityReviews(
     );
   }
 
-  return (data || []) as unknown as DbReviewResponse[];
+  return (data || []) as unknown as ReviewDatabase[];
 }
 
 /**
@@ -59,11 +59,11 @@ export async function insertCommunityReview(
 
 /**
  * Data layer puro - Obtiene una reseña por ID
- * Throw pattern: Promise<DbReviewResponse | null> | throw DatabaseError
+ * Throw pattern: Promise<ReviewDatabase | null> | throw DatabaseError
  */
 export async function fetchReviewById(
   reviewId: string
-): Promise<DbReviewResponse | null> {
+): Promise<ReviewDatabase | null> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -88,7 +88,7 @@ export async function fetchReviewById(
     );
   }
 
-  return data as unknown as DbReviewResponse | null;
+  return data as unknown as ReviewDatabase | null;
 }
 
 /**

@@ -15,7 +15,7 @@ export interface ReviewToSend extends BaseReview, ReviewFormData {
   user_id: string;
 }
 
-export interface DbReviewResponse extends ReviewToSend {
+export interface ReviewDatabase extends ReviewToSend {
   created_at: string;
   updated_at: string;
   profiles: {
@@ -26,5 +26,5 @@ export interface DbReviewResponse extends ReviewToSend {
 export interface communityFullReview {
   average_rating: number;
   total_reviews: number;
-  comments: DbReviewResponse[];
+  comments: ReviewDatabase[];
 }

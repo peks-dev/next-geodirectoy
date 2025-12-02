@@ -1,10 +1,10 @@
 import Textarea from '@/app/components/ui/inputs/Textarea';
 import { InputSelector } from '@/app/components/ui/inputs/Selector';
-import { useRatingFormStore } from '../../stores/useRatingStore';
+import { useReviewFormStore } from '../stores/useReviewStore';
 import { useEffect } from 'react';
 
-export default function RatingForm() {
-  const { comment, setComment, setRating, reset } = useRatingFormStore();
+export default function ReviewForm() {
+  const { comment, setComment, setRating, reset } = useReviewFormStore();
   const ratingOptions = [
     { value: 1, label: '1 estrella' },
     { value: 2, label: '2 estrellas' },

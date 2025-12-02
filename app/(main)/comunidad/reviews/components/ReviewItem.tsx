@@ -1,10 +1,10 @@
 import ItemContainer from '@/app/components/ui/containers/ItemList';
-import type { DbReviewResponse } from '../types';
+import type { ReviewDatabase } from '../types';
 import type { User } from '@supabase/supabase-js';
 import UserAvatar from '@/app/components/ui/UserAvatar';
 
 interface ReviewItemProps {
-  data: DbReviewResponse;
+  data: ReviewDatabase;
   user: User | null;
   onDelete: (reviewId: string) => void;
 }
