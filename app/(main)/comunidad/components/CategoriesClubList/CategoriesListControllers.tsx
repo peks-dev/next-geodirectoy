@@ -1,4 +1,4 @@
-import { Gender } from '@/app/types/communityTypes'; // Added imports for types used in props
+import { Gender } from '@/comunidad/types'; // Added imports for types used in props
 
 interface CategoriesListControllersProps {
   filter: Gender | 'all';

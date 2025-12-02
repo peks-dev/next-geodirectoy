@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { Community } from '@/app/types/communityTypes';
+import { Community } from '@/comunidad/types';
 
 interface CommunitiesState {
   // Estado

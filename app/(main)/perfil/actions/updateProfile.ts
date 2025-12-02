@@ -65,14 +65,8 @@ export async function updateProfile(
         // Subir usando la función de storage
         const uploadResult = await uploadImage(file, 'AVATARS', filePath);
 
-        if (!uploadResult.success) {
-          throw new Error(
-            uploadResult.error || 'Error al subir la imagen. Intenta de nuevo.'
-          );
-        }
-
-        uploadedFilePath = uploadResult.path!;
-        avatarUrl = uploadResult.url!;
+        uploadedFilePath = uploadResult.path;
+        avatarUrl = uploadResult.url;
       } catch (uploadError) {
         throw new Error(
           uploadError instanceof Error

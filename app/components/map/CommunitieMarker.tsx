@@ -2,11 +2,11 @@
 
 import { Marker, Popup } from 'react-leaflet';
 import MarkerIcon from './MarkerIcon';
-import CommunityCard from '../community/card';
+import CardCommunity from '@/comunidad/components/CardCommunity';
 import { createLeafletIcon } from './iconUtils';
 import { useMemo } from 'react';
 import { useAppTheme } from '@/lib/hooks/useAppTheme';
-import type { CommunityForMap, Coordinates } from '@/app/types/communityTypes';
+import type { CommunityForMap, Coordinates } from '@/comunidad/types';
 
 interface CommunitieMarkerProps {
   location: Coordinates;
@@ -31,7 +31,7 @@ export default function CommunitieMarker({
     <Marker position={[location.lat, location.lng]} icon={icon}>
       {enablePopup && data && (
         <Popup className="custom-popup">
-          <CommunityCard data={data} />
+          <CardCommunity data={data} />
         </Popup>
       )}
     </Marker>

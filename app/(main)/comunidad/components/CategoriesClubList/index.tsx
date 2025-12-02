@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Category, Gender } from '@/app/types/communityTypes';
+import { Category, Gender } from '@/comunidad/types';
 import CategoryCardDisplay from './CategoryCardDisplay';
 import CategoriesListControllers from './CategoriesListControllers';
 

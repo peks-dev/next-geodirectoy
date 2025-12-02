@@ -1,4 +1,4 @@
-import type { Coordinates } from '@/app/types/communityTypes';
+import type { Coordinates } from '@/comunidad/types';
 import DynamicMap from '@/components/map/DynamicMap';
 import HeadingSection from '../HeadingSection';
 import OpenInMaps from '../OpenInMaps';

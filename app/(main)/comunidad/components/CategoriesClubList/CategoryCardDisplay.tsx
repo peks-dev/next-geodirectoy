@@ -1,4 +1,4 @@
-import { Category, Gender } from '@/app/types/communityTypes';
+import { Category, Gender } from '@/comunidad/types';
 import ItemContainer from '@/components/ui/containers/ItemList';
 
 // Objeto para centralizar los detalles de cada género

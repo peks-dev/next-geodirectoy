@@ -5,7 +5,7 @@ import {
   StoreIcon,
 } from '@/app/components/ui/svgs/';
 
-import type { Service } from '@/app/types/communityTypes';
+import type { Service } from '@/comunidad/types';
 import ServiceItem from '@/app/components/ui/ServiceBadge';
 
 interface Props {

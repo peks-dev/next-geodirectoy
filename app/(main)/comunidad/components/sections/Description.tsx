@@ -3,11 +3,7 @@ import CategoriesClubList from '../CategoriesClubList';
 import DetailsBar from '@/app/components/ui/DetailsBar';
 import SectionWrapper from './SectionWrapper';
 
-import type {
-  AgeGroup,
-  CommunityType,
-  Category,
-} from '@/app/types/communityTypes';
+import type { AgeGroup, CommunityType, Category } from '@/comunidad/types';
 
 interface Props {
   description: string;

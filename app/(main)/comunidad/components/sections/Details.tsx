@@ -1,7 +1,7 @@
 import HeadingSection from '../HeadingSection';
 import CategoriesClubList from '../CategoriesClubList';
 import AvailableServices from '../AvailableServices';
-import type { Service, Category } from '@/app/types/communityTypes';
+import type { Service, Category } from '@/comunidad/types';
 import SectionWrapper from './SectionWrapper';
 
 interface Props {

@@ -29,11 +29,11 @@ export function InputSelector({
       )}
 
       <select
-        value={value}
+        value={value ?? 'none'}
         onChange={(e) => onChange(e.target.value)}
         className="focus-visible:ring-ring text-2x1 border-accent-primary hover-neon-effect flex w-full border px-3 py-2 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        <option value="" disabled className="text-2xl">
+        <option value="none" disabled className="text-2xl">
           {placeholder}
         </option>
         {options.map((option) => (

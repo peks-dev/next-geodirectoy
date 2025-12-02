@@ -2,9 +2,9 @@
 import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import CommunityCard from '@/app/components/community/card';
+import CardCommunity from '@/comunidad/components/CardCommunity';
 import { useCommunitiesProfileStore } from '../../perfil/stores/useCommunitiesProfileStore';
-import { Community } from '@/app/types/communityTypes';
+import { Community } from '@/comunidad/types';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -90,7 +90,7 @@ export default function CommunitiesScrollList({
             className="flex w-full max-w-[800px] origin-center justify-center will-change-transform"
           >
             <div className="w-full">
-              <CommunityCard data={community} isPopup={false} />
+              <CardCommunity data={community} isPopup={false} />
             </div>
           </li>
         ))}
