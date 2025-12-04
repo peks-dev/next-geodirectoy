@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getCommunityById } from '@/app/(main)/comunidad/dbQueries';
 import { type Result, ok, fail } from '@/lib/types/result';
 import { handleServiceError } from '@/lib/errors/handler';
+import { AuthErrorCodes } from '@/app/(auth)/errors/codes';
 import { ErrorCodes } from '@/lib/errors/codes';
 import { DatabaseError } from '@/lib/errors/database';
 import { updateCommunitySchema } from '@/contribuir/schemas/updateCommunitySchema';
@@ -32,7 +33,7 @@ export async function updateCommunity(
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return fail(ErrorCodes.UNAUTHORIZED, 'No autorizado');
+      return fail(AuthErrorCodes.UNAUTHORIZED, 'No autorizado');
     }
 
     // 3. Verificar propiedad de la comunidad

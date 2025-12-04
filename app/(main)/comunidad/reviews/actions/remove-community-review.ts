@@ -4,6 +4,7 @@ import { fetchReviewById } from '../dbQueries';
 import { deleteUserReview } from '../services';
 import { createClient } from '@/lib/supabase/server';
 import { type Result, ok, fail } from '@/lib/types/result';
+import { AuthErrorCodes } from '@/app/(auth)/errors/codes';
 import { ErrorCodes } from '@/lib/errors/codes';
 import { handleServiceError } from '@/lib/errors/handler';
 
@@ -21,7 +22,7 @@ export async function removeCommunityReview(
 
     if (authError || !user) {
       return fail(
-        ErrorCodes.UNAUTHORIZED,
+        AuthErrorCodes.UNAUTHORIZED,
         'Debes iniciar sesión para eliminar una valoración.'
       );
     }

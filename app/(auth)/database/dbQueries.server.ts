@@ -2,6 +2,7 @@
 'use server';
 import { createClient } from '@/lib/supabase/server';
 import { fromSupabaseError, DatabaseError } from '@/lib/errors/database';
+import { AuthErrorCodes } from '@/app/(auth)/errors/codes';
 import { ErrorCodes } from '@/lib/errors/codes';
 
 /**
@@ -23,14 +24,14 @@ export async function verifyOtp(email: string, token: string) {
     throw fromSupabaseError(
       error,
       'Error verificando el código OTP',
-      ErrorCodes.INVALID_CREDENTIALS
+      AuthErrorCodes.INVALID_CREDENTIALS
     );
   }
 
   if (!data.user) {
     throw new DatabaseError(
       'No se pudo autenticar al usuario',
-      ErrorCodes.UNAUTHORIZED
+      AuthErrorCodes.UNAUTHORIZED
     );
   }
 

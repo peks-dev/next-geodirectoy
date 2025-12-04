@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { v4 as uuidv4 } from 'uuid';
 import { type Result, ok, fail } from '@/lib/types/result';
 import { handleServiceError } from '@/lib/errors/handler';
+import { AuthErrorCodes } from '@/app/(auth)/errors/codes';
 import { ErrorCodes } from '@/lib/errors/codes';
 import { DatabaseError } from '@/lib/errors/database';
 import { registerCommunitySchema } from '../schemas/registerCommunitySchema';
@@ -30,7 +31,7 @@ export async function registerCommunity(
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return fail(ErrorCodes.UNAUTHORIZED, 'No autorizado');
+      return fail(AuthErrorCodes.UNAUTHORIZED, 'No autorizado');
     }
 
     // 3. Generar ID único

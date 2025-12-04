@@ -11,14 +11,6 @@ export const ErrorCodes = {
   INVALID_FILE_SIZE: 'INVALID_FILE_SIZE',
 
   // ============================================
-  // AUTENTICACIÓN (401)
-  // ============================================
-  UNAUTHORIZED: 'UNAUTHORIZED',
-  INVALID_CREDENTIALS: 'INVALID_CREDENTIALS',
-  SESSION_EXPIRED: 'SESSION_EXPIRED',
-  INVALID_TOKEN: 'INVALID_TOKEN',
-
-  // ============================================
   // AUTORIZACIÓN (403)
   // ============================================
   FORBIDDEN: 'FORBIDDEN',

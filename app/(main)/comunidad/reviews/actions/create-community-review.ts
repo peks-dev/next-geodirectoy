@@ -7,7 +7,7 @@ import { reviewForm } from '../schemas/reviewSchema';
 import { analyzeUserComment, checkExistingReview } from '../services/';
 import type { ReviewFormData, ReviewToSend } from '../types';
 import { type Result, ok, fail } from '@/lib/types/result';
-import { ErrorCodes } from '@/lib/errors/codes';
+import { AuthErrorCodes } from '@/app/(auth)/errors/codes';
 import { handleServiceError } from '@/lib/errors/handler';
 import { validateOrThrow } from '@/lib/errors/zodHandler';
 
@@ -25,7 +25,7 @@ export async function createCommunityReview(
 
     if (authError || !user) {
       return fail(
-        ErrorCodes.UNAUTHORIZED,
+        AuthErrorCodes.UNAUTHORIZED,
         'Debes iniciar sesión para dejar una valoración.'
       );
     }

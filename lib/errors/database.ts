@@ -8,7 +8,7 @@ import { ErrorCodes } from './codes';
 export class DatabaseError extends Error {
   constructor(
     message: string,
-    public code: keyof typeof ErrorCodes,
+    public code: string,
     public details?: unknown,
     public field?: string
   ) {
@@ -25,7 +25,7 @@ export class DatabaseError extends Error {
 export function fromSupabaseError(
   error: { message: string; code?: string; details?: string },
   userMessage: string,
-  errorCode: keyof typeof ErrorCodes
+  errorCode: string
 ): DatabaseError {
   return new DatabaseError(userMessage, errorCode, {
     supabaseMessage: error.message,

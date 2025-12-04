@@ -3,7 +3,7 @@
 import { getCommunitiesByUserId } from '../dbQueries';
 import { createClient } from '@/lib/supabase/server';
 import { type Result, ok, fail } from '@/lib/types/result';
-import { ErrorCodes } from '@/lib/errors/codes';
+import { AuthErrorCodes } from '@/app/(auth)/errors/codes';
 import { handleServiceError } from '@/lib/errors/handler';
 import type { Community } from '@/comunidad/types';
 
@@ -19,7 +19,7 @@ export async function getProfileCommunities(): Promise<Result<Community[]>> {
 
     if (authError || !user) {
       return fail(
-        ErrorCodes.UNAUTHORIZED,
+        AuthErrorCodes.UNAUTHORIZED,
         'Debes iniciar sesión para ver tus comunidades.'
       );
     }

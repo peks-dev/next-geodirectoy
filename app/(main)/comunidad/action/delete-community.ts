@@ -3,6 +3,7 @@
 import { getCommunityById, deleteCommunityById } from '../dbQueries';
 import { createClient } from '@/lib/supabase/server';
 import { type Result, ok, fail } from '@/lib/types/result';
+import { AuthErrorCodes } from '@/app/(auth)/errors/codes';
 import { ErrorCodes } from '@/lib/errors/codes';
 import { handleServiceError } from '@/lib/errors/handler';
 import type { CommunityFullResponse } from '@/comunidad/types';
@@ -21,7 +22,7 @@ export async function deleteCommunity(
 
     if (authError || !user) {
       return fail(
-        ErrorCodes.UNAUTHORIZED,
+        AuthErrorCodes.UNAUTHORIZED,
         'Debes iniciar sesión para eliminar una comunidad.'
       );
     }
