@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { Iceland, Oxanium } from 'next/font/google';
 import './globals.css';
 import BackgroundLines from '@/components/ui/BackgroundLines';
-import { AuthProvider } from '@/app/(auth)/components/AuthProvider';
-import { getCurrentUser } from '@/app/(auth)/database/dbQueries.server';
+import { AuthShell } from '@/app/(auth)/components/AuthShell';
+import { getAuthShellData } from '@/app/(auth)/actions/getAuthShellData';
 import ClientProviders from '@/components/ClientProviders';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 
@@ -32,7 +32,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await getCurrentUser();
+  // ✅ Usar el nuevo sistema de auth shell con manejo de errores específico
+  const { initialUser, authError } = await getAuthShellData();
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -45,9 +46,9 @@ export default async function RootLayout({
         <ThemeProvider>
           <BackgroundLines />
           <main className="relative z-[2] h-full w-full">
-            <AuthProvider initialUser={user}>
+            <AuthShell initialUser={initialUser} authError={authError}>
               <ClientProviders>{children}</ClientProviders>
-            </AuthProvider>
+            </AuthShell>
           </main>
         </ThemeProvider>
       </body>
