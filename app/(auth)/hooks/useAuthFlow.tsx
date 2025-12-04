@@ -10,7 +10,7 @@ import { sendLoginCode } from '@/auth/services/authService.browser';
 import { verifyOtpAndFetchProfile } from '@/auth/actions/verifyAndFetch';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useProfileStore } from '@/app/(main)/perfil/stores/useProfileStore';
-import { cacheService } from '@/lib/supabase/cacheService';
+import { cacheService } from '@/auth/utils/cacheService';
 import { useAuth } from '@/auth/components/AuthProvider';
 import { supabase } from '@/lib/supabase/client';
 import { toast } from 'sonner';
