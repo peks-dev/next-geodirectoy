@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useAuth } from './AuthProvider';
+import { useAuth } from '../hooks/useAuth';
 import { useRouter, usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
 
@@ -16,22 +16,22 @@ export function ProtectedWrapper({
   fallback,
   redirectTo = '/sign-in',
 }: ProtectedWrapperProps) {
-  const { user, loading } = useAuth();
+  const { user, isLoggingOut } = useAuth();
 
   const router = useRouter();
   const pathname = usePathname();
 
   // evitar llamadas durante render
   useEffect(() => {
-    if (!user && !loading) {
+    if (!user && !isLoggingOut) {
       // ✅ Guarda la URL actual como parámetro de retorno
       const returnUrl = encodeURIComponent(pathname);
       router.push(`${redirectTo}?returnUrl=${returnUrl}`);
     }
-  }, [user, loading, router, redirectTo, pathname]);
+  }, [user, isLoggingOut, router, redirectTo, pathname]);
 
-  // Loading state
-  if (loading) {
+  // isLoggingOut state
+  if (isLoggingOut) {
     return (
       fallback || (
         <div className="flex h-full items-center justify-center">

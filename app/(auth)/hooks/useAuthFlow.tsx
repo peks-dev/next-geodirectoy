@@ -6,12 +6,12 @@ import {
   showSuccessToast,
   showErrorToast,
 } from '@/app/components/toast/notificationService';
-import { sendLoginCode } from '@/auth/services/authService.browser';
+import { sendLoginCode } from '@/app/(auth)/database/dbQueries.browser';
 import { verifyOtpAndFetchProfile } from '@/auth/actions/verifyAndFetch';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useProfileStore } from '@/app/(main)/perfil/stores/useProfileStore';
 import { cacheService } from '@/auth/utils/cacheService';
-import { useAuth } from '@/auth/components/AuthProvider';
+import { useAuth } from '../hooks/useAuth';
 import { supabase } from '@/lib/supabase/client';
 import { toast } from 'sonner';
 
@@ -49,29 +49,31 @@ export const useAuthFlow = () => {
 
   const sendOTP = async (isResend = false): Promise<boolean> => {
     setLoading(true);
-    const { error } = await sendLoginCode(email);
+    try {
+      await sendLoginCode(email);
 
-    if (error) {
-      showErrorToast('Error al enviar código', error);
+      if (isResend) {
+        showSuccessToast(
+          'Código reenviado',
+          'Se ha reenviado un nuevo código a tu correo.'
+        );
+      } else {
+        showSuccessToast(
+          'Código enviado',
+          `Te hemos enviado un código a ${email}`
+        );
+      }
+      setState('code_sent');
+      setLoading(false);
+      return true;
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Error desconocido';
+      showErrorToast('Error al enviar código', errorMessage);
       setState('error');
       setLoading(false);
       return false;
     }
-
-    if (isResend) {
-      showSuccessToast(
-        'Código reenviado',
-        'Se ha reenviado un nuevo código a tu correo.'
-      );
-    } else {
-      showSuccessToast(
-        'Código enviado',
-        `Te hemos enviado un código a ${email}`
-      );
-    }
-    setState('code_sent');
-    setLoading(false);
-    return true;
   };
 
   const verifyOTP = async (): Promise<boolean> => {
@@ -80,10 +82,10 @@ export const useAuthFlow = () => {
 
     const result = await verifyOtpAndFetchProfile(email, otp);
 
-    if (result.error || !result.data) {
+    if (!result.success || !result.data) {
       showErrorToast(
         'Error al verificar código',
-        result.error || 'Error al verificar el código'
+        result.success ? 'Error al verificar el código' : result.error.message
       );
       setState('error');
       setLoading(false);

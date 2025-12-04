@@ -90,11 +90,9 @@ export async function getCommunityById(
 ): Promise<CommunityFullResponse> {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
-    .from('communities')
-    .select('*')
-    .eq('id', communityId)
-    .single();
+  const { data, error } = await supabase.rpc('get_community_by_id', {
+    community_id: communityId,
+  });
 
   if (error) {
     throw fromSupabaseError(

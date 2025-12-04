@@ -11,7 +11,7 @@ import {
   removeCommunityReview,
   getCommunityReviews,
 } from '../actions/';
-import { useAuth } from '@/app/(auth)/components/AuthProvider';
+import { useAuth } from '@/app/(auth)/hooks/useAuth';
 import {
   showErrorToast,
   showSuccessToast,

@@ -1,19 +1,17 @@
 'use server';
-import { createClient } from '@/lib/supabase/server';
-import { deleteAccountFromDb } from '@/app/(auth)/services/authService.server';
+import {
+  deleteAccountFromDb,
+  getCurrentUser,
+} from '@/app/(auth)/database/dbQueries.server';
 import { ProfileDbResponse } from '../types/updateProfileTypes';
 import { deleteImage } from '@/lib/supabase/storage';
 
 export async function deleteAccount(currentProfile: ProfileDbResponse) {
   try {
     // 1. Verificar autenticación
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    const user = await getCurrentUser();
 
-    if (authError || !user) {
+    if (!user) {
       throw new Error('Debes iniciar sesión para editar el perfil');
     }
 
@@ -29,13 +27,10 @@ export async function deleteAccount(currentProfile: ProfileDbResponse) {
 
     // 3. DESPUÉS: Eliminar cuenta de la base de datos
     const result = await deleteAccountFromDb();
-    if (!result.success) {
-      throw new Error(result.message);
-    }
 
     return {
       success: true,
-      message: 'cuenta eliminada con éxito',
+      message: result.message,
     };
   } catch (error) {
     if (error instanceof Error) {

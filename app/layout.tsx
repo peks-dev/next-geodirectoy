@@ -3,7 +3,7 @@ import { Iceland, Oxanium } from 'next/font/google';
 import './globals.css';
 import BackgroundLines from '@/components/ui/BackgroundLines';
 import { AuthProvider } from '@/app/(auth)/components/AuthProvider';
-import { getCurrentUser } from './(auth)/services/authService.server';
+import { getCurrentUser } from '@/app/(auth)/database/dbQueries.server';
 import ClientProviders from '@/components/ClientProviders';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 
@@ -32,7 +32,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { data: user } = await getCurrentUser();
+  const user = await getCurrentUser();
 
   return (
     <html lang="en" suppressHydrationWarning>

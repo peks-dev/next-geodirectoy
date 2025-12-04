@@ -1,19 +1,12 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import Button from '@/app/components/ui/Button';
 import { LogoutIcon } from '@/app/components/ui/svgs';
-import { useAuth } from '@/app/(auth)/components/AuthProvider';
+import { useAuth } from '@/app/(auth)/hooks/useAuth';
 import { useModalStore } from '@/app/components/ui/Modal/useModalStore';
 
-import {
-  showErrorToast,
-  showSuccessToast,
-} from '@/app/components/toast/notificationService';
-
 export default function LogoutButton() {
-  const router = useRouter();
-  const { logout, loading } = useAuth();
+  const { logout, isLoggingOut } = useAuth();
   const { showConfirmation } = useModalStore();
 
   const handleLogout = () => {
@@ -22,22 +15,7 @@ export default function LogoutButton() {
       message: '¿deseas salir de tu cuenta?',
       confirmText: 'si salir',
       onConfirm: async () => {
-        try {
-          const { error } = await logout();
-          if (!error) {
-            showSuccessToast('Sesión cerrada correctamente');
-
-            // Redirigir al home
-            router.push('/');
-            router.refresh(); // Opcional: fuerza refresh para limpiar estado
-          }
-        } catch (error) {
-          showErrorToast(
-            error instanceof Error
-              ? error.message
-              : 'Error inesperado al cerrar sesión'
-          );
-        }
+        await logout(); // El hook ya maneja notificaciones y navegación
       },
     });
   };
@@ -46,7 +24,7 @@ export default function LogoutButton() {
     <Button
       variant="icon"
       size="default"
-      loading={loading}
+      loading={isLoggingOut}
       onClick={handleLogout}
     >
       <LogoutIcon />

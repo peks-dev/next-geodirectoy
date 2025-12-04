@@ -1,7 +1,7 @@
 'use server';
 
 import { v4 as uuidv4 } from 'uuid';
-import { getCurrentUser } from '@/app/(auth)/services/authService.server';
+import { getCurrentUser } from '@/app/(auth)/database/dbQueries.server';
 import {
   updateProfileServerSchema,
   type UpdateProfileActionInput,
@@ -26,9 +26,9 @@ export async function updateProfile(
     const validated = updateProfileServerSchema.parse(input);
 
     // 2. Verificar autenticación
-    const { data: user, error: authError } = await getCurrentUser();
+    const user = await getCurrentUser();
 
-    if (authError || !user) {
+    if (!user) {
       throw new Error('Debes iniciar sesión para editar el perfil');
     }
 

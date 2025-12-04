@@ -1,9 +1,7 @@
 // components/auth/AuthProvider.tsx
 'use client';
-
 import {
   createContext,
-  useContext,
   useState,
   useEffect,
   ReactNode,
@@ -13,21 +11,26 @@ import {
 import { useRouter, usePathname } from 'next/navigation';
 import {
   onAuthStateChange,
-  logout as logoutService,
-} from '../services/authService.browser';
+  logout as logoutQuery,
+} from '../database/dbQueries.browser';
 import { useProfileStore } from '@/app/(main)/perfil/stores/useProfileStore';
 import { useCommunitiesProfileStore } from '@/app/(main)/perfil/stores/useCommunitiesProfileStore';
+import {
+  showErrorToast,
+  showSuccessToast,
+} from '@/app/components/toast/notificationService';
 import type { User, AuthChangeEvent, Session } from '@/lib/supabase/types';
 
 interface AuthContextType {
   user: User | null;
-  loading: boolean;
-  logout: () => Promise<{ error: string | null }>;
-  signOut: () => Promise<{ error: string | null }>;
+  logout: () => Promise<void>;
   waitForAuth: () => Promise<User | null>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
+
+export { AuthContext };
+export type { AuthContextType };
 
 export function AuthProvider({
   children,
@@ -37,12 +40,8 @@ export function AuthProvider({
   initialUser: User | null;
 }) {
   const [user, setUser] = useState<User | null>(initialUser);
-  const [loading, setLoading] = useState(false);
-  const clearProfile = useProfileStore((state) => state.clearProfile);
   const router = useRouter();
   const pathname = usePathname();
-  const { clearCommunities } = useCommunitiesProfileStore.getState();
-
   const authResolvers = useRef<Array<(user: User | null) => void>>([]);
 
   useEffect(() => {
@@ -50,7 +49,10 @@ export function AuthProvider({
       (event: AuthChangeEvent, session: Session | null) => {
         if (event === 'SIGNED_OUT' || !session) {
           setUser(null);
-          clearProfile();
+
+          // Limpieza automática de stores
+          useProfileStore.getState().clearProfile();
+          useCommunitiesProfileStore.getState().clearCommunities();
 
           authResolvers.current.forEach((resolve) => resolve(null));
           authResolvers.current = [];
@@ -63,9 +65,7 @@ export function AuthProvider({
           if (!isOnPublicRoute) {
             router.push('/sign-in');
           }
-        }
-        // ✅ CLAVE: Manejar SIGNED_IN e INITIAL_SESSION
-        else if (
+        } else if (
           (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') &&
           session
         ) {
@@ -73,13 +73,9 @@ export function AuthProvider({
             id: session.user.id,
             email: session.user.email,
           } as User;
-
           setUser(newUser);
-
-          // ✅ Resuelve todas las promises esperando
           authResolvers.current.forEach((resolve) => resolve(newUser));
           authResolvers.current = [];
-
           router.refresh();
         }
       }
@@ -90,77 +86,51 @@ export function AuthProvider({
         subscription.data.subscription.unsubscribe();
       }
     };
-  }, [router, pathname, clearProfile]);
-
-  const logout = async (): Promise<{ error: string | null }> => {
-    setLoading(true);
-    try {
-      const result = await logoutService();
-      if (result.error) {
-        console.error('Error al cerrar sesión:', result.error);
-        return { error: result.error };
-      }
-      // Limpieza de datos del usuario logeado
-      clearProfile();
-      clearCommunities();
-
-      return { error: null };
-    } catch (error) {
-      console.error('Unexpected error during logout:', error);
-      return { error: 'Error inesperado al cerrar sesión' };
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [router, pathname]);
 
   const waitForAuth = useCallback((): Promise<User | null> => {
     if (user) {
       return Promise.resolve(user);
     }
-
     return new Promise((resolve) => {
-      // Timeout de seguridad
       const timeoutId = setTimeout(() => {
         const index = authResolvers.current.indexOf(resolve);
         if (index > -1) {
           authResolvers.current.splice(index, 1);
         }
-
         resolve(null);
       }, 2000);
 
-      // ✅ Wrapper que limpia el timeout al resolver
       const wrappedResolve = (user: User | null) => {
         clearTimeout(timeoutId);
         resolve(user);
       };
 
-      // Agrega el resolver wrapped
       authResolvers.current.push(wrappedResolve);
     });
   }, [user]);
 
-  const signOut = logout;
+  // ✅ Logout centralizado en el Provider
+  const logout = useCallback(async () => {
+    try {
+      await logoutQuery();
+      showSuccessToast('Sesión cerrada correctamente');
+      // El resto lo maneja el listener de onAuthStateChange
+      router.push('/');
+      router.refresh();
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Error inesperado al cerrar sesión';
+      showErrorToast(errorMessage);
+      throw error;
+    }
+  }, [router]);
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        loading,
-        logout,
-        signOut,
-        waitForAuth,
-      }}
-    >
+    <AuthContext.Provider value={{ user, logout, waitForAuth }}>
       {children}
     </AuthContext.Provider>
   );
 }
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
-  }
-  return context;
-};
