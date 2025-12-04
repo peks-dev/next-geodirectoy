@@ -1,18 +1,19 @@
 // hooks/useAuthFlow.ts
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   showSuccessToast,
   showErrorToast,
 } from '@/app/components/toast/notificationService';
-import { sendLoginCode } from '../../services/authService.browser';
-import { verifyOtpAndFetchProfile } from '../actions/verifyAndFetch';
+import { sendLoginCode } from '@/auth/services/authService.browser';
+import { verifyOtpAndFetchProfile } from '@/auth/actions/verifyAndFetch';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useProfileStore } from '@/app/(main)/perfil/stores/useProfileStore';
 import { cacheService } from '@/lib/supabase/cacheService';
-import { useAuth } from '@/app/(auth)/components/AuthProvider';
+import { useAuth } from '@/auth/components/AuthProvider';
 import { supabase } from '@/lib/supabase/client';
+import { toast } from 'sonner';
 
 type AuthState =
   | 'idle'
@@ -27,10 +28,24 @@ export const useAuthFlow = () => {
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Timer state (integrated from useAuthTimer)
+  const [timeLeft, setTimeLeft] = useState(600);
+  const timerId = useRef<NodeJS.Timeout | null>(null);
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const { updateProfile: updateProfileStore } = useProfileStore();
   const { waitForAuth } = useAuth();
+
+  // Timer cleanup effect
+  useEffect(() => {
+    return () => {
+      if (timerId.current) {
+        clearInterval(timerId.current);
+      }
+    };
+  }, []);
 
   const sendOTP = async (isResend = false): Promise<boolean> => {
     setLoading(true);
@@ -133,16 +148,92 @@ export const useAuthFlow = () => {
     setOtp(newOtp.replace(/\D/g, '').slice(0, 6));
   };
 
+  // Timer functions (integrated from useAuthTimer)
+  const startTimer = (onExpire?: () => void) => {
+    if (timerId.current) clearInterval(timerId.current);
+
+    timerId.current = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          if (timerId.current) clearInterval(timerId.current);
+          toast.warning('El código de verificación ha expirado.');
+          if (onExpire) onExpire();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const resetTimer = (time: number = 600) => {
+    if (timerId.current) clearInterval(timerId.current);
+    setTimeLeft(time);
+  };
+
+  const clearTimer = () => {
+    if (timerId.current) clearInterval(timerId.current);
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Coordinated handlers
+  const handleSendOTP = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const success = await sendOTP();
+    if (success) {
+      resetTimer(600);
+      startTimer(() => setExpired());
+    }
+  };
+
+  const handleVerifyOTP = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const success = await verifyOTP();
+    if (success) {
+      clearTimer();
+    }
+  };
+
+  const handleResendCode = async () => {
+    const success = await sendOTP(true);
+    if (success) {
+      resetTimer(600);
+      startTimer(() => setExpired());
+    }
+  };
+
+  const handleResetFlow = () => {
+    clearTimer();
+    resetFlow();
+  };
+
   return {
+    // State
     state,
     email,
     otp,
     loading,
-    sendOTP,
-    verifyOTP,
-    resetFlow,
-    setExpired,
+    timeLeft,
+
+    // Main handlers
+    handleSendOTP,
+    handleVerifyOTP,
+    handleResendCode,
+    handleResetFlow,
+
+    // Input handlers
     handleEmailChange,
     handleOtpChange,
+
+    // Utilities
+    formatTime,
+
+    // Internal functions (for backward compatibility if needed)
+    sendOTP,
+    verifyOTP,
   };
 };

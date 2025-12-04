@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useAuthFlow } from '../../hooks/useAuthFlow';
-import { useAuthTimer } from '../../hooks/useAuthTimer';
+import { useAuthFlow } from '@/auth/hooks/useAuthFlow';
 import HeaderContainer from '@/components/ui/Header';
 import EmailForm from './components/EmailForm';
 import CodeVerificationForm from './components/CodeVerificationForm';
@@ -10,56 +9,24 @@ import ExpiredCodeMessage from './components/ExpiredCodeMessage';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 /**
- * Multi-step authentication form that handles OTP-based login/registration
- * States: idle → code_sent → success (or expired/error)
+ * Authentication form component that handles UI logic
+ * Business logic is handled by the useAuthFlow hook
  */
-
 export default function AuthForm() {
   const {
     state,
     email,
     otp,
     loading,
-    sendOTP,
-    verifyOTP,
-    resetFlow,
-    setExpired,
+    timeLeft,
+    handleSendOTP,
+    handleVerifyOTP,
+    handleResendCode,
+    handleResetFlow,
     handleEmailChange,
     handleOtpChange,
+    formatTime,
   } = useAuthFlow();
-
-  const { timeLeft, startTimer, resetTimer, clearTimer, formatTime } =
-    useAuthTimer();
-
-  const handleSendOTP = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const success = await sendOTP();
-    if (success) {
-      resetTimer(600);
-      startTimer(() => setExpired());
-    }
-  };
-
-  const handleVerifyOTP = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const success = await verifyOTP();
-    if (success) {
-      clearTimer(); // Stop timer on successful verification
-    }
-  };
-
-  const handleResendCode = async () => {
-    const success = await sendOTP(true);
-    if (success) {
-      resetTimer(600); // Reset to full 10 minutes on resend
-      startTimer(() => setExpired());
-    }
-  };
-
-  const handleResetFlow = () => {
-    clearTimer();
-    resetFlow();
-  };
 
   const getTitle = () => {
     switch (state) {

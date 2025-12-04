@@ -1,6 +1,6 @@
 'use server';
 
-import { verifyOtp } from '../../services/authService.server';
+import { verifyOtp } from '@/auth/services/authService.server';
 import { fetchProfileById } from '@/app/(main)/perfil/services/profileRepository';
 
 export async function verifyOtpAndFetchProfile(email: string, token: string) {
