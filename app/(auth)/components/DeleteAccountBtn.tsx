@@ -3,9 +3,9 @@
 import Button from '@/app/components/ui/Button';
 import { DeleteIcon } from '@/app/components/ui/svgs';
 import { useModalStore } from '@/app/components/ui/Modal/useModalStore';
-import { useProfileStore } from '../stores/useProfileStore';
-import { deleteAccount } from '../actions/deleteAccount';
-import { useRouter } from 'next/navigation';
+import { useProfileStore } from '@/app/(main)/perfil/stores/useProfileStore';
+import { deleteAccount } from '@/app/(auth)/actions/deleteAccount';
+import { useAuth } from '@/app/(auth)/hooks/useAuth';
 
 import {
   showErrorToast,
@@ -15,7 +15,7 @@ import {
 export default function DeleteAccountBtn() {
   const { showConfirmation } = useModalStore();
   const { profile } = useProfileStore.getState();
-  const router = useRouter();
+  const { logout } = useAuth();
 
   const handleClick = () => {
     showConfirmation({
@@ -27,10 +27,10 @@ export default function DeleteAccountBtn() {
           try {
             const result = await deleteAccount(profile);
             if (!result.success) {
-              throw new Error(result.message);
+              throw new Error(result.error.message);
             }
-            router.push('/');
-            showSuccessToast(result.message);
+            await logout();
+            showSuccessToast('Cuenta eliminada exitosamente');
           } catch (error) {
             if (error instanceof Error) {
               showErrorToast(error.message);

@@ -3,7 +3,7 @@ import { ProtectedWrapper } from '@/app/(auth)/components/ProtectedWrapper';
 import LogoutButton from './components/LogoutButton';
 import ProfileBanner from './components/ProfileBanner';
 import EditProfileBtn from './components/EditProfileBtn';
-import DeleteAccountBtn from './components/DeleteAccountBtn';
+import DeleteAccountBtn from '@/app/(auth)/components/DeleteAccountBtn';
 import OpenMenuBtn from '@/app/components/Menu/OpenMenuBtn';
 import NavigationButton from '@/app/components/ui/Buttons/NavigationButton';
 import { AddCommunityIcon } from '@/app/components/ui/svgs';
