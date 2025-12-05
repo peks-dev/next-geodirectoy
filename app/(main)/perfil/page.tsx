@@ -1,6 +1,6 @@
 // En el perfil
 import { ProtectedWrapper } from '@/app/(auth)/components/ProtectedWrapper';
-import LogoutButton from './components/LogoutButton';
+import LogoutButton from '@/app/(auth)/components/LogoutButton';
 import ProfileBanner from './components/ProfileBanner';
 import EditProfileBtn from './components/EditProfileBtn';
 import DeleteAccountBtn from '@/app/(auth)/components/DeleteAccountBtn';
