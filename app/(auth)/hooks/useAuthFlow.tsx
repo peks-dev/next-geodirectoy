@@ -12,7 +12,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useProfileStore } from '@/app/(main)/perfil/stores/useProfileStore';
 import { cacheService } from '@/auth/utils/cacheService';
 import { useAuth } from '../hooks/useAuth';
-import { supabase } from '@/lib/supabase/client';
 import { toast } from 'sonner';
 
 type AuthState =
@@ -36,7 +35,7 @@ export const useAuthFlow = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { updateProfile: updateProfileStore } = useProfileStore();
-  const { waitForAuth } = useAuth();
+  const { setUserAndSession } = useAuth();
 
   // Timer cleanup effect
   useEffect(() => {
@@ -92,6 +91,9 @@ export const useAuthFlow = () => {
       return false;
     }
 
+    // ¡Paso clave! Sincronizamos el estado de la app.
+    await setUserAndSession(result.data.user, result.data.session);
+
     // Hidrata el store con el perfil
     if (result.data.profile) {
       updateProfileStore(result.data.profile);
@@ -104,15 +106,6 @@ export const useAuthFlow = () => {
         email: result.data.user.email!,
       });
     }
-
-    //  Fuerzar a Supabase a refrescar la sesión
-    await supabase.auth.refreshSession();
-
-    // Pequeño delay para que el evento se propague
-    await new Promise((resolve) => setTimeout(resolve, 200));
-
-    // Ahora espera a que AuthProvider se entere
-    await waitForAuth();
 
     // Determina a dónde navegar
     const returnUrl = searchParams.get('returnUrl');

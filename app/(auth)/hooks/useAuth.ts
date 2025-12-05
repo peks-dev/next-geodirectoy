@@ -25,5 +25,6 @@ export function useAuth() {
     logout: logoutWithLoading,
     isLoggingOut,
     waitForAuth: context.waitForAuth,
+    setUserAndSession: context.setUserAndSession, // <-- Añadimos esta línea
   };
 }

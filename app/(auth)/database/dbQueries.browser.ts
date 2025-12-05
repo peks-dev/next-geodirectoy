@@ -5,6 +5,7 @@ import { ErrorCodes } from '@/lib/errors/codes';
 import type {
   AuthStateChangeCallback,
   AuthSubscription,
+  Session,
 } from '@/lib/supabase/types';
 
 /**
@@ -38,6 +39,26 @@ export async function logout(): Promise<void> {
     throw fromSupabaseError(
       error,
       'Error cerrando sesión',
+      ErrorCodes.DATABASE_ERROR
+    );
+  }
+}
+
+/**
+ * Establece manualmente la sesión en el cliente de Supabase.
+ * Útil después de la verificación del lado del servidor para sincronizar el cliente.
+ * @param session - El objeto de sesión de Supabase.
+ */
+export async function setSession(session: Session): Promise<void> {
+  const { error } = await supabase.auth.setSession({
+    access_token: session.access_token,
+    refresh_token: session.refresh_token,
+  });
+
+  if (error) {
+    throw fromSupabaseError(
+      error,
+      'Error al establecer la sesión del cliente',
       ErrorCodes.DATABASE_ERROR
     );
   }

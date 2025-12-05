@@ -8,10 +8,11 @@ import {
   useCallback,
   useRef,
 } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
   onAuthStateChange,
   logout as logoutQuery,
+  setSession,
 } from '../database/dbQueries.browser';
 import { useProfileStore } from '@/app/(main)/perfil/stores/useProfileStore';
 import { useCommunitiesProfileStore } from '@/app/(main)/perfil/stores/useCommunitiesProfileStore';
@@ -20,11 +21,13 @@ import {
   showSuccessToast,
 } from '@/app/components/toast/notificationService';
 import type { User, AuthChangeEvent, Session } from '@/lib/supabase/types';
+import { DatabaseError } from '@/lib/errors/database';
 
 interface AuthContextType {
   user: User | null;
   logout: () => Promise<void>;
   waitForAuth: () => Promise<User | null>;
+  setUserAndSession: (user: User, session: Session) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -41,7 +44,6 @@ export function AuthProvider({
 }) {
   const [user, setUser] = useState<User | null>(initialUser);
   const router = useRouter();
-  const pathname = usePathname();
   const authResolvers = useRef<Array<(user: User | null) => void>>([]);
 
   useEffect(() => {
@@ -49,22 +51,10 @@ export function AuthProvider({
       (event: AuthChangeEvent, session: Session | null) => {
         if (event === 'SIGNED_OUT' || !session) {
           setUser(null);
-
-          // Limpieza automática de stores
           useProfileStore.getState().clearProfile();
           useCommunitiesProfileStore.getState().clearCommunities();
-
           authResolvers.current.forEach((resolve) => resolve(null));
           authResolvers.current = [];
-
-          const publicRoutes = ['/'];
-          const isOnPublicRoute =
-            publicRoutes.includes(pathname) ||
-            publicRoutes.some((route) => pathname.startsWith(route));
-
-          if (!isOnPublicRoute) {
-            router.push('/sign-in');
-          }
         } else if (
           (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') &&
           session
@@ -76,7 +66,6 @@ export function AuthProvider({
           setUser(newUser);
           authResolvers.current.forEach((resolve) => resolve(newUser));
           authResolvers.current = [];
-          router.refresh();
         }
       }
     );
@@ -86,7 +75,7 @@ export function AuthProvider({
         subscription.data.subscription.unsubscribe();
       }
     };
-  }, [router, pathname]);
+  }, []);
 
   const waitForAuth = useCallback((): Promise<User | null> => {
     if (user) {
@@ -110,26 +99,36 @@ export function AuthProvider({
     });
   }, [user]);
 
-  // ✅ Logout centralizado en el Provider
+  // sincronizar con authFlow al iniciar
+  const setUserAndSession = useCallback(
+    async (user: User, session: Session) => {
+      await setSession(session);
+      setUser(user);
+    },
+    []
+  );
+
   const logout = useCallback(async () => {
     try {
       await logoutQuery();
       showSuccessToast('Sesión cerrada correctamente');
-      // El resto lo maneja el listener de onAuthStateChange
       router.push('/');
-      router.refresh();
     } catch (error) {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : 'Error inesperado al cerrar sesión';
-      showErrorToast(errorMessage);
+      let errorMessage = 'Error inesperado al cerrar sesión';
+      if (error instanceof DatabaseError) {
+        errorMessage = error.message; // Usamos el mensaje user-friendly del error
+      } else if (error instanceof Error) {
+        errorMessage = error.message; // Fallback por si acaso
+      }
+      showErrorToast('Error al cerrar sesión', errorMessage);
       throw error;
     }
   }, [router]);
 
   return (
-    <AuthContext.Provider value={{ user, logout, waitForAuth }}>
+    <AuthContext.Provider
+      value={{ user, logout, waitForAuth, setUserAndSession }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -1,5 +1,4 @@
 // lib/errors/database.ts
-import { ErrorCodes } from './codes';
 
 /**
  * Error para todas las operaciones de base de datos

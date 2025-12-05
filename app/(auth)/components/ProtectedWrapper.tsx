@@ -24,6 +24,7 @@ export function ProtectedWrapper({
   // evitar llamadas durante render
   useEffect(() => {
     if (!user && !isLoggingOut) {
+      console.log('ejecutado', user);
       // ✅ Guarda la URL actual como parámetro de retorno
       const returnUrl = encodeURIComponent(pathname);
       router.push(`${redirectTo}?returnUrl=${returnUrl}`);
