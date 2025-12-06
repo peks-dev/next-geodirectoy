@@ -2,18 +2,18 @@ import React from 'react';
 import Button from '@/app/components/ui/Button';
 
 interface ExpiredCodeMessageProps {
-  onResetFlow: () => void;
+  onResendCode: () => void;
 }
 
 export default function ExpiredCodeMessage({
-  onResetFlow,
+  onResendCode,
 }: ExpiredCodeMessageProps) {
   return (
     <div className="space-y-6 text-center">
       <div>
-        <p className="bg-error text-sm">El código ha expirado.</p>
+        <p className="text-sm">ya no es valido el codigo.</p>
       </div>
-      <Button onClick={onResetFlow}>Solicitar un nuevo código</Button>
+      <Button onClick={onResendCode}>Solicitar un nuevo código</Button>
     </div>
   );
 }

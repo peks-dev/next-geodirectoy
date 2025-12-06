@@ -1,25 +1,45 @@
 import React from 'react';
 import Button from '@/app/components/ui/Button';
 import Input from '@/app/components/ui/inputs/Text';
-import FlexBox from '@/app/components/ui/containers/FlexBox';
 
 interface EmailFormProps {
   email: string;
   loading: boolean;
+  isCollapsed: boolean;
   onEmailChange: (email: string) => void;
   onSubmit: (e: React.FormEvent) => void;
+  onShowEmailForm: () => void;
 }
 
 export default function EmailForm({
   email,
   loading,
+  isCollapsed,
   onEmailChange,
   onSubmit,
+  onShowEmailForm,
 }: EmailFormProps) {
+  if (isCollapsed) {
+    return (
+      <div className="flex w-full items-center justify-between">
+        <div>
+          <p className="mb-1 text-xs text-gray-400">Email</p>
+          <p className="text-foreground text-sm font-medium">{email}</p>
+        </div>
+        <Button
+          onClick={onShowEmailForm}
+          variant="secondary"
+          className="border-none text-sm"
+        >
+          Cambiar
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={onSubmit}>
-      <FlexBox direction="col" gap="md">
-        <p className="text-center text-sm">accede a basket places</p>
+      <div className="gap-md flex flex-col">
         <Input
           id="email"
           type="email"
@@ -29,10 +49,15 @@ export default function EmailForm({
           required
           disabled={loading}
         />
+        <p className="text-foreground text-center text-xs">
+          Al entrar, aceptas los{' '}
+          <a className="font-bold underline"> términos </a>y la
+          <a className="font-bold underline"> política de privacidad</a>.
+        </p>
         <Button type="submit" disabled={loading || !email}>
           {loading ? 'Enviando...' : 'Enviar código de acceso'}
         </Button>
-      </FlexBox>
+      </div>
     </form>
   );
 }

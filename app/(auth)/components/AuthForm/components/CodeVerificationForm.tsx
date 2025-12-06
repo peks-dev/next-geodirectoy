@@ -1,70 +1,66 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@/app/components/ui/Button';
-import Input from '@/app/components/ui/inputs/Text';
-import FlexBox from '@/app/components/ui/containers/FlexBox';
+import OtpInput from '@/app/components/ui/inputs/OtpInput';
+import { formatTime } from '@/app/(auth)/utils/formatTime';
 
 interface CodeVerificationFormProps {
-  email: string;
   otp: string;
   loading: boolean;
-  timeLeft: number;
-  formatTime: (seconds: number) => string;
   onOtpChange: (otp: string) => void;
-  onSubmit: (e: React.FormEvent) => void;
+  onSubmit: (e?: React.FormEvent) => void;
   onResendCode: () => void;
-  onResetFlow: () => void;
+  timeLeft: number;
 }
 
 export default function CodeVerificationForm({
-  email,
   otp,
   loading,
-  timeLeft,
-  formatTime,
   onOtpChange,
   onSubmit,
   onResendCode,
-  onResetFlow,
+  timeLeft,
 }: CodeVerificationFormProps) {
+  useEffect(() => {
+    if (otp.length === 6 && !loading) {
+      onSubmit();
+    }
+  }, [otp, loading, onSubmit]);
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (otp.length === 6) {
+      onSubmit();
+    }
+  };
+
   return (
-    <FlexBox direction="col" align="stretch" gap="md">
-      <p className="text-center text-xs">
-        código de 6 dígitos enviado a: <span>{email}</span>
-      </p>
+    <div className="relative pt-6">
+      <div className="gap-md mb-5 flex flex-col items-center justify-center">
+        <p className="text-xs text-gray-500">
+          Ingresa el código de 6 digitos enviado al correo
+        </p>
+        <p>
+          {timeLeft === 0 ? (
+            <span className="text-error">código expirado</span>
+          ) : (
+            formatTime(timeLeft)
+          )}
+        </p>
+      </div>
 
-      <FlexBox gap="md" align="center" justify="center">
-        <Button onClick={onResendCode} disabled={loading} variant="secondary">
-          Reenviar código
-        </Button>
-        <Button onClick={onResetFlow} variant="secondary">
-          Cambiar correo
-        </Button>
-      </FlexBox>
-
-      <form onSubmit={onSubmit} className="center flex flex-col">
-        <FlexBox direction="col" align="center" gap="md">
-          <Input
-            type="text"
-            placeholder="123456"
-            value={otp}
-            onChange={(e) => onOtpChange(e.target.value)}
-            maxLength={6}
-            className="w-full text-center tracking-widest"
-            autoFocus
-          />
-          <div className="text-xs text-gray-500">
-            <span>El código expira en: </span>
-            <span>{formatTime(timeLeft)}</span>
-          </div>
+      <form onSubmit={handleFormSubmit}>
+        <div className="flex flex-col justify-center gap-10">
+          <OtpInput value={otp} onChange={onOtpChange} maxLength={6} />
           <Button
-            type="submit"
-            disabled={loading || otp.length !== 6}
-            className="m-auto"
+            onClick={onResendCode}
+            disabled={loading}
+            variant="secondary"
+            className="border-none"
           >
-            {loading ? 'verificando...' : 'verificar código'}
+            Reenviar código
           </Button>
-        </FlexBox>
+        </div>
       </form>
-    </FlexBox>
+    </div>
   );
 }

@@ -86,8 +86,9 @@ export const useAuthFlow = () => {
         'Error al verificar código',
         result.success ? 'Error al verificar el código' : result.error.message
       );
-      setState('error');
+      setState('code_sent');
       setLoading(false);
+      setOtp('');
       return false;
     }
 
@@ -169,12 +170,6 @@ export const useAuthFlow = () => {
     if (timerId.current) clearInterval(timerId.current);
   };
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
   // Coordinated handlers
   const handleSendOTP = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -185,8 +180,8 @@ export const useAuthFlow = () => {
     }
   };
 
-  const handleVerifyOTP = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleVerifyOTP = async (e?: React.FormEvent) => {
+    e?.preventDefault();
     const success = await verifyOTP();
     if (success) {
       clearTimer();
@@ -223,9 +218,6 @@ export const useAuthFlow = () => {
     // Input handlers
     handleEmailChange,
     handleOtpChange,
-
-    // Utilities
-    formatTime,
 
     // Internal functions (for backward compatibility if needed)
     sendOTP,
