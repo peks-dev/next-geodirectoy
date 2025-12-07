@@ -1,5 +1,9 @@
 import { z } from 'zod';
-import { ErrorCodes } from './codes';
+import { ErrorCodes as BaseErrorCodes } from './codes';
+import { ErrorCodes as AICodes } from '../services/ai/errors/codes';
+
+// Tipo union de los códigos de error
+export type AppErrorCode = keyof typeof BaseErrorCodes | keyof typeof AICodes;
 
 /**
  * Error de validación personalizado
@@ -7,7 +11,7 @@ import { ErrorCodes } from './codes';
 export class ValidationError extends Error {
   constructor(
     message: string,
-    public code: keyof typeof ErrorCodes,
+    public code: AppErrorCode,
     public field?: string,
     public details?: unknown
   ) {
@@ -26,7 +30,7 @@ export function fromZodError(error: z.ZodError): ValidationError {
 
   return new ValidationError(
     firstError.message,
-    ErrorCodes.VALIDATION_ERROR,
+    BaseErrorCodes.VALIDATION_ERROR, // Usa el código de error base
     firstError.path.join('.'),
     error.issues // Todos los errores para debugging
   );

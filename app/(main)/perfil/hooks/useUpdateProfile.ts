@@ -4,9 +4,7 @@ import { useState } from 'react';
 import { useEditProfileFormStore } from '../stores/useEditProfileFormStore';
 import { useProfileStore } from '../stores/useProfileStore';
 import { updateProfileController } from '../actions';
-import { compressAvatar } from '../utils';
-import { ValidationError } from '@/lib/errors/zodHandler';
-import { ErrorCodes } from '@/lib/errors/codes';
+import { compressImage } from '@/lib/utils/images/compressImage';
 
 interface UseUpdateProfileReturn {
   /**
@@ -44,36 +42,39 @@ export function useUpdateProfile(): UseUpdateProfileReturn {
         useProfileStore.getState();
 
       if (!profile) {
-        throw new ValidationError(
-          'Se necesita un perfil para actualizar',
-          ErrorCodes.NOT_FOUND
-        );
+        throw new Error('usuario no logeado');
       }
 
       // 2. Preparar datos básicos
       const actionData = {
         userId: profile.user_id,
-        name: name.trim() || undefined,
+        name: name.trim(),
       };
 
-      // 3. Procesar imagen si existe (usando servicio)
-      let compressedAvatar;
+      // 3. Procesar imagen si existe (comprimir)
+      let avatar;
       if (avatarFile) {
         setProgress('compressing');
-        const processed = await compressAvatar(avatarFile);
-        compressedAvatar = processed.compressedAvatar;
+        // Comprimir la imagen
+        const compressedFile = await compressImage(avatarFile, {
+          maxWidth: 512,
+          maxHeight: 512,
+          targetSize: 200 * 1024, // 200KB
+          quality: 0.85,
+        });
+        avatar = compressedFile;
       }
 
       // 4. Preparar datos finales para el action
       const finalActionData = {
         ...actionData,
-        compressedAvatar,
+        avatar,
       };
 
       setProgress('uploading');
 
       // 5. Llamar al controller (que valida y procesa todo)
-      const result = await updateProfileController(finalActionData, profile);
+      const result = await updateProfileController(finalActionData);
 
       if (!result.success) {
         throw new Error(result.error.message);

@@ -4,6 +4,7 @@ import { getCurrentUser } from '@/app/(auth)/database/dbQueries.server';
 import { type Result, ok, fail } from '@/lib/types/result';
 import { AuthErrorCodes } from '@/app/(auth)/errors/codes';
 import { ErrorCodes } from '@/lib/errors/codes';
+import { ErrorCodes as AiErrors } from '@/lib/services/ai/errors/codes';
 import { ProfileErrorMessages } from '../errors';
 import { handleServiceError } from '@/lib/errors/handler';
 import { validateOrThrow, ValidationError } from '@/lib/errors/zodHandler';
@@ -14,10 +15,8 @@ import {
   type UpdateProfileActionInput,
 } from '../schemas/updateProfileSchema';
 
-import type { ProfileDbResponse } from '../types';
-
-import { insertProfileUpdates } from '../dbQueries';
-import { uploadAvatar } from '../services/';
+import { insertProfileUpdates, fetchProfileById } from '../dbQueries';
+import { uploadAvatar, analyzeProfileImage } from '../services/';
 import { extractAvatarPath } from '../utils';
 import { prepareProfileUpdateData } from '../transformers';
 
@@ -28,8 +27,7 @@ export interface UpdateProfileData {
 }
 
 export async function updateProfileController(
-  input: UpdateProfileActionInput,
-  currentProfile: ProfileDbResponse
+  input: UpdateProfileActionInput
 ): Promise<Result<UpdateProfileData>> {
   let pathToRollback: string | null = null;
   try {
@@ -56,7 +54,14 @@ export async function updateProfileController(
       );
     }
 
-    // 4. Variables para tracking de recursos creados (para rollback)
+    // 4. Obtener perfil actual desde la base de datos
+    const currentProfile = await fetchProfileById(user.id);
+
+    if (!currentProfile) {
+      return fail(ErrorCodes.NOT_FOUND, 'Perfil no encontrado');
+    }
+
+    // 5. Variables para tracking de recursos creados (para rollback)
     let avatarUrl: string | null = null;
     let uploadedFilePath: string | null = null;
     let previousAvatarUrl: string | null = null;
@@ -65,28 +70,38 @@ export async function updateProfileController(
       previousAvatarUrl = currentProfile.avatar_url;
     }
 
-    // 5. Procesar avatar si existe usando el servicio de negocio
-    if (validated.compressedAvatar) {
-      const uploatedAvatar = await uploadAvatar(
-        validated.compressedAvatar,
-        user.id
-      );
+    // 6. Procesar avatar si existe usando el servicio de negocio
+    if (validated.avatar) {
+      // Análisis con AI
+      const avatarAnalyzed = await analyzeProfileImage({
+        image: validated.avatar,
+      });
 
-      uploadedFilePath = uploatedAvatar.uploadedFilePath;
-      avatarUrl = uploatedAvatar.avatarUrl;
+      if (!avatarAnalyzed.isValid) {
+        throw new ValidationError(
+          'No se permiten imágenes NSFW',
+          AiErrors.INAPPROPRIATE_CONTENT
+        );
+      }
+
+      // Subir a Supabase
+      const uploadedAvatar = await uploadAvatar(validated.avatar, user.id);
+
+      uploadedFilePath = uploadedAvatar.uploadedFilePath;
+      avatarUrl = uploadedAvatar.avatarUrl;
 
       // Asignar path para posible rollback
       pathToRollback = uploadedFilePath;
     }
 
-    // 6. Preparar datos de actualización usando validaciones de negocio
+    // 7. Preparar datos de actualización usando validaciones de negocio
     const updateData = prepareProfileUpdateData(
       validated,
       currentProfile,
       avatarUrl || undefined
     );
 
-    // 7. Actualizar perfil en la base de datos
+    // 8. Actualizar perfil en la base de datos
     const profileResponse = await insertProfileUpdates(updateData);
 
     if (!profileResponse) {
@@ -96,7 +111,7 @@ export async function updateProfileController(
       );
     }
 
-    // 8. ÉXITO: Eliminar avatar anterior si había uno y se subió uno nuevo
+    // 9. ÉXITO: Eliminar avatar anterior si había uno y se subió uno nuevo
     if (previousAvatarUrl && uploadedFilePath) {
       // Extraer el path del URL anterior
       const previousFilePath = extractAvatarPath(previousAvatarUrl);
@@ -105,14 +120,14 @@ export async function updateProfileController(
       await deleteImage(previousFilePath, 'AVATARS');
     }
 
-    // 9. Devolver resultado exitoso
+    // 10. Devolver resultado exitoso
     return ok({
       name: profileResponse.name,
       avatar_url: profileResponse.avatar_url,
       user_id: profileResponse.user_id,
     });
   } catch (error) {
-    // Rollback si error de DB post-upload
+    // Rollback si error de DB post-upload o post-análisis
     if (pathToRollback && error instanceof DatabaseError) {
       try {
         await deleteImage(pathToRollback, 'AVATARS');

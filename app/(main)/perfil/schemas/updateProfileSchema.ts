@@ -1,9 +1,6 @@
 import { z } from 'zod';
 
-import {
-  browserFileSchema,
-  compressedImageSchema,
-} from '@/lib/schemas/image-schemas';
+import { browserFileSchema } from '@/lib/schemas/image-schemas';
 
 /**
  * Schema para validar datos del formulario
@@ -42,7 +39,7 @@ export type UpdateProfileFormData = z.infer<typeof updateProfileFormSchema>;
  * Schema para validar datos que se envían al server action
  * Usado en: Hook → Server Action
  *
- * Valida los datos ya procesados (imagen comprimida a base64)
+ * Valida los datos ya procesados (imagen comprimida como File)
  */
 export const updateProfileActionSchema = z.object({
   name: z
@@ -65,7 +62,7 @@ export const updateProfileActionSchema = z.object({
 
   userId: z.string().uuid('ID de usuario inválido'),
 
-  compressedAvatar: compressedImageSchema.optional(),
+  avatar: browserFileSchema.optional(),
 });
 
 export type UpdateProfileActionInput = z.infer<
@@ -79,8 +76,8 @@ export type UpdateProfileActionInput = z.infer<
 export const updateProfileServerSchema = updateProfileActionSchema.refine(
   (data) => {
     // Validación adicional: Si hay avatar, el tamaño debe ser razonable
-    if (data.compressedAvatar) {
-      return data.compressedAvatar.size <= 2 * 1024 * 1024;
+    if (data.avatar) {
+      return data.avatar.size <= 2 * 1024 * 1024;
     }
     return true;
   },
