@@ -1,10 +1,9 @@
 'use server';
 
 import { verifyOtp } from '@/app/(auth)/database/dbQueries.server';
-import { fetchProfileById } from '@/app/(main)/perfil/services/profileRepository';
+import { fetchProfileById } from '@/app/(main)/perfil/dbQueries';
 import { handleServiceError } from '@/lib/errors/handler';
-import { ok, fail } from '@/lib/types/result';
-import { ErrorCodes } from '@/lib/errors/codes';
+import { ok } from '@/lib/types/result';
 
 export async function verifyOtpAndFetchProfile(email: string, token: string) {
   try {
@@ -12,13 +11,7 @@ export async function verifyOtpAndFetchProfile(email: string, token: string) {
     const authData = await verifyOtp(email, token);
 
     // Obtiene el perfil del usuario autenticado
-    const { data: profile, error: profileError } = await fetchProfileById(
-      authData.user.id
-    );
-
-    if (profileError) {
-      return fail(ErrorCodes.DATABASE_ERROR, profileError);
-    }
+    const profile = await fetchProfileById(authData.user.id);
 
     return ok({
       user: authData.user,

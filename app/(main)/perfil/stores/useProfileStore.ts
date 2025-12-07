@@ -1,10 +1,7 @@
 // app/(main)/perfil/stores/useProfileStore.ts
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type {
-  ProfileStore,
-  ProfileDbResponse,
-} from '../types/updateProfileTypes';
+import type { ProfileStore, ProfileDbResponse } from '../types';
 
 export const useProfileStore = create<ProfileStore>()(
   persist(

@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 // Asumimos que el tipo EditProfileFormState se actualiza para incluir la nueva info
-import type { EditProfileFormState } from '../types/updateProfileTypes';
+import type { EditProfileFormState } from '../types';
 // Importamos la función de utilidad
 import { getImageInfo } from '@/lib/utils/images/getImageInfo';
 

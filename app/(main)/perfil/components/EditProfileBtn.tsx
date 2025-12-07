@@ -4,11 +4,10 @@ import Button from '@/app/components/ui/Button';
 import { EditProfile } from '@/app/components/ui/svgs';
 import EditProfileForm from './EditProfileForm';
 import { useModalStore } from '@/app/components/ui/Modal/useModalStore';
-import { useUpdateProfile } from '../hooks/useUpdateProfile';
-
+import { useUpdateProfile } from '../hooks';
 import {
-  showErrorToast,
   showSuccessToast,
+  handleSubmissionError,
 } from '@/app/components/toast/notificationService';
 
 export default function EditProfileBtn() {
@@ -21,22 +20,14 @@ export default function EditProfileBtn() {
       ContentComponent: EditProfileForm,
       onConfirm: async () => {
         try {
-          const result = await handleUpdateProfile();
-
-          if (!result.success) {
-            throw new Error(result.message);
-          }
-          showSuccessToast('se actualizo el perfil');
+          await handleUpdateProfile();
+          showSuccessToast('Perfil actualizado correctamente');
         } catch (error) {
-          if (error instanceof Error) {
-            showErrorToast(error.message);
-          } else {
-            showErrorToast('Un error inesperado ocurrió.');
-          }
+          handleSubmissionError(error);
         }
       },
       confirmText: 'enviar',
-      isLoading: isLoading,
+      isLoading,
     });
   };
 

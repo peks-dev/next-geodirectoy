@@ -1,40 +1,59 @@
 'use server';
 
-import { v4 as uuidv4 } from 'uuid';
 import { getCurrentUser } from '@/app/(auth)/database/dbQueries.server';
+import { type Result, ok, fail } from '@/lib/types/result';
+import { AuthErrorCodes } from '@/app/(auth)/errors/codes';
+import { ErrorCodes } from '@/lib/errors/codes';
+import { ProfileErrorMessages } from '../errors';
+import { handleServiceError } from '@/lib/errors/handler';
+import { validateOrThrow, ValidationError } from '@/lib/errors/zodHandler';
+import { deleteImage } from '@/lib/supabase/storage';
+import { DatabaseError } from '@/lib/errors/database';
 import {
   updateProfileServerSchema,
   type UpdateProfileActionInput,
 } from '../schemas/updateProfileSchema';
 
-import type {
-  ProfileDbResponse,
-  UpdateProfileResult,
-} from '../types/updateProfileTypes';
+import type { ProfileDbResponse } from '../types';
 
-import { base64ToBuffer } from '@/lib/utils/images/imagesTransform';
+import { updateProfileDb } from '../dbQueries';
+import { uploadAvatar } from '../services/';
+import { extractAvatarPath } from '../utils';
+import { prepareProfileUpdateData } from '../transformers';
 
-import { updateProfileDb } from '../services/profileRepository';
-import { uploadImage, deleteImage } from '@/lib/supabase/storage';
+export interface UpdateProfileData {
+  name: string;
+  avatar_url: string | null;
+  user_id: string;
+}
 
-export async function updateProfile(
+export async function updateProfileController(
   input: UpdateProfileActionInput,
   currentProfile: ProfileDbResponse
-): Promise<UpdateProfileResult> {
+): Promise<Result<UpdateProfileData>> {
+  let pathToRollback: string | null = null;
   try {
-    // 1. Validar input (CRÍTICO: nunca confiar en datos del cliente)
-    const validated = updateProfileServerSchema.parse(input);
+    // 1. Validar input usando validateOrThrow (lanza ValidationError si falla)
+    // Esto valida tanto los datos como el archivo comprimido si existe
+    const validated = validateOrThrow(updateProfileServerSchema, input);
 
     // 2. Verificar autenticación
     const user = await getCurrentUser();
 
     if (!user) {
-      throw new Error('Debes iniciar sesión para editar el perfil');
+      return fail(
+        AuthErrorCodes.UNAUTHORIZED,
+        'Debes iniciar sesión para editar el perfil'
+      );
     }
 
-    // 3. Verificar autorización (el userId debe coincidir con el usuario autenticado)
+    // 3. Validar permisos de negocio (lanza ValidationError si falla)
     if (user.id !== validated.userId) {
-      throw new Error('No tienes permisos para editar este perfil');
+      throw new ValidationError(
+        'No tienes permisos para editar este perfil',
+        ErrorCodes.FORBIDDEN,
+        'user_id'
+      );
     }
 
     // 4. Variables para tracking de recursos creados (para rollback)
@@ -46,112 +65,65 @@ export async function updateProfile(
       previousAvatarUrl = currentProfile.avatar_url;
     }
 
-    // 5. Procesar avatar si existe
+    // 5. Procesar avatar si existe usando el servicio de negocio
     if (validated.compressedAvatar) {
-      const { data: base64Data, name, type } = validated.compressedAvatar;
+      const uploatedAvatar = await uploadAvatar(
+        validated.compressedAvatar,
+        user.id
+      );
 
-      try {
-        // Convertir base64 a Buffer
-        const buffer = base64ToBuffer(base64Data);
+      uploadedFilePath = uploatedAvatar.uploadedFilePath;
+      avatarUrl = uploatedAvatar.avatarUrl;
 
-        // Generar nombre único para el archivo
-        const extension = type.split('/')[1]; // 'jpeg', 'png', 'webp'
-        const fileName = `${uuidv4()}.${extension}`;
-        const filePath = `${user.id}/${fileName}`;
-
-        // Crear File object desde el buffer
-        const file = new File([buffer], name, { type });
-
-        // Subir usando la función de storage
-        const uploadResult = await uploadImage(file, 'AVATARS', filePath);
-
-        uploadedFilePath = uploadResult.path;
-        avatarUrl = uploadResult.url;
-      } catch (uploadError) {
-        throw new Error(
-          uploadError instanceof Error
-            ? uploadError.message
-            : 'Error al procesar la imagen'
-        );
-      }
+      // Asignar path para posible rollback
+      pathToRollback = uploadedFilePath;
     }
 
-    // 6. Actualizar perfil en la base de datos
-    const updateData: {
-      name: string;
-      avatar_url?: string;
-      updated_at: string;
-      user_id: string;
-    } = {
-      updated_at: new Date().toISOString(),
-      user_id: validated.userId,
-      name: currentProfile.name,
-    };
+    // 6. Preparar datos de actualización usando validaciones de negocio
+    const updateData = prepareProfileUpdateData(
+      validated,
+      currentProfile,
+      avatarUrl || undefined
+    );
 
-    // Solo actualizar nombre si fue proporcionado
-    if (validated.name && validated.name.length > 0) {
-      updateData.name = validated.name;
-    }
-
-    // Solo actualizar avatar_url si hay uno nuevo
-    if (avatarUrl) {
-      updateData.avatar_url = avatarUrl;
-    }
-
-    // Llamar a la accion de servidor
+    // 7. Actualizar perfil en la base de datos
     const profileResponse = await updateProfileDb(updateData);
 
-    if (!profileResponse.data) {
-      // Rollback: eliminar avatar recién subido
-      if (uploadedFilePath) {
-        await deleteImage(uploadedFilePath, 'AVATARS').catch(console.error);
-      }
-      throw new Error('Error al actualizar el perfil en la base de datos');
+    if (!profileResponse) {
+      return fail(
+        ErrorCodes.INTERNAL_ERROR,
+        ProfileErrorMessages[ErrorCodes.INTERNAL_ERROR]
+      );
     }
 
-    // 7. ÉXITO: Eliminar avatar anterior si había uno y se subió uno nuevo
+    // 8. ÉXITO: Eliminar avatar anterior si había uno y se subió uno nuevo
     if (previousAvatarUrl && uploadedFilePath) {
       // Extraer el path del URL anterior
-      const previousFilePath = previousAvatarUrl.split('/avatars/')[1];
+      const previousFilePath = extractAvatarPath(previousAvatarUrl);
 
       // Eliminar avatar anterior (sin bloquear la respuesta)
-      deleteImage(previousFilePath, 'AVATARS').catch((error) => {
-        console.error('No se pudo eliminar el avatar antiguo:', error);
-      });
+      await deleteImage(previousFilePath, 'AVATARS');
     }
 
-    // 8. Devolver resultado exitoso
-    return {
-      success: true,
-      data: {
-        name: profileResponse.data.name,
-        avatar_url: profileResponse.data.avatar_url,
-        user_id: profileResponse.data.user_id,
-      },
-      message: 'Perfil actualizado correctamente',
-    };
+    // 9. Devolver resultado exitoso
+    return ok({
+      name: profileResponse.name,
+      avatar_url: profileResponse.avatar_url,
+      user_id: profileResponse.user_id,
+    });
   } catch (error) {
-    // Manejar errores de validación de Zod
-    if (error && typeof error === 'object' && 'errors' in error) {
-      const zodError = error as { errors: Array<{ message: string }> };
-      return {
-        success: false,
-        data: null,
-        message: zodError.errors[0]?.message || 'Datos inválidos',
-      };
+    // Rollback si error de DB post-upload
+    if (pathToRollback && error instanceof DatabaseError) {
+      try {
+        await deleteImage(pathToRollback, 'AVATARS');
+      } catch (rollbackError) {
+        console.error('✗ ROLLBACK FALLÓ - Avatar huérfano:', {
+          path: pathToRollback,
+          originalError: error,
+          rollbackError,
+        });
+      }
     }
-    if (error instanceof Error) {
-      return {
-        success: false,
-        data: null,
-        message: error.message || 'algo salio mal',
-      };
-    }
-
-    return {
-      success: false,
-      data: null,
-      message: 'Error inesperado. Intenta de nuevo.',
-    };
+    return handleServiceError(error);
   }
 }

@@ -1,28 +1,9 @@
 import { z } from 'zod';
 
-// ============================================================================
-// SCHEMAS DE VALIDACIÓN
-// ============================================================================
-
-/**
- * Schema para validar File del navegador
- * Usado en la validación del formulario (UI → Hook)
- */
-const browserFileSchema = z
-  .instanceof(File, {
-    message: 'Debe ser un archivo válido',
-  })
-  .refine((file) => file.size > 0, {
-    message: 'El archivo no puede estar vacío',
-  })
-  .refine(
-    (file) => file.size <= 10 * 1024 * 1024, // 10MB
-    { message: 'El archivo es demasiado grande (máximo 10MB)' }
-  )
-  .refine(
-    (file) => ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
-    { message: 'Formato inválido. Solo JPEG, PNG o WebP' }
-  );
+import {
+  browserFileSchema,
+  compressedImageSchema,
+} from '@/lib/schemas/image-schemas';
 
 /**
  * Schema para validar datos del formulario
@@ -58,51 +39,6 @@ export const updateProfileFormSchema = z
 export type UpdateProfileFormData = z.infer<typeof updateProfileFormSchema>;
 
 /**
- * Schema para validar imagen comprimida como base64
- * Usado internamente en updateProfileActionSchema
- */
-const compressedImageSchema = z.object({
-  data: z
-    .string()
-    .min(1, 'Datos de imagen vacíos')
-    .refine(
-      (str) => {
-        // Validar que sea base64 válido
-        try {
-          return str.startsWith('data:image/') && str.includes('base64,');
-        } catch {
-          return false;
-        }
-      },
-      { message: 'Formato de imagen inválido (debe ser base64)' }
-    )
-    .refine(
-      (str) => {
-        // Validar tamaño del base64 (aprox. 1.37x el tamaño real del archivo)
-        const base64Length = str.split(',')[1]?.length || 0;
-        const approxBytes = (base64Length * 3) / 4;
-        // Límite de 2MB para el payload de Next.js
-        return approxBytes <= 2 * 1024 * 1024;
-      },
-      { message: 'Imagen demasiado grande después de comprimir (máx 2MB)' }
-    ),
-
-  name: z
-    .string()
-    .min(1, 'Nombre de archivo requerido')
-    .max(255, 'Nombre de archivo demasiado largo'),
-
-  type: z.enum(['image/jpeg', 'image/png', 'image/webp'], {
-    message: 'Tipo de imagen no soportado',
-  }),
-
-  size: z
-    .number()
-    .min(1, 'Tamaño de archivo inválido')
-    .max(2 * 1024 * 1024, 'Archivo demasiado grande (máx 2MB)'),
-});
-
-/**
  * Schema para validar datos que se envían al server action
  * Usado en: Hook → Server Action
  *
@@ -114,6 +50,17 @@ export const updateProfileActionSchema = z.object({
     .min(2, 'El nombre debe tener al menos 2 caracteres')
     .max(100, 'El nombre debe tener menos de 100 caracteres')
     .trim()
+    .refine(
+      (str) => {
+        // Validar caracteres permitidos (letras, espacios, guiones, apóstrofes)
+        const nameRegex = /^[a-zA-ZÀ-ÿ\s\-']+$/;
+        return nameRegex.test(str);
+      },
+      {
+        message:
+          'El nombre solo puede contener letras, espacios, guiones y apóstrofes',
+      }
+    )
     .optional(),
 
   userId: z.string().uuid('ID de usuario inválido'),
@@ -143,23 +90,3 @@ export const updateProfileServerSchema = updateProfileActionSchema.refine(
 export type UpdateProfileServerInput = z.infer<
   typeof updateProfileServerSchema
 >;
-
-// ============================================================================
-// CONSTANTES
-// ============================================================================
-
-export const IMAGE_CONSTRAINTS = {
-  /** Tamaño máximo del archivo original antes de comprimir */
-  MAX_INPUT_SIZE: 10 * 1024 * 1024, // 10MB
-  /** Tamaño objetivo después de comprimir */
-  TARGET_SIZE: 200 * 1024, // 200KB
-  /** Tamaño máximo del base64 para enviar al servidor */
-  MAX_BASE64_SIZE: 2 * 1024 * 1024, // 2MB
-  /** Dimensiones máximas para avatares */
-  AVATAR_MAX_WIDTH: 512,
-  AVATAR_MAX_HEIGHT: 512,
-  /** Calidad de compresión JPEG */
-  COMPRESSION_QUALITY: 0.85,
-  /** Tipos de imagen permitidos */
-  ALLOWED_TYPES: ['image/jpeg', 'image/png', 'image/webp'] as const,
-} as const;

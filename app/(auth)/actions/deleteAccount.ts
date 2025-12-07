@@ -8,7 +8,7 @@ import { type Result, ok, fail } from '@/lib/types/result';
 import { AuthErrorCodes } from '@/app/(auth)/errors/codes';
 import { ErrorCodes } from '@/lib/errors/codes';
 import { handleServiceError } from '@/lib/errors/handler';
-import { ProfileDbResponse } from '@/app/(main)/perfil/types/updateProfileTypes';
+import { ProfileDbResponse } from '@/app/(main)/perfil/types';
 import { deleteImage } from '@/lib/supabase/storage';
 
 export async function deleteAccount(

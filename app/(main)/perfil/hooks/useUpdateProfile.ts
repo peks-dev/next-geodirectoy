@@ -1,148 +1,91 @@
+'use client';
+
 import { useState } from 'react';
-import { ZodError } from 'zod';
-import {
-  compressImage,
-  ImageCompressionError,
-} from '@/lib/utils/images/compressImage';
-import { fileToBase64 } from '@/lib/utils/images/imagesTransform';
 import { useEditProfileFormStore } from '../stores/useEditProfileFormStore';
 import { useProfileStore } from '../stores/useProfileStore';
-import { updateProfile } from '../actions/updateProfile';
-import {
-  updateProfileFormSchema,
-  updateProfileActionSchema,
-  type UpdateProfileActionInput,
-} from '../schemas/updateProfileSchema';
-
-interface UpdateProfileHookResult {
-  success: boolean;
-  message: string;
-}
+import { updateProfileController } from '../actions';
+import { compressAvatar } from '../utils';
+import { ValidationError } from '@/lib/errors/zodHandler';
+import { ErrorCodes } from '@/lib/errors/codes';
 
 interface UseUpdateProfileReturn {
   /**
-   * Prepara los datos para la actualización del perfil.
-   * Realiza validación y compresión de imagen en el cliente.
-   * Devuelve los datos listos para ser enviados a la Server Action.
+   * Ejecuta la actualización del perfil.
+   * Orquesta el flujo desde el formulario hasta el action.
+   * @throws Error si falla la actualización
    */
-  handleUpdateProfile: () => Promise<UpdateProfileHookResult>;
-  /** Estado de loading durante el proceso de preparación */
+  handleUpdateProfile: () => Promise<void>;
+
+  /** Estado de loading durante el proceso */
   isLoading: boolean;
-  /** Progreso del proceso (útil para UI feedback) */
-  progress: 'idle' | 'validating' | 'compressing' | 'uploading' | 'error';
+
+  /** Progreso del proceso para feedback visual */
+  progress: 'idle' | 'compressing' | 'uploading';
 }
 
+/**
+ * Hook para actualizar el perfil de usuario (MVVM Pattern)
+ * Orquesta el flujo de actualización sin lógica de negocio
+ */
 export function useUpdateProfile(): UseUpdateProfileReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState<
-    'idle' | 'validating' | 'compressing' | 'uploading' | 'error'
+    'idle' | 'compressing' | 'uploading'
   >('idle');
 
-  const handleUpdateProfile = async (): Promise<UpdateProfileHookResult> => {
+  const handleUpdateProfile = async (): Promise<void> => {
     setIsLoading(true);
-    setProgress('validating');
+    setProgress('idle');
 
     try {
-      // 1. Obtener datos del store de formulario
+      // 1. Obtener datos crudos del store de formulario
       const { name, avatarFile } = useEditProfileFormStore.getState();
       const { profile, updateProfile: updateLocalProfile } =
         useProfileStore.getState();
 
       if (!profile) {
-        throw new Error('se necesita un perfil');
+        throw new ValidationError(
+          'Se necesita un perfil para actualizar',
+          ErrorCodes.NOT_FOUND
+        );
       }
 
-      // 2. Validar datos del formulario con Zod
-      const validatedForm = updateProfileFormSchema.parse({
+      // 2. Preparar datos básicos
+      const actionData = {
+        userId: profile.user_id,
         name: name.trim() || undefined,
-        avatarFile: avatarFile || undefined,
-        userId: profile.user_id,
-      });
-
-      if (!profile) {
-        throw new Error('Se necesita un perfil de usuario para actualizar.');
-      }
-
-      // 3. Preparar objeto base a enviar
-      const actionData: UpdateProfileActionInput = {
-        userId: profile.user_id,
       };
 
-      if (validatedForm.name && validatedForm.name.length > 0) {
-        actionData.name = validatedForm.name;
-      }
-
-      // 4. Procesar y agregar avatar si existe
-      if (validatedForm.avatarFile) {
+      // 3. Procesar imagen si existe (usando servicio)
+      let compressedAvatar;
+      if (avatarFile) {
         setProgress('compressing');
-        try {
-          const compressedFile = await compressImage(validatedForm.avatarFile, {
-            maxWidth: 512,
-            maxHeight: 512,
-            targetSize: 200 * 1024,
-            quality: 0.85,
-          });
-
-          const base64 = await fileToBase64(compressedFile);
-
-          actionData.compressedAvatar = {
-            data: base64,
-            name: compressedFile.name,
-            type: compressedFile.type as
-              | 'image/jpeg'
-              | 'image/png'
-              | 'image/webp',
-            size: compressedFile.size,
-          };
-        } catch (compressionError) {
-          if (compressionError instanceof ImageCompressionError) {
-            const errorMessages: Record<string, string> = {
-              TOO_LARGE: 'La imagen es demasiado grande. Máximo 10MB.',
-              LOAD_FAILED: 'No se pudo cargar la imagen. ¿Está corrupta?',
-              COMPRESSION_FAILED:
-                'Error al procesar la imagen. Intenta con otra.',
-              BROWSER_NOT_SUPPORTED: 'Tu navegador no soporta esta función.',
-            };
-            throw new Error(
-              errorMessages[compressionError.code] ||
-                'Error al procesar la imagen'
-            );
-          }
-          throw compressionError;
-        }
+        const processed = await compressAvatar(avatarFile);
+        compressedAvatar = processed.compressedAvatar;
       }
 
-      // 5. Validar datos finales antes de enviarlos al server
-      const validatedActionData = updateProfileActionSchema.parse(actionData);
-
-      const result = await updateProfile(validatedActionData, profile);
-
-      if (!result.success || !result.data) {
-        throw new Error('no hay datos del usuario');
-      }
-
-      // Actualizar la UI
-      updateLocalProfile(result.data);
+      // 4. Preparar datos finales para el action
+      const finalActionData = {
+        ...actionData,
+        compressedAvatar,
+      };
 
       setProgress('uploading');
-      return {
-        success: true,
-        message: 'se actualizaron los datos',
-      };
-    } catch (err) {
-      if (err instanceof ZodError) {
-        return {
-          success: false,
-          message: err.message || 'datos del formulario inválidos.',
-        };
+
+      // 5. Llamar al controller (que valida y procesa todo)
+      const result = await updateProfileController(finalActionData, profile);
+
+      if (!result.success) {
+        throw new Error(result.error.message);
       }
 
-      return {
-        success: false,
-        message: 'no se pudo actualizar el perfil',
-      };
+      // 6. Actualizar el store local si tuvo éxito
+      if (result.data) {
+        updateLocalProfile(result.data);
+      }
     } finally {
       setIsLoading(false);
+      setProgress('idle');
     }
   };
 
