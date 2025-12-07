@@ -16,7 +16,7 @@ import {
 
 import type { ProfileDbResponse } from '../types';
 
-import { updateProfileDb } from '../dbQueries';
+import { insertProfileUpdates } from '../dbQueries';
 import { uploadAvatar } from '../services/';
 import { extractAvatarPath } from '../utils';
 import { prepareProfileUpdateData } from '../transformers';
@@ -87,7 +87,7 @@ export async function updateProfileController(
     );
 
     // 7. Actualizar perfil en la base de datos
-    const profileResponse = await updateProfileDb(updateData);
+    const profileResponse = await insertProfileUpdates(updateData);
 
     if (!profileResponse) {
       return fail(

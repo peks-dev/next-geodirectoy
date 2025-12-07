@@ -33,7 +33,7 @@ export async function fetchProfileById(
  * Data layer puro - Actualiza el perfil de un usuario
  * Throw pattern: Promise<ProfileDbResponse> | throw DatabaseError
  */
-export async function updateProfileDb(
+export async function insertProfileUpdates(
   dataToInsert: ProfileDataToInsert
 ): Promise<ProfileDbResponse> {
   const supabase = await createClient();
