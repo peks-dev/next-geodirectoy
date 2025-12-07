@@ -1,7 +1,7 @@
 'use server';
 
 import type { CommunityFormData, Community } from '@/comunidad/types';
-import { createClient } from '@/lib/supabase/server';
+import { getCurrentUser } from '@/app/(auth)/database/dbQueries.server';
 import { v4 as uuidv4 } from 'uuid';
 import { type Result, ok, fail } from '@/lib/types/result';
 import { handleServiceError } from '@/lib/errors/handler';
@@ -18,19 +18,15 @@ import { transformToCommunityProfile } from '../transformers';
 export async function registerCommunity(
   formData: CommunityFormData
 ): Promise<Result<Community>> {
-  const supabase = await createClient();
   let pathsToRollback: string[] = [];
   try {
     // 1. Validar schema
     const validated = validateOrThrow(registerCommunitySchema, formData);
 
     // 2. Validar autenticación
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    const user = await getCurrentUser();
 
-    if (authError || !user) {
+    if (!user) {
       return fail(AuthErrorCodes.UNAUTHORIZED, 'No autorizado');
     }
 

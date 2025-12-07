@@ -1,7 +1,7 @@
 'use server';
 
 import type { CommunityFormData, Community } from '@/comunidad/types';
-import { createClient } from '@/lib/supabase/server';
+import { getCurrentUser } from '@/app/(auth)/database/dbQueries.server';
 import { getCommunityById } from '@/app/(main)/comunidad/dbQueries';
 import { type Result, ok, fail } from '@/lib/types/result';
 import { handleServiceError } from '@/lib/errors/handler';
@@ -18,8 +18,6 @@ import { transformToCommunityProfile } from '../transformers';
 export async function updateCommunity(
   formData: CommunityFormData
 ): Promise<Result<Community>> {
-  const supabase = await createClient();
-
   // Declarar fuera del try para acceso en catch
   let pathsToRollback: string[] = [];
   try {
@@ -27,12 +25,9 @@ export async function updateCommunity(
     const validated = validateOrThrow(updateCommunitySchema, formData);
 
     // 2. Validar autenticación
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    const user = await getCurrentUser();
 
-    if (authError || !user) {
+    if (!user) {
       return fail(AuthErrorCodes.UNAUTHORIZED, 'No autorizado');
     }
 

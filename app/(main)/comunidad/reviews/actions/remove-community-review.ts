@@ -2,7 +2,7 @@
 
 import { fetchReviewById } from '../dbQueries';
 import { deleteUserReview } from '../services';
-import { createClient } from '@/lib/supabase/server';
+import { getCurrentUser } from '@/app/(auth)/database/dbQueries.server';
 import { type Result, ok, fail } from '@/lib/types/result';
 import { AuthErrorCodes } from '@/app/(auth)/errors/codes';
 import { ErrorCodes } from '@/lib/errors/codes';
@@ -12,15 +12,10 @@ export async function removeCommunityReview(
   reviewId: string
 ): Promise<Result<null>> {
   try {
-    const supabase = await createClient();
-
     // 1. Comprobar que hay un usuario loggeado
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    const user = await getCurrentUser();
 
-    if (authError || !user) {
+    if (!user) {
       return fail(
         AuthErrorCodes.UNAUTHORIZED,
         'Debes iniciar sesión para eliminar una valoración.'

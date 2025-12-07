@@ -2,7 +2,7 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import { insertCommunityReview } from '../dbQueries';
-import { createClient } from '@/lib/supabase/server';
+import { getCurrentUser } from '@/app/(auth)/database/dbQueries.server';
 import { reviewForm } from '../schemas/reviewSchema';
 import { analyzeUserComment, checkExistingReview } from '../services/';
 import type { ReviewFormData, ReviewToSend } from '../types';
@@ -15,15 +15,10 @@ export async function createCommunityReview(
   review: ReviewFormData
 ): Promise<Result<null>> {
   try {
-    const supabase = await createClient();
-
     // 1. Verificar la autenticación del usuario
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    const user = await getCurrentUser();
 
-    if (authError || !user) {
+    if (!user) {
       return fail(
         AuthErrorCodes.UNAUTHORIZED,
         'Debes iniciar sesión para dejar una valoración.'
