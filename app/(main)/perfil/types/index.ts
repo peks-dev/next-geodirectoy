@@ -6,6 +6,3 @@ export type {
   ProfileStore,
   EditProfileFormState,
 } from './entity.types';
-
-// DTO Types
-export type { UpdateProfileActionInput } from './dto.types';

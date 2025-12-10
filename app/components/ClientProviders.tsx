@@ -1,6 +1,6 @@
 'use client';
 import { Toaster } from 'sonner';
-import { Modal } from '@/components/ui/Modal';
+import { Modal } from '@/app/components/ui/Modal';
 import GlobalMenu from './Menu';
 
 export default function ClientProviders({

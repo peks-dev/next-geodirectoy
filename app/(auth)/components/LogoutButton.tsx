@@ -3,19 +3,22 @@
 import Button from '@/app/components/ui/Button';
 import { LogoutIcon } from '@/app/components/ui/svgs';
 import { useAuth } from '@/app/(auth)/hooks/useAuth';
-import { useModalStore } from '@/app/components/ui/Modal/useModalStore';
+import { useModalStore } from '@/app/components/ui/Modal';
 
 export default function LogoutButton() {
   const { logout, isLoggingOut } = useAuth();
-  const { showConfirmation } = useModalStore();
+  const { openModal } = useModalStore();
 
   const handleLogout = () => {
-    showConfirmation({
+    openModal({
       title: 'cerrar sesión',
-      message: '¿deseas salir de tu cuenta?',
-      confirmText: 'si salir',
-      onConfirm: async () => {
-        await logout(); // El hook ya maneja notificaciones y navegación
+      content: '¿deseas salir de tu cuenta?',
+      confirmButton: {
+        text: 'si salir',
+        variant: 'primary',
+        onClick: async () => {
+          await logout(); // El hook ya maneja notificaciones y navegación
+        },
       },
     });
   };

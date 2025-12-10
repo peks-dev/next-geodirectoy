@@ -4,7 +4,7 @@ import FlexBox from '@/app/components/ui/containers/FlexBox';
 import { TriangleIcon, CloseIcon, SendIcon } from '@/app/components/ui/svgs/';
 
 import { useRouter } from 'next/navigation';
-import { useModal } from '@/components/ui/Modal';
+import { useModalStore } from '@/app/components/ui/Modal';
 
 interface Props {
   prevStep: () => void;
@@ -21,15 +21,19 @@ export default function NavigationControls({
 }: Props) {
   // close form logic
   const router = useRouter();
-  const { showConfirmation } = useModal();
+  const { openModal } = useModalStore();
 
   const handleCloseForm = () => {
-    showConfirmation({
+    openModal({
       title: 'salir del formulario',
-      message: 'perderás todos los datos que hallas ingresado',
-      variant: 'primary',
-      confirmText: 'si, salir',
-      onConfirm: () => router.push('/'),
+      content: 'perderás todos los datos que hallas ingresado',
+      confirmButton: {
+        text: 'si, salir',
+        variant: 'primary',
+        onClick: async () => {
+          router.push('/');
+        },
+      },
     });
   };
 

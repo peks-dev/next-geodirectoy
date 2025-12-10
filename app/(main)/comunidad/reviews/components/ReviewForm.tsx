@@ -20,7 +20,7 @@ export default function ReviewForm() {
   }, [reset]);
 
   return (
-    <form className="form-container flex min-h-[200px] w-[80vw] max-w-[500px] flex-col gap-8">
+    <form className="form-container flex h-full w-full flex-col gap-8">
       <InputSelector
         options={ratingOptions}
         onChange={(value) => setRating(Number(value))}

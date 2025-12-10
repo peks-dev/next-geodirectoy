@@ -1,2 +1,2 @@
 export { Modal } from './Modal';
-export { useModal } from './useModal';
+export { useModalStore } from './modalStore';

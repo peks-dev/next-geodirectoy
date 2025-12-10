@@ -1,7 +1,8 @@
 'use client';
+
 import Button from '@/app/components/ui/Button';
 import { DeleteIcon } from '@/app/components/ui/svgs';
-import { useModalStore } from '@/app/components/ui/Modal/useModalStore';
+import { useModalStore } from '@/app/components/ui/Modal';
 import { deleteCommunity } from '../action/delete-community';
 import { useCommunitiesProfileStore } from '../../perfil/stores/useCommunitiesProfileStore';
 import {
@@ -14,27 +15,30 @@ export default function DeleteCommunityBtn({
 }: {
   communityId: string;
 }) {
-  const { showConfirmation } = useModalStore();
+  const { openModal } = useModalStore();
   const removeCommunity = useCommunitiesProfileStore(
     (state) => state.removeCommunity
   );
 
   const handleDeleteCommunity = () => {
-    showConfirmation({
+    openModal({
       title: '¿eliminar comunidad?',
-      message: 'esta acción es irreversible y permanente',
-      confirmText: 'si, eliminar',
-      onConfirm: async () => {
-        const result = await deleteCommunity(communityId);
-        if (!result.success) {
-          showErrorToast('algo salio mal', result.error.message);
-        } else {
-          removeCommunity(communityId);
-          showSuccessToast(
-            'eliminacion exitosa',
-            `comunidad ${result.data.name} eliminada `
-          );
-        }
+      content: 'esta acción es irreversible y permanente',
+      confirmButton: {
+        text: 'si, eliminar',
+        variant: 'delete',
+        onClick: async () => {
+          const result = await deleteCommunity(communityId);
+          if (!result.success) {
+            showErrorToast('algo salio mal', result.error.message);
+          } else {
+            removeCommunity(communityId);
+            showSuccessToast(
+              'eliminacion exitosa',
+              `comunidad ${result.data.name} eliminada `
+            );
+          }
+        },
       },
     });
   };

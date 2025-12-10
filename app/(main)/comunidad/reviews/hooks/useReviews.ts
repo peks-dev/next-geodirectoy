@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import type { ReviewDatabase, ReviewFormState } from '../types';
 import type { User } from '@supabase/supabase-js';
 import ReviewForm from '../components/ReviewForm';
-import { useModalStore } from '@/app/components/ui/Modal/useModalStore';
+import { useModalStore } from '@/app/components/ui/Modal';
 import { useReviewFormStore } from '../stores/useReviewStore';
 import {
   createCommunityReview,
@@ -45,7 +45,7 @@ export function useReviews({
   initialAverageRating,
   initialTotalReviews,
 }: UseReviewsProps): UseReviewsReturn {
-  const { showConfirmation } = useModalStore();
+  const { openModal } = useModalStore();
   const { user: userLogged } = useAuth();
   const [reviews, setReviews] = useState<ReviewDatabase[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -86,43 +86,46 @@ export function useReviews({
       return;
     }
 
-    showConfirmation({
+    openModal({
       title: 'eliminar comentario',
-      message: '¿quieres eliminar tu comentario? esto no es revertible',
-      variant: 'primary',
-      confirmText: 'sí, eliminar',
-      onConfirm: async () => {
-        const result = await removeCommunityReview(reviewId);
+      content: '¿quieres eliminar tu comentario? esto no es revertible',
+      confirmButton: {
+        text: 'sí, eliminar',
+        variant: 'primary',
+        onClick: async () => {
+          const result = await removeCommunityReview(reviewId);
 
-        // Comprobar error
-        if (!result.success) {
-          showErrorToast(
-            'No se pudo eliminar el comentario',
-            result.error.message
+          // Comprobar error
+          if (!result.success) {
+            showErrorToast(
+              'No se pudo eliminar el comentario',
+              result.error.message
+            );
+            return;
+          }
+
+          // Actualiza la UI eliminando la review del estado local
+          setReviews((currentReviews) =>
+            currentReviews.filter((review) => review.id !== reviewId)
           );
-          return;
-        }
 
-        // Actualiza la UI eliminando la review del estado local
-        setReviews((currentReviews) =>
-          currentReviews.filter((review) => review.id !== reviewId)
-        );
+          // Actualiza el estado local de total y promedio
+          const newTotal = totalReviews - 1;
+          const newAverage =
+            newTotal > 0
+              ? (averageRating * totalReviews - reviewToDelete.rating) /
+                newTotal
+              : 0;
 
-        // Actualiza el estado local de total y promedio
-        const newTotal = totalReviews - 1;
-        const newAverage =
-          newTotal > 0
-            ? (averageRating * totalReviews - reviewToDelete.rating) / newTotal
-            : 0;
+          setTotalReviews(newTotal);
+          setAverageRating(parseFloat(newAverage.toFixed(2)));
 
-        setTotalReviews(newTotal);
-        setAverageRating(parseFloat(newAverage.toFixed(2)));
-
-        // Darle Feedback al usuario
-        showSuccessToast(
-          'Comentario eliminado',
-          'Tu comentario ha sido eliminado.'
-        );
+          // Darle Feedback al usuario
+          showSuccessToast(
+            'Comentario eliminado',
+            'Tu comentario ha sido eliminado.'
+          );
+        },
       },
     });
   };
@@ -140,38 +143,41 @@ export function useReviews({
       return;
     }
 
-    showConfirmation({
+    openModal({
       title: 'valorar la comunidad',
-      confirmText: 'enviar valoración',
-      ContentComponent: ReviewForm,
-      onConfirm: async () => {
-        const { comment, rating }: ReviewFormState =
-          useReviewFormStore.getState();
+      confirmButton: {
+        text: 'enviar valoración',
+        variant: 'primary',
+        onClick: async () => {
+          const { comment, rating }: ReviewFormState =
+            useReviewFormStore.getState();
 
-        const result = await createCommunityReview({
-          comment,
-          rating,
-          community_id: communityId,
-        });
+          const result = await createCommunityReview({
+            comment,
+            rating,
+            community_id: communityId,
+          });
 
-        if (!result.success) {
-          showErrorToast('No se pudo enviar tu reseña', result.error.message);
-          return;
-        }
+          if (!result.success) {
+            showErrorToast('No se pudo enviar tu reseña', result.error.message);
+            return;
+          }
 
-        // Actualizamos el total y promedio localmente para una UX instantánea
-        const newTotal = totalReviews + 1;
-        const newAverage = (averageRating * totalReviews + rating) / newTotal;
+          // Actualizamos el total y promedio localmente para una UX instantánea
+          const newTotal = totalReviews + 1;
+          const newAverage = (averageRating * totalReviews + rating) / newTotal;
 
-        setTotalReviews(newTotal);
-        setAverageRating(parseFloat(newAverage.toFixed(2)));
+          setTotalReviews(newTotal);
+          setAverageRating(parseFloat(newAverage.toFixed(2)));
 
-        // Recargamos las reseñas desde el backend para mostrar la nueva
-        await fetchReviews();
+          // Recargamos las reseñas desde el backend para mostrar la nueva
+          await fetchReviews();
 
-        // Notificar al usuario
-        showSuccessToast('Valoración enviada', '¡Gracias por tu aportación!');
+          // Notificar al usuario
+          showSuccessToast('Valoración enviada', '¡Gracias por tu aportación!');
+        },
       },
+      ContentComponent: ReviewForm,
     });
   };
 
