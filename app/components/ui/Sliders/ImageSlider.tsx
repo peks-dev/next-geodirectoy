@@ -1,10 +1,8 @@
 'use client';
-
+import { useMemo } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import Image from 'next/image';
-
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -12,24 +10,43 @@ import './swiper-overrides.css';
 
 interface ImageSliderProps {
   images: string[];
+  altTexts?: string[];
   enableNavigation?: boolean;
   enablePagination?: boolean;
   enableAutoplay?: boolean;
+  autoplayDelay?: number;
 }
 
 export default function ImageSlider({
   images,
+  altTexts,
   enableNavigation = false,
   enablePagination = false,
   enableAutoplay = false,
+  autoplayDelay = 4000,
 }: ImageSliderProps) {
-  // Construir módulos dinámicamente
-  const modules = [];
-  if (enableNavigation) modules.push(Navigation);
-  if (enablePagination) modules.push(Pagination);
-  if (enableAutoplay) modules.push(Autoplay);
+  // Memoizar módulos
+  const modules = useMemo(() => {
+    const mods = [];
+    if (enableNavigation) mods.push(Navigation);
+    if (enablePagination) mods.push(Pagination);
+    if (enableAutoplay) mods.push(Autoplay);
+    return mods;
+  }, [enableNavigation, enablePagination, enableAutoplay]);
 
-  // Si no hay imágenes, mostrar un placeholder
+  // Memoizar configuración de autoplay
+  const autoplayConfig = useMemo(
+    () =>
+      enableAutoplay
+        ? {
+            delay: autoplayDelay,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }
+        : false,
+    [enableAutoplay, autoplayDelay]
+  );
+
   if (!images || images.length === 0) {
     return (
       <div
@@ -47,28 +64,21 @@ export default function ImageSlider({
         modules={modules}
         spaceBetween={0}
         slidesPerView={1}
-        navigation={enableNavigation || undefined}
-        pagination={enablePagination ? { clickable: true } : undefined}
-        autoplay={
-          enableAutoplay
-            ? {
-                delay: 4000,
-                disableOnInteraction: false,
-              }
-            : undefined
-        }
+        navigation={enableNavigation}
+        pagination={enablePagination ? { clickable: true } : false}
+        autoplay={autoplayConfig}
         loop={images.length > 1}
         className="h-full w-full"
       >
         {images.map((image, index) => (
-          <SwiperSlide key={index}>
+          <SwiperSlide key={`${image}-${index}`}>
             <div className="relative h-full w-full">
               <Image
                 src={image}
-                alt={`Imagen ${index + 1}`}
+                alt={altTexts?.[index] || `Imagen ${index + 1} del slider`}
                 fill
                 className="object-cover"
-                sizes="(max-width: 500px) 100vw, 500px"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1000px"
                 priority={index === 0}
               />
             </div>
