@@ -12,29 +12,52 @@ interface CommunitiesScrollListProps {
   initialItems: Community[];
 }
 
+// ✅ Helper para comparación eficiente
+const shallowEqual = (a: Community[], b: Community[]): boolean => {
+  if (a.length !== b.length) return false;
+  return a.every((item, index) => item.id === b[index]?.id);
+};
+
 export default function CommunitiesScrollList({
   initialItems,
 }: CommunitiesScrollListProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLLIElement | null)[]>([]);
+  const prevInitialItemsRef = useRef<Community[]>(initialItems);
 
-  const { communities, setCommunities } = useCommunitiesProfileStore();
+  // ✅ Usar selectores separados
+  const communities = useCommunitiesProfileStore((state) => state.communities);
+  const setCommunities = useCommunitiesProfileStore(
+    (state) => state.setCommunities
+  );
 
-  // SOLUCIÓN: Siempre sincronizar con initialItems
-  // Esto permite que el componente refleje cambios del servidor
+  // ✅ Sin warnings, sin loops infinitos
   useEffect(() => {
-    setCommunities(initialItems);
+    const hasChanged = !shallowEqual(initialItems, prevInitialItemsRef.current);
+
+    if (hasChanged) {
+      prevInitialItemsRef.current = initialItems;
+      setCommunities(initialItems);
+    }
   }, [initialItems, setCommunities]);
 
-  // Efecto de animación - se ejecuta cuando communities cambia
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const cards = cardsRef.current;
+    cardsRef.current = cardsRef.current.slice(0, communities.length);
+  }, [communities.length]);
 
-      cards.forEach((card) => {
+  useEffect(() => {
+    if (communities.length === 0) return;
+
+    ScrollTrigger.getAll().forEach((trigger) => {
+      if (trigger.scroller === containerRef.current) {
+        trigger.kill();
+      }
+    });
+
+    const ctx = gsap.context(() => {
+      cardsRef.current.forEach((card) => {
         if (!card) return;
 
-        // Entrada
         gsap.fromTo(
           card,
           { scale: 0.5, opacity: 0.5 },
@@ -42,17 +65,20 @@ export default function CommunitiesScrollList({
             scale: 1,
             opacity: 1,
             ease: 'power2.out',
+            immediateRender: false,
             scrollTrigger: {
               trigger: card,
               scroller: containerRef.current,
               start: 'top 85%',
               end: 'center center',
               scrub: true,
+              onRefresh: (self) => {
+                self.animation?.progress(self.progress);
+              },
             },
           }
         );
 
-        // Salida
         gsap.fromTo(
           card,
           { scale: 1, opacity: 1 },
@@ -60,19 +86,31 @@ export default function CommunitiesScrollList({
             scale: 0.5,
             opacity: 0.5,
             ease: 'power2.in',
+            immediateRender: false,
             scrollTrigger: {
               trigger: card,
               scroller: containerRef.current,
               start: 'center center',
               end: 'bottom 15%',
               scrub: true,
+              onRefresh: (self) => {
+                self.animation?.progress(self.progress);
+              },
             },
           }
         );
       });
+
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+        ScrollTrigger.update();
+      });
     }, containerRef);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      ScrollTrigger.refresh();
+    };
   }, [communities]);
 
   return (
@@ -83,7 +121,7 @@ export default function CommunitiesScrollList({
       <ul className="flex flex-col items-center gap-12 py-[10vh]">
         {communities.map((community, index) => (
           <li
-            key={`${community.id}-${index}`} // ✅ Key corregida
+            key={community.id}
             ref={(el) => {
               cardsRef.current[index] = el;
             }}
