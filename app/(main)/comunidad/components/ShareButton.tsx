@@ -8,20 +8,15 @@ import { useShare } from '@/lib/hooks/useShare';
 interface ShareButtonProps {
   name: string;
   description: string;
-  url: string;
 }
 
 // ==================== Component ====================
-export default function ShareButton({
-  name,
-  description,
-  url,
-}: ShareButtonProps) {
+export default function ShareButton({ name, description }: ShareButtonProps) {
   const { handleShare } = useShare();
 
   return (
     <Button
-      onClick={() => handleShare({ title: name, text: description, url })}
+      onClick={() => handleShare({ title: name, text: description })}
       id="share-button"
       variant="icon"
       size="md"

@@ -1,4 +1,3 @@
-import { headers } from 'next/headers';
 import { getCommunityById } from '@/app/(main)/comunidad/dbQueries';
 import { notFound } from 'next/navigation';
 import type { CommunityFullResponse } from '@/comunidad/types';
@@ -22,20 +21,12 @@ export default async function CommunityPage({ params }: PageProps) {
     notFound();
   }
 
-  // Construir la URL actual
-  const headersList = await headers();
-  const host = headersList.get('host');
-  const protocol = headersList.get('x-forwarded-proto') ?? 'http';
-  const pathname = `/comunidad/${id}`;
-  const currentUrl = `${protocol}://${host}${pathname}`;
-
   return (
     <div className="gap-lg flex h-full w-full flex-col p-4 lg:flex-row">
       <HeaderCommunity
         name={community.name}
         images={community.images}
         description={community.description}
-        url={currentUrl}
       />
       <ContentCommunity community={community} />
     </div>

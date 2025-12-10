@@ -5,7 +5,6 @@ import OpenMenuBtn from '@/app/components/Menu/OpenMenuBtn';
 interface Props {
   name: string;
   images: string[];
-  url: string;
   description: string;
 }
 
@@ -17,11 +16,7 @@ export default function HeaderCommunity(data: Props) {
           {data.name}
         </h2>
         <div className="flex items-center gap-6">
-          <ShareButton
-            name={data.name}
-            url={data.url}
-            description={data.description}
-          />
+          <ShareButton name={data.name} description={data.description} />
           <OpenMenuBtn variant="primary" />
         </div>
       </header>
