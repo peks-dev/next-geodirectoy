@@ -25,7 +25,7 @@ export default async function ProfilePage() {
         <ProfileCommunities />
         <div className="border-accent-primary active:scale:110 absolute right-16 bottom-15 overflow-hidden rounded-[50%] border-2 p-2">
           <NavigationButton
-            url="/contribuir"
+            url="/comunidad/contribuir"
             className="bg-background-interactive rounded-[50%] p-4"
             variant="icon"
             size="md"
