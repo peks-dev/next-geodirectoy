@@ -12,34 +12,41 @@ interface CommunitiesScrollListProps {
   initialItems: Community[];
 }
 
-// ✅ Helper para comparación eficiente
-const shallowEqual = (a: Community[], b: Community[]): boolean => {
-  if (a.length !== b.length) return false;
-  return a.every((item, index) => item.id === b[index]?.id);
-};
-
 export default function CommunitiesScrollList({
   initialItems,
 }: CommunitiesScrollListProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLLIElement | null)[]>([]);
-  const prevInitialItemsRef = useRef<Community[]>(initialItems);
+  const isInitializedRef = useRef(false);
 
-  // ✅ Usar selectores separados
   const communities = useCommunitiesProfileStore((state) => state.communities);
   const setCommunities = useCommunitiesProfileStore(
     (state) => state.setCommunities
   );
 
-  // ✅ Sin warnings, sin loops infinitos
+  //  Inicializar el store en el primer render
   useEffect(() => {
-    const hasChanged = !shallowEqual(initialItems, prevInitialItemsRef.current);
-
-    if (hasChanged) {
-      prevInitialItemsRef.current = initialItems;
+    if (!isInitializedRef.current && initialItems.length > 0) {
+      console.log('Inicializando communities:', initialItems);
       setCommunities(initialItems);
+      isInitializedRef.current = true;
     }
   }, [initialItems, setCommunities]);
+
+  // Actualizar cuando initialItems cambie (después de la inicialización)
+  useEffect(() => {
+    if (isInitializedRef.current && initialItems.length > 0) {
+      const hasChanged =
+        communities.length !== initialItems.length ||
+        !initialItems.every(
+          (item, index) => item.id === communities[index]?.id
+        );
+
+      if (hasChanged) {
+        setCommunities(initialItems);
+      }
+    }
+  }, [initialItems, communities, setCommunities]);
 
   useEffect(() => {
     cardsRef.current = cardsRef.current.slice(0, communities.length);
