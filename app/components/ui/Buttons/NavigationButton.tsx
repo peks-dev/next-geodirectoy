@@ -1,14 +1,14 @@
 'use client';
 import Button from '../Button';
 import { useRouter } from 'next/navigation';
+import { IconSize } from '@/lib/utils/getIconSize';
 
 type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'delete' | 'icon';
-type ButtonSize = 'default' | 'sm' | 'xsm' | 'lg' | 'xl' | 'md';
 
 interface NavigationButtonProps {
   url: string;
   variant?: ButtonVariant;
-  size?: ButtonSize;
+  size?: IconSize;
   children?: React.ReactNode;
   className?: string;
 }
