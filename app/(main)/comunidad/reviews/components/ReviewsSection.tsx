@@ -40,7 +40,7 @@ export default function ReviewsSection({
       return (
         <div className="py-8 text-center">
           <p className="mb-2 text-red-500">{error}</p>
-          <Button onClick={fetchReviews} variant="secondary" size="sm">
+          <Button onClick={fetchReviews} variant="secondary">
             reintentar
           </Button>
         </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import UserAvatar from '@/app/components/ui/UserAvatar';
+import UserAvatar from '@/app/(main)/perfil/components/UserAvatar';
 import { useProfileStore } from '../stores/useProfileStore';
 
 export default function ProfileBanner() {

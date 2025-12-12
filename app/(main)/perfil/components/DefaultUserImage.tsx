@@ -1,4 +1,4 @@
-import { UserIcon } from './svgs';
+import { UserIcon } from '../../../components/ui/svgs';
 import { getIconSizeClass } from '@/lib/utils/getIconSize';
 
 type IconSize = 'xsm' | 'small' | 'md' | 'lg' | 'xl';
