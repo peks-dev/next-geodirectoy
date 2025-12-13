@@ -3,6 +3,7 @@
 import HeadingSection from '@/app/(main)/comunidad/components/HeadingSection';
 import Button from '@/app/components/ui/Button';
 import DetailsBar from '@/app/components/ui/DetailsBar';
+import ReviewsSectionSkeleton from '@/app/components/ui/skeletons/ReviewsSectionSkeleton';
 import ReviewItem from './ReviewItem';
 import SectionWrapper from './SectionWrapper';
 import { useReviews } from '../hooks/useReviews';
@@ -46,8 +47,7 @@ export default function ReviewsSection({
         </div>
       );
     }
-    if (isLoading)
-      return <p className="py-8 text-center">cargando comentarios...</p>;
+    if (isLoading) return <ReviewsSectionSkeleton />;
     if (reviews.length === 0) {
       return (
         <p className="py-8 text-center text-gray-500">

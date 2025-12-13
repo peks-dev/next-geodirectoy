@@ -271,3 +271,22 @@
     filter: drop-shadow(0 0 3px currentColor);
   }
 }
+
+/* --- SKELETON ANIMATIONS --- */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes slide {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}

@@ -1,7 +1,7 @@
 import ItemContainer from '@/app/components/ui/containers/ItemList';
 import type { ReviewDatabase } from '../types';
 import type { User } from '@supabase/supabase-js';
-import UserAvatar from '@/app/components/ui/UserAvatar';
+import UserAvatar from '@/app/(main)/perfil/components/UserAvatar';
 
 interface ReviewItemProps {
   data: ReviewDatabase;

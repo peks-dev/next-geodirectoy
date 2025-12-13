@@ -7,6 +7,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import './swiper-overrides.css';
+import ImageSliderSkeleton from '../skeletons/ImageSliderSkeleton';
 
 interface ImageSliderProps {
   images: string[];
@@ -15,6 +16,7 @@ interface ImageSliderProps {
   enablePagination?: boolean;
   enableAutoplay?: boolean;
   autoplayDelay?: number;
+  isLoading?: boolean;
 }
 
 export default function ImageSlider({
@@ -24,6 +26,7 @@ export default function ImageSlider({
   enablePagination = false,
   enableAutoplay = false,
   autoplayDelay = 4000,
+  isLoading = false,
 }: ImageSliderProps) {
   // Memoizar módulos
   const modules = useMemo(() => {
@@ -46,6 +49,10 @@ export default function ImageSlider({
         : false,
     [enableAutoplay, autoplayDelay]
   );
+
+  if (isLoading) {
+    return <ImageSliderSkeleton />;
+  }
 
   if (!images || images.length === 0) {
     return (
@@ -77,7 +84,7 @@ export default function ImageSlider({
                 src={image}
                 alt={altTexts?.[index] || `Imagen ${index + 1} del slider`}
                 fill
-                className="object-cover"
+                className="bg-border object-cover"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1000px"
                 priority={index === 0}
               />
