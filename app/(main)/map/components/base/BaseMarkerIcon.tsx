@@ -1,4 +1,4 @@
-const MarkerIcon = () => (
+const BaseMarkerIcon = () => (
   <svg
     width="100%"
     height="100%"
@@ -15,4 +15,5 @@ const MarkerIcon = () => (
     </g>
   </svg>
 );
-export default MarkerIcon;
+
+export default BaseMarkerIcon;

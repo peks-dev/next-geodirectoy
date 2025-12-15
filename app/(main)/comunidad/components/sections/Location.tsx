@@ -1,5 +1,5 @@
 import type { Coordinates } from '@/comunidad/types';
-import DynamicMap from '@/components/map/DynamicMap';
+import { BaseDynamicMap, BaseMarker } from '@/app/(main)/map';
 import HeadingSection from '../HeadingSection';
 import OpenInMaps from '../OpenInMaps';
 import SectionWrapper from './SectionWrapper';
@@ -14,11 +14,9 @@ export default function LocationSection({
       <HeadingSection text="ubicacion" />
       <div className="relative h-full w-full grow">
         <OpenInMaps lat={location.lat} lng={location.lng} />
-        <DynamicMap
-          location={location}
-          center={location}
-          zoom={13}
-        ></DynamicMap>
+        <BaseDynamicMap center={[location.lat, location.lng]} zoom={13}>
+          <BaseMarker position={location} />
+        </BaseDynamicMap>
       </div>
     </SectionWrapper>
   );

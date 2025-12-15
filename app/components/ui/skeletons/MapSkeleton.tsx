@@ -61,7 +61,8 @@ export default function MapSkeleton() {
   return (
     <div
       ref={containerRef}
-      className="relative h-screen w-screen overflow-hidden"
+      className="relative h-full w-full overflow-hidden"
+      style={{ minHeight: '100%', minWidth: '100%' }}
     >
       {/* Overlay semi-transparente */}
       <div

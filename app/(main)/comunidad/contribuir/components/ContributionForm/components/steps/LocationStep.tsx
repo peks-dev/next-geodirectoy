@@ -1,13 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import DynamicMap from '@/components/map/DynamicMap';
-import DynamicDraggableMarker from '@/components/map/DynamicDraggableMarker';
+import { BaseDynamicMap, BaseDraggableMarker } from '@/app/(main)/map';
+import { useGeocoding } from '@/app/(main)/map/hooks/useGeocoding';
 import type { Coordinates } from '@/comunidad/types';
 import { useContributionStore } from '@/contribuir/stores/useContributionStore';
 import { useDebounce } from '@/lib/hooks/useDebounce';
-// 1. Importa tu función de geocodificación directamente
-import { reverseGeocode } from '@/lib/geocoding/reverseGeocode';
 
 const DEFAULT_LOCATION: Coordinates = {
   lat: 20.9674,
@@ -21,8 +19,10 @@ export default function LocationStep() {
   const [currentPosition, setCurrentPosition] = useState<Coordinates>(
     location || DEFAULT_LOCATION
   );
-  const [isLoading, setIsLoading] = useState(false);
   const debouncedPosition = useDebounce(currentPosition, 750);
+
+  // Usar el hook de geocodificación
+  const { address, isLoading } = useGeocoding(debouncedPosition);
 
   useEffect(() => {
     if (
@@ -30,34 +30,16 @@ export default function LocationStep() {
       (debouncedPosition.lat !== location?.lat ||
         debouncedPosition.lng !== location?.lng)
     ) {
-      const fetchLocationData = async () => {
-        setIsLoading(true);
-        updateFormField('location', debouncedPosition);
+      updateFormField('location', debouncedPosition);
 
-        try {
-          // 2. Llama a tu función directamente en lugar de usar fetch
-          const data = await reverseGeocode(
-            debouncedPosition.lat,
-            debouncedPosition.lng
-          );
-
-          // Actualizamos el store con la respuesta
-          updateFormField('city', data.city);
-          updateFormField('state', data.state);
-          updateFormField('country', data.country);
-        } catch (error) {
-          console.error('Error fetching geocode data:', error);
-          updateFormField('city', null);
-          updateFormField('state', null);
-          updateFormField('country', null);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      fetchLocationData();
+      // Actualizar campos de dirección desde el hook
+      if (address) {
+        updateFormField('city', address.city);
+        updateFormField('state', address.state);
+        updateFormField('country', address.country);
+      }
     }
-  }, [debouncedPosition, location, updateFormField]);
+  }, [debouncedPosition, location, address, updateFormField]);
 
   const handleMarkerDrag = (coords: Coordinates) => {
     setCurrentPosition(coords);
@@ -65,12 +47,15 @@ export default function LocationStep() {
 
   return (
     <div className="relative h-full w-full">
-      <DynamicMap center={currentPosition} zoom={11}>
-        <DynamicDraggableMarker
+      <BaseDynamicMap
+        center={[currentPosition.lat, currentPosition.lng]}
+        zoom={11}
+      >
+        <BaseDraggableMarker
           initialPosition={currentPosition}
           onDragEnd={handleMarkerDrag}
         />
-      </DynamicMap>
+      </BaseDynamicMap>
 
       <div className="bg-background-primary-dark absolute bottom-4 left-1/2 z-[1000] w-11/12 -translate-x-1/2 rounded-lg p-3 text-center shadow-lg">
         <h3 className="text-text-primary font-semibold">Ubicación Detectada</h3>

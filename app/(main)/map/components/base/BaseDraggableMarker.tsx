@@ -3,28 +3,38 @@
 import { Marker } from 'react-leaflet';
 import { useMemo, useRef, useCallback } from 'react';
 import type { Marker as LeafletMarker } from 'leaflet';
-import { createLeafletIcon } from './iconUtils';
-import MarkerIcon from './MarkerIcon';
 import { useAppTheme } from '@/lib/hooks/useAppTheme';
+import { createLeafletIcon } from '../../utils/iconUtils';
+import BaseMarkerIcon from './BaseMarkerIcon';
 import type { Coordinates } from '@/comunidad/types';
 
-interface DraggableMarkerProps {
+/**
+ * Props para el componente BaseDraggableMarker
+ */
+export interface BaseDraggableMarkerProps {
   initialPosition?: Coordinates;
-  // Cambiamos el nombre de la prop para ser más específicos
   onDragEnd: (coords: Coordinates) => void;
+  iconColorClass?: string;
 }
 
-export default function DraggableMarker({
+/**
+ * Componente base para marcadores arrastrables sin lógica específica de negocio
+ */
+function BaseDraggableMarker({
   initialPosition = { lat: 20.9674, lng: -89.5926 }, // Mérida, Yucatán
-  onDragEnd, // Usamos la nueva prop
-}: DraggableMarkerProps) {
+  onDragEnd,
+  iconColorClass,
+}: BaseDraggableMarkerProps) {
   const { isDark } = useAppTheme();
   const markerRef = useRef<LeafletMarker>(null);
 
+  // Usar color por defecto si no se especifica
+  const colorClass =
+    iconColorClass || (isDark ? 'text-accent-primary' : 'text-accent-primary');
+
   const icon = useMemo(() => {
-    const colorClass = isDark ? 'text-accent-primary' : 'text-accent-primary';
-    return createLeafletIcon(<MarkerIcon />, colorClass);
-  }, [isDark]);
+    return createLeafletIcon(<BaseMarkerIcon />, colorClass);
+  }, [colorClass]);
 
   const handleDragEnd = useCallback(() => {
     const marker = markerRef.current;
@@ -47,3 +57,5 @@ export default function DraggableMarker({
     />
   );
 }
+
+export default BaseDraggableMarker;
