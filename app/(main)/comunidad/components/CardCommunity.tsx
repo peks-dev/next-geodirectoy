@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import NavigationButton from '../../../components/ui/Buttons/NavigationButton';
 import DeleteCommunityBtn from '@/comunidad/components/DeleteCommunityBtn';
 import ImageSlider from '../../../components/ui/Sliders/ImageSlider';
@@ -15,7 +16,7 @@ interface Props {
   isPopup?: boolean;
 }
 
-export default function CardCommunity({ data, isPopup = true }: Props) {
+function CardCommunity({ data, isPopup = true }: Props) {
   const footerData = [
     { icon: <PeopleIcon />, value: data.type },
     { icon: <StarIcon />, value: data.average_rating },
@@ -93,3 +94,20 @@ export default function CardCommunity({ data, isPopup = true }: Props) {
     </article>
   );
 }
+
+export default memo(CardCommunity, (prevProps, nextProps) => {
+  // Retorna true si las props son iguales (NO re-renderizar)
+  return (
+    prevProps.data.id === nextProps.data.id &&
+    prevProps.data.name === nextProps.data.name &&
+    prevProps.data.average_rating === nextProps.data.average_rating &&
+    prevProps.data.total_reviews === nextProps.data.total_reviews &&
+    prevProps.data.type === nextProps.data.type &&
+    prevProps.isPopup === nextProps.isPopup &&
+    // Comparación superficial del array de imágenes
+    prevProps.data.images.length === nextProps.data.images.length &&
+    prevProps.data.images.every(
+      (img, idx) => img === nextProps.data.images[idx]
+    )
+  );
+});

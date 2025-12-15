@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import ItemContainer from '@/app/components/ui/containers/ItemList';
 import type { ReviewDatabase } from '../types';
 import type { User } from '@supabase/supabase-js';
@@ -9,7 +10,7 @@ interface ReviewItemProps {
   onDelete: (reviewId: string) => void;
 }
 
-export default function ReviewItem({ data, user, onDelete }: ReviewItemProps) {
+function ReviewItem({ data, user, onDelete }: ReviewItemProps) {
   const isOwner = user && data.user_id === user.id;
   return (
     <ItemContainer
@@ -26,3 +27,15 @@ export default function ReviewItem({ data, user, onDelete }: ReviewItemProps) {
     </ItemContainer>
   );
 }
+
+export default memo(ReviewItem, (prevProps, nextProps) => {
+  // Retorna true si las props son iguales (NO re-renderizar)
+  return (
+    prevProps.data.id === nextProps.data.id &&
+    prevProps.data.comment === nextProps.data.comment &&
+    prevProps.data.profiles.name === nextProps.data.profiles.name &&
+    prevProps.data.profiles.avatar_url === nextProps.data.profiles.avatar_url &&
+    prevProps.user?.id === nextProps.user?.id
+    // onDelete lo omitimos porque siempre es una nueva función
+  );
+});
