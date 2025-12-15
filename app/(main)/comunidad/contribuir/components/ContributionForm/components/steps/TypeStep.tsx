@@ -1,6 +1,6 @@
 import RetasIcon from '@/components/ui/svgs/RetasIcon';
 import ClubIcon from '@/components/ui/svgs/ClubIcon';
-import FlexBox from '@/app/components/ui/containers/FlexBox';
+
 import { CornerIcon } from '@/app/components/ui/svgs/';
 import { useContributionStore } from '@/contribuir/stores/useContributionStore';
 import { type CommunityType } from '@/comunidad/types';
@@ -15,14 +15,9 @@ export default function TypeStep() {
   ];
 
   return (
-    <FlexBox
-      justify="center"
-      direction="col"
-      className="gap-xl h-full"
-      align="stretch"
-    >
+    <div className="gap-xl flex h-full flex-col items-stretch justify-center">
       <p className="text-md text-center">¿De que comunidad se trata?</p>
-      <FlexBox align="center" justify="around">
+      <div className="flex items-center justify-around">
         {options.map(({ value, label, Icon }) => (
           <label
             key={value}
@@ -67,7 +62,7 @@ export default function TypeStep() {
             />
           </label>
         ))}
-      </FlexBox>
-    </FlexBox>
+      </div>
+    </div>
   );
 }

@@ -5,7 +5,7 @@ import { useContributionStore } from '@/contribuir/stores/useContributionStore';
 import type { Schedule } from '@/comunidad/types';
 import DaysRangePicker from './DaysRangePicker';
 import TimeRangePicker from './TimeRangePicker';
-import FlexBox from '@/app/components/ui/containers/FlexBox';
+
 import Button from '@/app/components/ui/Button';
 interface Props {
   toggleConstructorView: (value: boolean) => void;
@@ -64,7 +64,7 @@ export default function ScheduleConstructor({ toggleConstructorView }: Props) {
   }
 
   return (
-    <FlexBox direction="col" justify="between" className="h-full">
+    <div className="flex h-full flex-col justify-between">
       <DaysRangePicker
         selectedDays={selectedDay}
         handleInputChange={handleDays}
@@ -78,6 +78,6 @@ export default function ScheduleConstructor({ toggleConstructorView }: Props) {
       <Button onClick={handleAddSchedule} id="add-schedule">
         agregar
       </Button>
-    </FlexBox>
+    </div>
   );
 }

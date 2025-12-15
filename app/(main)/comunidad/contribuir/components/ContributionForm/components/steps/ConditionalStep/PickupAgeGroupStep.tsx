@@ -1,4 +1,3 @@
-import FlexBox from '@/app/components/ui/containers/FlexBox';
 import ToggleInput from '@/app/components/ui/inputs/Toggle';
 import { useContributionStore } from '@/contribuir/stores/useContributionStore';
 import { AGE_GROUP_OPTIONS } from './constants';
@@ -8,12 +7,12 @@ export default function PickupAgeGroupStep() {
   const { age_group, updateFormField } = useContributionStore();
 
   return (
-    <FlexBox className="h-full" align="center">
+    <div className="flex h-full items-center">
       <div className="m-auto">
         <h2 className="text-md font-oxanium mb-xl text-center">
           Selecciona la edad predominante
         </h2>
-        <FlexBox wrap="wrap" justify="around" className="gap-md">
+        <div className="gap-md flex flex-wrap justify-around">
           {AGE_GROUP_OPTIONS.map((option) => (
             <ToggleInput
               key={option.value}
@@ -29,8 +28,8 @@ export default function PickupAgeGroupStep() {
               wrapperClass="mb-2"
             />
           ))}
-        </FlexBox>
+        </div>
       </div>
-    </FlexBox>
+    </div>
   );
 }

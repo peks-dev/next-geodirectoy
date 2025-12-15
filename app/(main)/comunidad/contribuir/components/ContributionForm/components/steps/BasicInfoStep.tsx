@@ -1,13 +1,13 @@
 import Input from '@/app/components/ui/inputs/Text';
 import Textarea from '@/app/components/ui/inputs/Textarea';
-import FlexBox from '@/app/components/ui/containers/FlexBox';
+
 import { useContributionStore } from '@/contribuir/stores/useContributionStore';
 
 export default function BasicInfoStep() {
   const { name, description, updateFormField } = useContributionStore();
 
   return (
-    <FlexBox direction="col" className="gap-xl h-full">
+    <div className="gap-xl flex h-full flex-col">
       <label>
         <Input
           type="text"
@@ -26,6 +26,6 @@ export default function BasicInfoStep() {
           onChange={(e) => updateFormField('description', e.target.value)}
         />
       </label>
-    </FlexBox>
+    </div>
   );
 }

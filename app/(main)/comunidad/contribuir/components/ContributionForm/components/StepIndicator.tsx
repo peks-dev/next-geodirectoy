@@ -1,6 +1,5 @@
 'use client';
 
-import FlexBox from '@/app/components/ui/containers/FlexBox';
 import {
   useNavigationStore,
   type StepNumber,
@@ -30,7 +29,7 @@ export default function StepIndicator({ currentStep }: StepIndicatorProps) {
   };
 
   return (
-    <FlexBox className="w-full" align="center" justify="between">
+    <div className="flex w-full items-center justify-between">
       <h2 className="heading text-md neon-effect">
         {stepLabels[currentStep - 1]}
       </h2>
@@ -49,6 +48,6 @@ export default function StepIndicator({ currentStep }: StepIndicatorProps) {
           </li>
         ))}
       </ul>
-    </FlexBox>
+    </div>
   );
 }

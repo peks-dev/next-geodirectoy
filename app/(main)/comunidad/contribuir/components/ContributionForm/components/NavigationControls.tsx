@@ -1,6 +1,6 @@
 'use client';
 import Button from '@/app/components/ui/Button';
-import FlexBox from '@/app/components/ui/containers/FlexBox';
+
 import { TriangleIcon, CloseIcon, SendIcon } from '@/app/components/ui/svgs/';
 
 import { useRouter } from 'next/navigation';
@@ -39,11 +39,7 @@ export default function NavigationControls({
 
   // render component
   return (
-    <FlexBox
-      align="center"
-      justify="between"
-      className="bg-background-secondary-dark p-3"
-    >
+    <div className="bg-background-secondary-dark flex items-center justify-between p-3">
       <Button variant="icon" onClick={prevStep}>
         <TriangleIcon />
       </Button>
@@ -68,6 +64,6 @@ export default function NavigationControls({
           <SendIcon />
         </Button>
       )}
-    </FlexBox>
+    </div>
   );
 }

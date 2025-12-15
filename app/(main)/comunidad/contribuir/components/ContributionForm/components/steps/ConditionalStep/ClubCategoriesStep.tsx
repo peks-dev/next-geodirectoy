@@ -1,4 +1,3 @@
-import FlexBox from '@/app/components/ui/containers/FlexBox';
 import { POSSIBLE_CATEGORIES } from './constants';
 import { useCategoriesLogic } from './useCategoriesLogic';
 import CategoryCardSelector from './CategoryCardSelector';
@@ -8,12 +7,12 @@ export default function ClubCategoriesStep() {
     useCategoriesLogic();
 
   return (
-    <FlexBox direction="col" className="h-full max-h-full">
+    <div className="flex h-full max-h-full flex-col">
       <h2 className="border-border-secondary font-oxanium grow-0 border-b-2 pb-4 text-center text-sm">
         Selecciona las categorías disponibles
       </h2>
       <div className="max-h-full w-full overflow-auto pt-10">
-        <FlexBox direction="col" className="gap-md" justify="around">
+        <div className="gap-md flex flex-col justify-around">
           {POSSIBLE_CATEGORIES.map((cat) => {
             const isSelected = (categories || []).some(
               (c) => c.category === cat.category
@@ -33,8 +32,8 @@ export default function ClubCategoriesStep() {
               />
             );
           })}
-        </FlexBox>
+        </div>
       </div>
-    </FlexBox>
+    </div>
   );
 }

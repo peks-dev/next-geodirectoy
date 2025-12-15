@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import TimeInput from '@/app/components/ui/inputs/Time';
-import FlexBox from '@/app/components/ui/containers/FlexBox';
 
 interface TimeRange {
   start: string;
@@ -46,11 +45,7 @@ const TimeRangePicker = ({
   };
 
   return (
-    <FlexBox
-      className={` ${wrapperClass}`.trim()}
-      justify="around"
-      align="center"
-    >
+    <div className={`flex items-center justify-around ${wrapperClass}`.trim()}>
       <TimeInput
         label={startLabel}
         value={time.start}
@@ -64,7 +59,7 @@ const TimeRangePicker = ({
         onChange={handleEndChange}
         wrapperClass={inputWrapperClass}
       />
-    </FlexBox>
+    </div>
   );
 };
 

@@ -1,6 +1,5 @@
 'use client';
 
-import FlexBox from '@/app/components/ui/containers/FlexBox';
 import StepIndicator from './components/StepIndicator';
 import NavigationControls from './components/NavigationControls';
 import StepRenderer from './components/StepRenderer';
@@ -24,11 +23,7 @@ export default function ContributionForm({ initialData }: Props) {
   } = useContributionForm({ initialData });
 
   return (
-    <FlexBox
-      direction="col"
-      align="stretch"
-      className="m-auto h-full w-md gap-5"
-    >
+    <div className="m-auto flex h-full w-md flex-col items-stretch gap-5">
       <StepIndicator currentStep={currentStep} />
 
       <form
@@ -53,6 +48,6 @@ export default function ContributionForm({ initialData }: Props) {
         currentStep={currentStep}
         isLoading={isLoading}
       />
-    </FlexBox>
+    </div>
   );
 }

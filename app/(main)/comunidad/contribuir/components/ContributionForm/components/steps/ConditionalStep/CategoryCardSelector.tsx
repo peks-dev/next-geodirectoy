@@ -1,4 +1,3 @@
-import FlexBox from '@/app/components/ui/containers/FlexBox';
 import ToggleInput from '@/app/components/ui/inputs/Toggle';
 import { GENDERS, GENDER_LABELS } from './constants';
 import type { Category, Gender } from '@/comunidad/types';
@@ -19,13 +18,10 @@ export default function CategoryCardSelector({
   onGenderChange,
 }: Props) {
   return (
-    <FlexBox
-      className={`py-sm bg-background-interactive text-accent-primary hover:border-accent-primary cursor-pointer border-2 ${
+    <div
+      className={`py-sm bg-background-interactive text-accent-primary hover:border-accent-primary flex cursor-pointer flex-col items-center justify-between border-2 ${
         isSelected ? 'border-accent-primary' : 'border-background-interactive'
       }`}
-      align="center"
-      justify="between"
-      direction="col"
     >
       <input
         type="checkbox"
@@ -71,6 +67,6 @@ export default function CategoryCardSelector({
           </div>
         </div>
       )}
-    </FlexBox>
+    </div>
   );
 }

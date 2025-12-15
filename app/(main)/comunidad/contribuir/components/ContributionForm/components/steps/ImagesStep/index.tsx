@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { toast } from 'sonner';
 import { useContributionStore } from '@/contribuir/stores/useContributionStore';
 import ImagePreview from './components/ImagePreview';
-import FlexBox from '@/app/components/ui/containers/FlexBox';
+
 import Button from '@/app/components/ui/Button';
 
 const MAX_IMAGES = 4;
@@ -55,7 +55,7 @@ export default function ImagesStep() {
   const canAddMore = images.length < MAX_IMAGES;
 
   return (
-    <FlexBox direction="col" className="gap-xl h-full">
+    <div className="gap-xl flex h-full flex-col">
       <p className="text-center text-sm">
         Selecciona o toma {MIN_IMAGES} como mínimo, {MAX_IMAGES} máximo
         <br />
@@ -74,7 +74,7 @@ export default function ImagesStep() {
 
       <ul className="grow">
         {images.length > 0 && (
-          <FlexBox direction="col" align="stretch" gap="md">
+          <div className="gap-md flex flex-col items-stretch">
             {images.map((img, index) => (
               <ImagePreview
                 key={`${img instanceof File ? img.name : img}-${index}`}
@@ -83,13 +83,13 @@ export default function ImagesStep() {
                 deleteImgFn={() => handleRemove(index)}
               />
             ))}
-          </FlexBox>
+          </div>
         )}
       </ul>
 
       {canAddMore && (
         <Button onClick={handleButtonClick}>Elegir imágenes</Button>
       )}
-    </FlexBox>
+    </div>
   );
 }

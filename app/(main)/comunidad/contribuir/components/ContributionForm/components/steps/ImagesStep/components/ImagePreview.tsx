@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useState, useEffect } from 'react'; // Importamos useState y useEffect
-import FlexBox from '@/app/components/ui/containers/FlexBox';
+
 import { CloseIcon } from '@/app/components/ui/svgs/';
 import Button from '@/app/components/ui/Button';
 
@@ -51,7 +51,7 @@ const ImagePreview = ({ file, index, deleteImgFn }: ImagePreviewProps) => {
 
   return (
     <li className="border-border relative border-2 p-2.5">
-      <FlexBox align="stretch" className="gap-2">
+      <div className="flex items-stretch gap-2">
         <div className="bg-light-tertiary flex grow items-center">
           <figure className="border-light-tertiary relative h-24 w-24 overflow-hidden border">
             <Image
@@ -74,7 +74,7 @@ const ImagePreview = ({ file, index, deleteImgFn }: ImagePreviewProps) => {
         >
           <CloseIcon />
         </Button>
-      </FlexBox>
+      </div>
     </li>
   );
 };

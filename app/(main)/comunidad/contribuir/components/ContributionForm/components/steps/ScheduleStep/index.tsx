@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Button from '@/app/components/ui/Button';
-import FlexBox from '@/app/components/ui/containers/FlexBox';
+
 import ScheduleConstructor from './components/ScheduleConstructor';
 import ScheduleItem from '@/comunidad/components/ScheduleItem';
 import { useContributionStore } from '@/contribuir/stores/useContributionStore';
@@ -16,7 +16,7 @@ const StepSchedule = () => {
   }
 
   return (
-    <FlexBox direction="col" align="stretch" className="h-full w-full">
+    <div className="flex h-full w-full flex-col items-stretch">
       <div className="grow">
         {constructorView ? (
           <ScheduleConstructor toggleConstructorView={setConstructorView} />
@@ -27,7 +27,7 @@ const StepSchedule = () => {
                 crea conjuntos de días con horarios
               </p>
             ) : (
-              <FlexBox direction="col" align="center" className="gap-md">
+              <div className="gap-md flex flex-col items-center">
                 {schedule.map((item, index) => (
                   <ScheduleItem
                     key={index}
@@ -35,7 +35,7 @@ const StepSchedule = () => {
                     onDelete={() => removeSchedule(index)}
                   />
                 ))}
-              </FlexBox>
+              </div>
             )}
           </ul>
         )}
@@ -47,7 +47,7 @@ const StepSchedule = () => {
       >
         {constructorView ? 'cancelar' : 'agregar nuevo'}
       </Button>
-    </FlexBox>
+    </div>
   );
 };
 

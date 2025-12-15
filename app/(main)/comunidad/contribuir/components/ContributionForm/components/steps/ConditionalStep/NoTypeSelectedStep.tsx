@@ -1,4 +1,3 @@
-import FlexBox from '@/app/components/ui/containers/FlexBox';
 import WarningIcon from '@/app/components/ui/svgs/WarningIcon';
 import Button from '@/app/components/ui/Button';
 import { useNavigationStore } from '@/contribuir/stores/useNavigationStore';
@@ -10,7 +9,7 @@ export default function NoTypeSelectedStep() {
   }
 
   return (
-    <FlexBox direction="col" className="h-full" justify="center" align="center">
+    <div className="flex h-full flex-col items-center justify-center">
       <p className="text-md font-oxanium mb-xl text-center">
         Selecciona un tipo de comunidad.
       </p>
@@ -24,6 +23,6 @@ export default function NoTypeSelectedStep() {
       >
         seleccionar
       </Button>
-    </FlexBox>
+    </div>
   );
 }
