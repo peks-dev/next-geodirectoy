@@ -5,7 +5,6 @@ import { useContributionStore } from '@/contribuir/stores/useContributionStore';
 import type { Schedule } from '@/comunidad/types';
 import DaysRangePicker from './DaysRangePicker';
 import TimeRangePicker from './TimeRangePicker';
-// import WheelTimePicker from './WheelTimePicker';
 import FlexBox from '@/app/components/ui/containers/FlexBox';
 import Button from '@/app/components/ui/Button';
 interface Props {
