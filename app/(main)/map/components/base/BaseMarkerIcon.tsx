@@ -1,4 +1,15 @@
-const BaseMarkerIcon = () => (
+'use client';
+
+import { useMemo } from 'react';
+import { DivIcon } from 'leaflet';
+import { useAppTheme } from '@/lib/hooks/useAppTheme';
+import { createLeafletIcon } from '../../utils/iconUtils';
+
+interface BaseMarkerIconProps {
+  iconColorClass?: string;
+}
+
+const BaseMarkerIconComponent = () => (
   <svg
     width="100%"
     height="100%"
@@ -15,5 +26,24 @@ const BaseMarkerIcon = () => (
     </g>
   </svg>
 );
+
+/**
+ * Componente que crea un icono de marcador de Leaflet con manejo de tema
+ * Maneja la lógica de color basado en el tema y devuelve un DivIcon listo para usar
+ */
+function BaseMarkerIcon({ iconColorClass }: BaseMarkerIconProps): DivIcon {
+  const { isDark } = useAppTheme();
+
+  // Usar color por defecto si no se especifica
+  const colorClass =
+    iconColorClass || (isDark ? 'text-white-primary' : 'text-dark-primary');
+
+  // Crear icono con color dinámico basado en tema
+  const icon = useMemo(() => {
+    return createLeafletIcon(<BaseMarkerIconComponent />, colorClass);
+  }, [colorClass]);
+
+  return icon;
+}
 
 export default BaseMarkerIcon;

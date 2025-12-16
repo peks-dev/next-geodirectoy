@@ -1,9 +1,6 @@
 'use client';
 
 import { Marker } from 'react-leaflet';
-import { useMemo } from 'react';
-import { useAppTheme } from '@/lib/hooks/useAppTheme';
-import { createLeafletIcon } from '../../utils/iconUtils';
 import BaseMarkerIcon from './BaseMarkerIcon';
 import { BaseMarkerProps } from '../../types';
 
@@ -20,16 +17,8 @@ export default function BaseMarker({
   iconColorClass,
   children,
 }: BaseMarkerProps) {
-  const { isDark } = useAppTheme();
-
-  // Usar color por defecto si no se especifica
-  const colorClass =
-    iconColorClass || (isDark ? 'text-white-primary' : 'text-dark-primary');
-
-  // Crear icono con color dinámico basado en tema
-  const icon = useMemo(() => {
-    return createLeafletIcon(<BaseMarkerIcon />, colorClass);
-  }, [colorClass]);
+  // Crear icono usando el nuevo BaseMarkerIcon que maneja toda la lógica
+  const icon = BaseMarkerIcon({ iconColorClass });
 
   return (
     <Marker position={[position.lat, position.lng]} icon={icon}>

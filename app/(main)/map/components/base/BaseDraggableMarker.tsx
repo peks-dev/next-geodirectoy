@@ -1,11 +1,9 @@
 'use client';
 
 import { Marker } from 'react-leaflet';
-import { useMemo, useRef, useCallback } from 'react';
+import { useRef, useCallback } from 'react';
 import type { Marker as LeafletMarker } from 'leaflet';
 import type { Coordinates } from '@/comunidad/types';
-import { useAppTheme } from '@/lib/hooks/useAppTheme';
-import { createLeafletIcon } from '../../utils/iconUtils';
 import BaseMarkerIcon from './BaseMarkerIcon';
 
 /**
@@ -25,16 +23,10 @@ function BaseDraggableMarker({
   onDragEnd,
   iconColorClass,
 }: BaseDraggableMarkerProps) {
-  const { isDark } = useAppTheme();
   const markerRef = useRef<LeafletMarker>(null);
 
-  // Usar color por defecto si no se especifica
-  const colorClass =
-    iconColorClass || (isDark ? 'text-accent-primary' : 'text-accent-primary');
-
-  const icon = useMemo(() => {
-    return createLeafletIcon(<BaseMarkerIcon />, colorClass);
-  }, [colorClass]);
+  // Crear icono usando el nuevo BaseMarkerIcon que maneja toda la lógica
+  const icon = BaseMarkerIcon({ iconColorClass });
 
   const handleDragEnd = useCallback(() => {
     const marker = markerRef.current;
