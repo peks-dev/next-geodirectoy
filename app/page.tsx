@@ -1,5 +1,5 @@
 import Navbar from '@/components/ui/Navbar';
-import { BaseDynamicMap, CommunityMarker } from '@/map/index';
+import HomeMap from '@/app/(main)/map/components/HomeMap';
 import { fetchAllCommunitiesForMap } from '@/comunidad/dbQueries';
 import { transformToCommunityForMap } from '@/comunidad/transformers';
 
@@ -14,11 +14,7 @@ export default async function Home() {
 
   return (
     <div className="relative h-full w-full">
-      <BaseDynamicMap>
-        {communitiesTransformed.map((community) => (
-          <CommunityMarker key={community.id} data={community} />
-        ))}
-      </BaseDynamicMap>
+      <HomeMap communities={communitiesTransformed} />
       <Navbar />
     </div>
   );

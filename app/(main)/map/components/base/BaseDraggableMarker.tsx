@@ -3,10 +3,10 @@
 import { Marker } from 'react-leaflet';
 import { useMemo, useRef, useCallback } from 'react';
 import type { Marker as LeafletMarker } from 'leaflet';
+import type { Coordinates } from '@/comunidad/types';
 import { useAppTheme } from '@/lib/hooks/useAppTheme';
 import { createLeafletIcon } from '../../utils/iconUtils';
 import BaseMarkerIcon from './BaseMarkerIcon';
-import type { Coordinates } from '@/comunidad/types';
 
 /**
  * Props para el componente BaseDraggableMarker

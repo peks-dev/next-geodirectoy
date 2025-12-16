@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { BaseDynamicMap, BaseDraggableMarker } from '@/app/(main)/map';
+import { BaseMap, BaseDraggableMarker } from '@/app/(main)/map';
 import { useGeocoding } from '@/app/(main)/map/hooks/useGeocoding';
 import type { Coordinates } from '@/comunidad/types';
 import { useContributionStore } from '@/contribuir/stores/useContributionStore';
@@ -47,15 +47,12 @@ export default function LocationStep() {
 
   return (
     <div className="relative h-full w-full">
-      <BaseDynamicMap
-        center={[currentPosition.lat, currentPosition.lng]}
-        zoom={11}
-      >
+      <BaseMap center={[currentPosition.lat, currentPosition.lng]} zoom={11}>
         <BaseDraggableMarker
           initialPosition={currentPosition}
           onDragEnd={handleMarkerDrag}
         />
-      </BaseDynamicMap>
+      </BaseMap>
 
       <div className="bg-background-primary-dark absolute bottom-4 left-1/2 z-[1000] w-11/12 -translate-x-1/2 rounded-lg p-3 text-center shadow-lg">
         <h3 className="text-text-primary font-semibold">Ubicación Detectada</h3>
