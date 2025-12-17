@@ -22,8 +22,57 @@ const iceland = Iceland({
 });
 
 export const metadata: Metadata = {
-  title: 'Basket Places',
-  description: 'Directorio de comunidades de basketball',
+  metadataBase: new URL('https://www.basket-places.website'),
+  title: {
+    template: '%s | Basket Places',
+    default: 'Basket Places - Directorio de comunidades de basketball',
+  },
+  description:
+    'Encuentra y conecta con comunidades de basketball locales. Descubre canchas, clubes y comunidades en tu área.',
+  keywords: [
+    'basketball',
+    'comunidades',
+    'canchas',
+    'clubes',
+    'deportivo',
+    'local',
+  ],
+  openGraph: {
+    type: 'website',
+    locale: 'es_ES',
+    url: 'https://www.basket-places.website',
+    siteName: 'Basket Places',
+    title: 'Basket Places - Directorio de comunidades de basketball',
+    description:
+      'Encuentra y conecta con comunidades de basketball locales. Descubre canchas, clubes y comunidades en tu área.',
+    images: [
+      {
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'Basket Places - Directorio de comunidades de basketball',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@basketplaces',
+    creator: '@basketplaces',
+    title: 'Basket Places - Directorio de comunidades de basketball',
+    description: 'Encuentra y conecta con comunidades de basketball locales.',
+    images: ['/opengraph-image'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default async function RootLayout({

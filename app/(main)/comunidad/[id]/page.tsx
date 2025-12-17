@@ -1,6 +1,8 @@
 import { getCommunityById } from '@/app/(main)/comunidad/dbQueries';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import type { CommunityFullResponse } from '@/comunidad/types';
+import { generateCommunityMetadata } from '../utils/generateCommunityMetadata';
 import HeaderCommunity from '../components/HeaderCommunity';
 import ContentCommunity from '../components/ContentCommunity';
 
@@ -8,6 +10,14 @@ interface PageProps {
   params: Promise<{
     id: string;
   }>;
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  const community: CommunityFullResponse | null = await getCommunityById(id);
+  return generateCommunityMetadata(community);
 }
 
 export default async function CommunityPage({ params }: PageProps) {
@@ -22,13 +32,64 @@ export default async function CommunityPage({ params }: PageProps) {
   }
 
   return (
-    <div className="gap-lg flex h-full w-full flex-col p-4 lg:flex-row">
-      <HeaderCommunity
-        name={community.name}
-        images={community.images}
-        description={community.description}
+    <>
+      {/* Structured Data para SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'SportsActivityLocation',
+            name: community.name,
+            description: community.description,
+            url: `https://www.basket-places.website/comunidad/${community.id}`,
+            image: community.images,
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: community.city,
+              addressRegion: community.state,
+              addressCountry: community.country,
+            },
+            geo: {
+              '@type': 'GeoCoordinates',
+              latitude: community.lat,
+              longitude: community.lng,
+            },
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: community.average_rating,
+              reviewCount: community.total_reviews,
+            },
+            sport: 'Basketball',
+            amenityFeature: [
+              community.services.transport && {
+                '@type': 'LocationFeatureSpecification',
+                name: 'Transporte',
+              },
+              community.services.store && {
+                '@type': 'LocationFeatureSpecification',
+                name: 'Tienda',
+              },
+              community.services.wifi && {
+                '@type': 'LocationFeatureSpecification',
+                name: 'WiFi',
+              },
+              community.services.bathroom && {
+                '@type': 'LocationFeatureSpecification',
+                name: 'Baños',
+              },
+            ].filter(Boolean),
+          }).replace(/</g, '\\u003c'),
+        }}
       />
-      <ContentCommunity community={community} />
-    </div>
+      <div className="gap-lg flex h-full w-full flex-col p-4 lg:flex-row">
+        <HeaderCommunity
+          name={community.name}
+          images={community.images}
+          description={community.description}
+        />
+        <ContentCommunity community={community} />
+      </div>
+    </>
   );
 }
