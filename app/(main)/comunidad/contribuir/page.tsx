@@ -3,6 +3,8 @@
 import { ProtectedWrapper } from '@/app/(auth)/components/ProtectedWrapper';
 import ContributionForm from './components/ContributionForm';
 
+export const dynamic = 'force-dynamic';
+
 export default async function ContributionPage() {
   return (
     <ProtectedWrapper>

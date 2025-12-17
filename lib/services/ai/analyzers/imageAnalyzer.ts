@@ -1,10 +1,6 @@
 import { getAIService } from '../core/aiFactory';
 import { AIUnavailableError, AIServiceError } from '../errors/custom';
-import type {
-  ParseFunction,
-  ValidateFunction,
-  ValidationResult,
-} from '../core/types';
+import type { ParseFunction, ValidateFunction } from '../core/types';
 import type { ImageAnalysisOptions } from './types';
 
 /**

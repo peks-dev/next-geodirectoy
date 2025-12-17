@@ -1,9 +1,7 @@
-import AuthForm from '@/auth/components/AuthForm/index';
+import SignInPageWrapper from './components/SignInPageWrapper';
+
+export const dynamic = 'force-dynamic';
 
 export default function SignInPage() {
-  return (
-    <section className="p-md flex min-h-screen items-center justify-center">
-      <AuthForm />
-    </section>
-  );
+  return <SignInPageWrapper />;
 }

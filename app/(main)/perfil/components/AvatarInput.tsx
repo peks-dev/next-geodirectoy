@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
+import Image from 'next/image';
 import { useEditProfileFormStore } from '../stores/useEditProfileFormStore';
 
 export default function RoundImageInput() {
@@ -26,9 +27,11 @@ export default function RoundImageInput() {
         title="Haz clic para seleccionar una imagen"
       >
         {avatarPreviewUrl ? (
-          <img
+          <Image
             src={avatarPreviewUrl}
             alt="Vista previa del avatar"
+            width={96}
+            height={96}
             className="h-full w-full object-cover"
           />
         ) : (
