@@ -6,6 +6,8 @@ import { getAuthShellData } from '@/app/(auth)/actions/getAuthShellData';
 import ClientProviders from '@/components/ClientProviders';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 
+export const dynamic = 'force-dynamic';
+
 // 1. Configura las fuentes con next/font
 const oxanium = Oxanium({
   subsets: ['latin'],
