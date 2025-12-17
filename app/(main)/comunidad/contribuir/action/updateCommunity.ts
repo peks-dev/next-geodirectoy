@@ -14,6 +14,7 @@ import { separateNewAndExistingImages } from '../utils/imageSplitter';
 import * as contributionService from '../services/index';
 import { deleteImage } from '@/lib/supabase/storage';
 import { transformToCommunityProfile } from '../transformers';
+import { reverseGeocode } from '@/app/(main)/map/services/reverseGeocode';
 
 export async function updateCommunity(
   formData: CommunityFormData
@@ -41,7 +42,13 @@ export async function updateCommunity(
       return fail(ErrorCodes.FORBIDDEN, 'No autorizado');
     }
 
-    // 4. Separar y validar imágenes
+    // 4. Obtener información de ubicación usando reverse geocoding
+    const locationData = await reverseGeocode(
+      validated.location.lat,
+      validated.location.lng
+    );
+
+    // 5. Separar y validar imágenes
     const { newFiles, existingUrls } = separateNewAndExistingImages(
       validated.images
     );
@@ -76,12 +83,13 @@ export async function updateCommunity(
     // Asignar paths para posible rollback
     pathsToRollback = imageResults.uploadedPaths;
 
-    // 7. Actualizar en base de datos
+    // 8. Actualizar en base de datos
     const updatedCommunity = await contributionService.modifyCommunity(
       validated,
       { ...imageResults, existingUrls },
       aiResult,
-      validated.id
+      validated.id,
+      locationData
     );
 
     const community = transformToCommunityProfile(updatedCommunity);

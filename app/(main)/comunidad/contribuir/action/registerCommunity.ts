@@ -14,6 +14,7 @@ import { separateNewAndExistingImages } from '../utils/imageSplitter';
 import * as contributionService from '../services/index';
 import { deleteImage } from '@/lib/supabase/storage';
 import { transformToCommunityProfile } from '../transformers';
+import { reverseGeocode } from '@/app/(main)/map/services/reverseGeocode';
 
 export async function registerCommunity(
   formData: CommunityFormData
@@ -33,7 +34,13 @@ export async function registerCommunity(
     // 3. Generar ID único
     const communityId = uuidv4();
 
-    // 4. Separar y validar imágenes (solo nuevas para register)
+    // 4. Obtener información de ubicación usando reverse geocoding
+    const locationData = await reverseGeocode(
+      validated.location.lat,
+      validated.location.lng
+    );
+
+    // 5. Separar y validar imágenes (solo nuevas para register)
     const { newFiles, existingUrls } = separateNewAndExistingImages(
       validated.images
     );
@@ -46,7 +53,7 @@ export async function registerCommunity(
       );
     }
 
-    // 5. Análisis AI
+    // 6. Análisis AI
     const aiResult = await contributionService.analyzeCommunity({
       name: validated.name,
       description: validated.description,
@@ -55,7 +62,7 @@ export async function registerCommunity(
       is_covered: validated.is_covered!,
     });
 
-    // 6. Procesar imágenes (no hay oldUrls en register)
+    // 7. Procesar imágenes (no hay oldUrls en register)
     const imageResults = await contributionService.uploadCommunityImages(
       [], // No hay imágenes existentes
       existingUrls,
@@ -67,13 +74,14 @@ export async function registerCommunity(
     // Asignar paths para posible rollback
     pathsToRollback = imageResults.uploadedPaths;
 
-    // 7. Crear en base de datos
+    // 8. Crear en base de datos
     const createdCommunity = await contributionService.createCommunity(
       validated,
       imageResults,
       aiResult,
       user.id,
-      communityId
+      communityId,
+      locationData
     );
 
     const community = transformToCommunityProfile(createdCommunity);

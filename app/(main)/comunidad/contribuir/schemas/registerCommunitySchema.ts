@@ -34,9 +34,6 @@ export const registerCommunitySchema = z
       .enum(['teens', 'young_adults', 'veterans', 'mixed'])
       .nullable(),
     categories: z.array(categorySchema).nullable(),
-    country: z.string().min(1, 'País requerido'),
-    state: z.string().min(1, 'Estado requerido'),
-    city: z.string().min(1, 'Ciudad requerida'),
     floor_type: z
       .enum(['cement', 'parquet', 'asphalt', 'synthetic'])
       .nullable(),

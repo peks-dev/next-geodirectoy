@@ -3,6 +3,7 @@ import type { CourtImageAnalysisResult } from '@/contribuir/services/analyzeComm
 import { UpdateCommunityFormData } from '../schemas/updateCommunitySchema';
 import { updateCommunityById } from '@/app/(main)/comunidad/dbQueries';
 import { CommunityUpdateData } from '@/comunidad/types';
+import type { LocationData } from '@/app/(main)/map/services/reverseGeocode';
 
 /**
  * Servicio para actualizar comunidad en base de datos
@@ -18,15 +19,23 @@ export async function modifyCommunity(
     existingUrls: string[]; // Imágenes que usuario mantiene
   },
   aiResult: CourtImageAnalysisResult,
-  communityId: string
+  communityId: string,
+  locationData: LocationData
 ): Promise<CommunityFullResponse> {
+  // Validar que tengamos los datos de ubicación requeridos
+  if (!locationData.city || !locationData.country) {
+    throw new Error(
+      'No se pudo determinar la ubicación completa de las coordenadas proporcionadas'
+    );
+  }
+
   const dataToUpdate: CommunityUpdateData = {
     type: validatedData.type,
     name: validatedData.name,
     description: validatedData.description,
-    country: validatedData.country,
-    state: validatedData.state,
-    city: validatedData.city,
+    country: locationData.country,
+    state: locationData.state,
+    city: locationData.city,
     floor_type: aiResult.floorType,
     is_covered: aiResult.isCovered,
     schedule: validatedData.schedule,

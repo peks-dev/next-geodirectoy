@@ -30,9 +30,6 @@ export const updateCommunitySchema = z
       .string()
       .min(30, 'Descripción muy corta')
       .max(500, 'Descripción debe tener máximo 500 caracteres'),
-    country: z.string().min(1, 'País requerido'),
-    state: z.string().min(1, 'Estado requerido'),
-    city: z.string().min(1, 'Ciudad requerida'),
     floor_type: z.enum(['cement', 'parquet', 'asphalt', 'synthetic'], {
       message: 'Tipo de piso requerido',
     }),

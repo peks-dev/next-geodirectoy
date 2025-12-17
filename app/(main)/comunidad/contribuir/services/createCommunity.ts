@@ -5,6 +5,7 @@ import type {
 import type { CourtImageAnalysisResult } from './analyzeCommunity/types';
 import { RegisterCommunityFormData } from '../schemas/registerCommunitySchema';
 import { insertCommunity } from '@/app/(main)/comunidad/dbQueries';
+import type { LocationData } from '@/app/(main)/map/services/reverseGeocode';
 
 export async function createCommunity(
   validatedData: RegisterCommunityFormData,
@@ -14,8 +15,16 @@ export async function createCommunity(
   },
   aiResult: CourtImageAnalysisResult,
   userId: string,
-  communityId: string
+  communityId: string,
+  locationData: LocationData
 ): Promise<CommunityFullResponse> {
+  // Validar que tengamos los datos de ubicación requeridos
+  if (!locationData.city || !locationData.country) {
+    throw new Error(
+      'No se pudo determinar la ubicación completa de las coordenadas proporcionadas'
+    );
+  }
+
   // Crear objeto
   const dataToInsert: CommunityInsertData = {
     id: communityId,
@@ -23,9 +32,9 @@ export async function createCommunity(
     type: validatedData.type,
     name: validatedData.name,
     description: validatedData.description,
-    country: validatedData.country!,
-    state: validatedData.state!,
-    city: validatedData.city!,
+    country: locationData.country,
+    state: locationData.state,
+    city: locationData.city,
     floor_type: aiResult.floorType,
     is_covered: aiResult.isCovered,
     schedule: validatedData.schedule,

@@ -55,9 +55,6 @@ export interface CommunityFormData {
   name: string;
   description: string;
   location: Coordinates | null;
-  city: string | null;
-  state: string | null;
-  country: string | null;
   images: (File | string)[]; // File = nuevo, string = URL ya subida
   floor_type: FloorType | null;
   is_covered: boolean;
@@ -83,6 +80,9 @@ export interface CommunityInsertData
   > {
   id: string; // Requerido
   user_id: string; // Requerido
+  city: string; // Obtenido desde reverseGeocode
+  state: string | null; // Obtenido desde reverseGeocode
+  country: string; // Obtenido desde reverseGeocode
   images: string[]; // Solo URLs después de subir a storage
   floor_type: FloorType; // Requerido después de análisis de AI
   location: `POINT(${number} ${number})`; // Formato PostGIS WKT
@@ -92,6 +92,9 @@ export type CommunityUpdateData = Omit<
   UpdateCommunityFormData,
   'id' | 'images' | 'location'
 > & {
+  city: string; // Obtenido desde reverseGeocode
+  state: string | null; // Obtenido desde reverseGeocode
+  country: string; // Obtenido desde reverseGeocode
   images: string[]; // Final array para DB
   location: `POINT(${number} ${number})`; // Formato PostGIS WKT
   floor_type: FloorType; // AI result (no null)
