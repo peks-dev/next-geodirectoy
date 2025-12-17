@@ -16,12 +16,19 @@ export default function BaseMarker({
   position,
   iconColorClass,
   children,
+  onClick,
 }: BaseMarkerProps) {
   // Crear icono usando el nuevo BaseMarkerIcon que maneja toda la lógica
   const icon = BaseMarkerIcon({ iconColorClass });
 
   return (
-    <Marker position={[position.lat, position.lng]} icon={icon}>
+    <Marker
+      position={[position.lat, position.lng]}
+      icon={icon}
+      eventHandlers={{
+        click: onClick,
+      }}
+    >
       {children}
     </Marker>
   );

@@ -16,7 +16,8 @@ export interface MapProps {
 export interface BaseMarkerProps {
   position: Coordinates;
   iconColorClass?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
+  onClick?: () => void;
 }
 
 export interface BaseMapProps {

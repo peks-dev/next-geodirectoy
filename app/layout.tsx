@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Iceland, Oxanium } from 'next/font/google';
 import './globals.css';
-import BackgroundLines from '@/components/ui/BackgroundLines';
 import { AuthShell } from '@/app/(auth)/components/AuthShell';
 import { getAuthShellData } from '@/app/(auth)/actions/getAuthShellData';
 import ClientProviders from '@/components/ClientProviders';
@@ -44,7 +43,6 @@ export default async function RootLayout({
         className={`${iceland.variable} ${oxanium.variable} relative h-[100dvh] w-[100vw] antialiased`}
       >
         <ThemeProvider>
-          <BackgroundLines />
           <main className="relative z-[2] h-full w-full">
             <AuthShell initialUser={initialUser} authError={authError}>
               <ClientProviders>{children}</ClientProviders>
