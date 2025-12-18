@@ -7,10 +7,7 @@ import { useProfileStore } from '@/app/(main)/perfil/stores/useProfileStore';
 import { deleteAccount } from '@/app/(auth)/actions/deleteAccount';
 import { useAuth } from '@/app/(auth)/hooks/useAuth';
 
-import {
-  showErrorToast,
-  showSuccessToast,
-} from '@/app/components/toast/notificationService';
+import { showErrorToast, showSuccessToast } from '@/shared/notifications';
 
 export default function DeleteAccountBtn() {
   const { openModal } = useModalStore();

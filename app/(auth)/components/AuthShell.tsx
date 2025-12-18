@@ -3,7 +3,7 @@
 
 import { useEffect } from 'react';
 import { AuthProvider } from './AuthProvider';
-import { showErrorToast } from '@/app/components/toast/notificationService';
+import { showErrorToast } from '@/shared/notifications';
 import type { User } from '@/lib/supabase/types';
 
 interface AuthShellProps {

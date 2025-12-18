@@ -1,8 +1,5 @@
 'use client';
-import {
-  showErrorToast,
-  showSuccessToast,
-} from '@/app/components/toast/notificationService';
+import { showErrorToast, showSuccessToast } from '@/shared/notifications';
 import { getErrorMessage } from '@/lib/utils/errorHandler';
 
 // ==================== Constants ====================

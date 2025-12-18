@@ -8,7 +8,7 @@ import { useUpdateProfile } from '../hooks';
 import {
   showSuccessToast,
   handleSubmissionError,
-} from '@/app/components/toast/notificationService';
+} from '@/shared/notifications';
 
 export default function EditProfileBtn() {
   const { openModal } = useModalStore();

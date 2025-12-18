@@ -12,10 +12,7 @@ import {
   getCommunityReviews,
 } from '../actions/';
 import { useAuth } from '@/app/(auth)/hooks/useAuth';
-import {
-  showErrorToast,
-  showSuccessToast,
-} from '@/app/components/toast/notificationService';
+import { showErrorToast, showSuccessToast } from '@/shared/notifications';
 import { useRouter, usePathname } from 'next/navigation';
 import { handleServiceError } from '@/lib/errors/handler';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { toast } from 'sonner';
 import { ZodError } from 'zod';
 import { getErrorMessages, type FieldError } from '@/lib/utils/errorHandler';
-import ErrorToast from './ErrorToast';
+import ErrorToast from '../components/error-toast';
 
 //Toast de éxito estándar.
 export const showSuccessToast = (title: string, description?: string) => {

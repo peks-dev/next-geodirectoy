@@ -5,10 +5,7 @@ import { DeleteIcon } from '@/app/components/ui/svgs';
 import { useModalStore } from '@/app/components/ui/Modal';
 import { deleteCommunity } from '../action/delete-community';
 import { useCommunitiesProfileStore } from '../../perfil/stores/useCommunitiesProfileStore';
-import {
-  showErrorToast,
-  showSuccessToast,
-} from '@/app/components/toast/notificationService';
+import { showErrorToast, showSuccessToast } from '@/shared/notifications';
 
 export default function DeleteCommunityBtn({
   communityId,

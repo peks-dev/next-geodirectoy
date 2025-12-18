@@ -25,7 +25,8 @@
       "@/auth/*": ["./app/(auth)/*"],
       "@/comunidad/*": ["./app/(main)/comunidad/*"],
       "@/contribuir/*": ["./app/(main)/comunidad/contribuir/*"],
-      "@/map/*": ["./app/(main)/map/*"]
+      "@/map/*": ["./app/(main)/map/*"],
+      "@/shared/*": ["./app/(shared)/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

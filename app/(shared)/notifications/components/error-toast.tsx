@@ -1,4 +1,4 @@
-import type { FieldError } from '@/lib/utils/errorHandler';
+import type { FieldError } from '../types';
 
 interface ErrorToastProps {
   errors: FieldError[];

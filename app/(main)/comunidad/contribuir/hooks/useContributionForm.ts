@@ -6,10 +6,7 @@ import { useContributionStore } from '../stores/useContributionStore';
 import { useCommunitiesProfileStore } from '@/app/(main)/perfil/stores/useCommunitiesProfileStore';
 import { registerCommunity, updateCommunity } from '../action/index';
 import { compressImage } from '@/lib/utils/images/compressImage';
-import {
-  showSuccessToast,
-  showErrorToast,
-} from '@/app/components/toast/notificationService';
+import { showSuccessToast, showErrorToast } from '@/shared/notifications';
 import type { CommunityFormData } from '@/comunidad/types';
 
 interface UseContributionFormProps {

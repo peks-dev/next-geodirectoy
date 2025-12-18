@@ -100,6 +100,7 @@ id: bafyreidooi2hmseirpljxrafsglexk4hlqy6cqpab3wwzekvh7cdn7sdo4
  - reviews - Review and rating system
  - map - Map functionality
  - search - Search and filters (soon)
+ - shared - system shared domain
  ### 🔧 Infrastructure Scopes
  - deps - Dependencies
  - build - Build process

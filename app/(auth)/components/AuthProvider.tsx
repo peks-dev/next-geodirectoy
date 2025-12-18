@@ -16,10 +16,7 @@ import {
 } from '../database/dbQueries.browser';
 import { useProfileStore } from '@/app/(main)/perfil/stores/useProfileStore';
 import { useCommunitiesProfileStore } from '@/app/(main)/perfil/stores/useCommunitiesProfileStore';
-import {
-  showErrorToast,
-  showSuccessToast,
-} from '@/app/components/toast/notificationService';
+import { showErrorToast, showSuccessToast } from '@/shared/notifications';
 import type { User, AuthChangeEvent, Session } from '@/lib/supabase/types';
 import { DatabaseError } from '@/lib/errors/database';
 

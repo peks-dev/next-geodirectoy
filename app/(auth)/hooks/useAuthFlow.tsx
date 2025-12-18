@@ -2,10 +2,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import {
-  showSuccessToast,
-  showErrorToast,
-} from '@/app/components/toast/notificationService';
+import { showSuccessToast, showErrorToast } from '@/shared/notifications';
 import { sendLoginCode } from '@/app/(auth)/database/dbQueries.browser';
 import { verifyOtpAndFetchProfile } from '@/auth/actions/verifyAndFetch';
 import { useRouter, useSearchParams } from 'next/navigation';
