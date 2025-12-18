@@ -73,11 +73,10 @@ export interface CommunityFormData {
  * Tipo para insertar una comunidad en Supabase.
  * Todos los campos requeridos están presentes y transformados al formato correcto.
  */
-export interface CommunityInsertData
-  extends Omit<
-    CommunityFormData,
-    'user_id' | 'images' | 'floor_type' | 'id' | 'location'
-  > {
+export interface CommunityInsertData extends Omit<
+  CommunityFormData,
+  'user_id' | 'images' | 'floor_type' | 'id' | 'location'
+> {
   id: string; // Requerido
   user_id: string; // Requerido
   city: string; // Obtenido desde reverseGeocode

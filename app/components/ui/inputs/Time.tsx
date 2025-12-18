@@ -1,7 +1,9 @@
 import { forwardRef, InputHTMLAttributes } from 'react';
 
-interface TimeInputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange'> {
+interface TimeInputProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'type' | 'onChange'
+> {
   label?: string;
   value: string;
   onChange: (value: string) => void;
