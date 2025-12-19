@@ -91,10 +91,10 @@ export default async function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body
-        className={`${iceland.variable} ${oxanium.variable} relative h-[100dvh] w-[100vw] antialiased`}
+        className={`${iceland.variable} ${oxanium.variable} relative h-dvh w-screen antialiased`}
       >
         <ThemeProvider>
-          <main className="relative z-[2] h-full w-full">
+          <main className="relative z-2 h-full w-full">
             <AuthShell initialUser={initialUser} authError={authError}>
               <ClientProviders>{children}</ClientProviders>
             </AuthShell>
