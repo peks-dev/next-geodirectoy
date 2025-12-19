@@ -2,19 +2,7 @@
 import React from 'react';
 import { toast as sonnerToast } from 'sonner';
 import Button from '@/app/components/ui/Button';
-
-type ToastType = 'success' | 'error' | 'warning' | 'info';
-
-interface ToastProps {
-  id: string | number;
-  title: string;
-  description?: string;
-  type: ToastType;
-  button?: {
-    label: string;
-    onClick: () => void;
-  };
-}
+import type { ToastProps, ToastType } from '../types';
 
 /** A fully custom toast that still maintains the animations and interactions. */
 function BaseToast(props: ToastProps) {

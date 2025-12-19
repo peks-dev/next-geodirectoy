@@ -2,14 +2,17 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { showSuccessToast, showErrorToast } from '@/shared/notifications';
+import {
+  showSuccessToast,
+  showErrorToast,
+  showWarningToast,
+} from '@/shared/notifications';
 import { sendLoginCode } from '@/app/(auth)/database/dbQueries.browser';
 import { verifyOtpAndFetchProfile } from '@/auth/actions/verifyAndFetch';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useProfileStore } from '@/app/(main)/perfil/stores/useProfileStore';
 import { cacheService } from '@/auth/utils/cacheService';
 import { useAuth } from '../hooks/useAuth';
-import { toast } from 'sonner';
 
 type AuthState =
   | 'idle'
@@ -149,7 +152,10 @@ export const useAuthFlow = () => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           if (timerId.current) clearInterval(timerId.current);
-          toast.warning('El código de verificación ha expirado.');
+          showWarningToast(
+            'Código expirado',
+            'El código de verificación ha expirado.'
+          );
           if (onExpire) onExpire();
           return 0;
         }

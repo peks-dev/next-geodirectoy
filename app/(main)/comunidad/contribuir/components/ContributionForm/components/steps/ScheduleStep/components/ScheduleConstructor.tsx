@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { toast } from 'sonner';
+import { showErrorToast } from '@/shared/notifications';
 import { useContributionStore } from '@/contribuir/stores/useContributionStore';
 import type { Schedule } from '@/comunidad/types';
 import DaysRangePicker from './DaysRangePicker';
@@ -18,12 +18,15 @@ export default function ScheduleConstructor({ toggleConstructorView }: Props) {
 
   function handleAddSchedule() {
     if (selectedDay.length === 0) {
-      toast.error('Selecciona al menos un día');
+      showErrorToast('Error de validación', 'Selecciona al menos un día');
       return;
     }
 
     if (time.start === '' || time.end === '') {
-      toast.error('Ingresa hora de inicio y hora final');
+      showErrorToast(
+        'Error de validación',
+        'Ingresa hora de inicio y hora final'
+      );
       return;
     }
 
@@ -32,7 +35,7 @@ export default function ScheduleConstructor({ toggleConstructorView }: Props) {
     const end = new Date(`1970/01/01 ${time.end}`);
 
     if (start >= end) {
-      toast.error('Horario inválido');
+      showErrorToast('Error de validación', 'Horario inválido');
       return;
     }
 

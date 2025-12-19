@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { toast } from 'sonner';
+import { showErrorToast } from '@/shared/notifications';
 import { useContributionStore } from '@/contribuir/stores/useContributionStore';
 import ImagePreview from './components/ImagePreview';
 
@@ -33,7 +33,7 @@ export default function ImagesStep() {
       if (isHorizontal) {
         validFiles.push(file);
       } else {
-        toast.error(`la imagen debe ser horizontal.`);
+        showErrorToast('Error de validación', 'La imagen debe ser horizontal.');
       }
     }
 
