@@ -8,7 +8,7 @@ import type { AgeGroup, CommunityType, Category } from '@/comunidad/types';
 interface Props {
   description: string;
   ageGroup?: AgeGroup | null;
-  userId?: string;
+  profile: { name: string; avatar_url: string | null };
   type: CommunityType;
   categories?: Category[] | null;
 }
@@ -18,6 +18,7 @@ export default function DescriptionSection({
   ageGroup,
   type,
   categories,
+  profile,
 }: Props) {
   const LABELS = {
     types: {
@@ -25,7 +26,7 @@ export default function DescriptionSection({
       club: 'club',
     },
     ageGroups: {
-      teens: 'adolecentes',
+      teens: 'adolescentes',
       young_adults: 'jovenes adultos',
       veterans: 'veteranos',
       mixed: 'mixto',
@@ -42,10 +43,10 @@ export default function DescriptionSection({
             ...(ageGroup
               ? [{ label: 'edades', value: LABELS.ageGroups[ageGroup] }]
               : []),
-            { label: 'autor', value: 'peks' },
+            { label: 'autor', value: profile.name },
           ]}
         />
-        <div className="overflow auto">
+        <div className="overflow-auto">
           <p>{description}</p>
         </div>
       </div>

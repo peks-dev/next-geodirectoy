@@ -29,6 +29,7 @@ export default function ContentCommunity({
           description={community.description}
           ageGroup={community.age_group}
           type={community.type}
+          profile={community.profile}
         />
       ),
       icon: <TextIcon />,
@@ -75,7 +76,7 @@ export default function ContentCommunity({
     },
   ];
   return (
-    <div className="transparent-container flex flex-grow overflow-hidden">
+    <div className="transparent-container flex grow overflow-hidden">
       <DinamicSlider slides={slides} />
     </div>
   );

@@ -161,6 +161,10 @@ export interface CommunityFullResponse {
   updated_at: string;
   average_rating: number;
   total_reviews: number;
+  profile: {
+    name: string;
+    avatar_url: string | null;
+  };
 }
 
 /**

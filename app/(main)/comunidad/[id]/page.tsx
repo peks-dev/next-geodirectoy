@@ -25,7 +25,7 @@ export default async function CommunityPage({ params }: PageProps) {
 
   // Fetch de la comunidad por ID
   const community: CommunityFullResponse | null = await getCommunityById(id);
-
+  console.log('page', community);
   // Si no existe, mostrar página 404
   if (!community) {
     notFound();
