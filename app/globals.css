@@ -14,8 +14,11 @@
   --color-dark-4: #3a3d3f;
   --color-accent-primary: #de9e36;
   --color-accent-secondary: #ab6900;
+
+  /* Complementarios */
   --color-error: #c11237;
   --color-success: #59a24d;
+  --color-warning: #bb4d00;
 
   --background-gradient: linear-gradient(
     135deg,
