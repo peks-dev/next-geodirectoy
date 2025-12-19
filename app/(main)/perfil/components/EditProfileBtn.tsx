@@ -5,10 +5,6 @@ import { EditProfile } from '@/app/components/ui/svgs';
 import EditProfileForm from './EditProfileForm';
 import { useModalStore } from '@/app/components/ui/Modal';
 import { useUpdateProfile } from '../hooks';
-import {
-  showSuccessToast,
-  handleSubmissionError,
-} from '@/shared/notifications';
 
 export default function EditProfileBtn() {
   const { openModal } = useModalStore();
@@ -21,14 +17,7 @@ export default function EditProfileBtn() {
       confirmButton: {
         text: 'enviar',
         variant: 'primary',
-        onClick: async () => {
-          try {
-            await handleUpdateProfile();
-            showSuccessToast('Perfil actualizado correctamente');
-          } catch (error) {
-            handleSubmissionError(error);
-          }
-        },
+        onClick: handleUpdateProfile,
       },
       isLoading,
     });

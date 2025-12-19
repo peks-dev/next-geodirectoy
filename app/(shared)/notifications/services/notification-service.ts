@@ -1,8 +1,4 @@
-import React from 'react';
 import { toast } from 'sonner';
-import { ZodError } from 'zod';
-import { getErrorMessages, type FieldError } from '@/lib/utils/errorHandler';
-import ErrorToast from '../components/error-toast';
 
 //Toast de éxito estándar.
 export const showSuccessToast = (title: string, description?: string) => {
@@ -20,25 +16,18 @@ export const showErrorToast = (title: string, description?: string) => {
   });
 };
 
-// Toast de error detallado para errores de validación de formulario.
-export const showFormValidationErrors = (errors: FieldError[]) => {
-  toast(React.createElement(ErrorToast, { errors }), {
-    duration: 8000,
-    position: 'top-right',
+// Toast de advertencia.
+export const showWarningToast = (title: string, description?: string) => {
+  toast.warning(title, {
+    description,
+    duration: 4500,
   });
 };
 
-// Manejador de errores centralizado que determina qué toast mostrar
-export const handleSubmissionError = (error: unknown) => {
-  if (error instanceof ZodError) {
-    const validationErrors = getErrorMessages(error);
-    showFormValidationErrors(validationErrors);
-  } else {
-    const errors = getErrorMessages(error);
-    if (errors.length > 0 && errors[0].message) {
-      showErrorToast('Error al procesar el formulario', errors[0].message);
-    } else {
-      showErrorToast('Ha ocurrido un error inesperado');
-    }
-  }
+// Toast de información.
+export const showInfoToast = (title: string, description?: string) => {
+  toast.info(title, {
+    description,
+    duration: 3500,
+  });
 };

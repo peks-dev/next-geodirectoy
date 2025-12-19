@@ -5,6 +5,7 @@ import { useEditProfileFormStore } from '../stores/useEditProfileFormStore';
 import { useProfileStore } from '../stores/useProfileStore';
 import { updateProfileController } from '../actions';
 import { compressImage } from '@/lib/utils/images/compressImage';
+import { showSuccessToast, showErrorToast } from '@/shared/notifications';
 
 interface UseUpdateProfileReturn {
   /**
@@ -84,6 +85,14 @@ export function useUpdateProfile(): UseUpdateProfileReturn {
       if (result.data) {
         updateLocalProfile(result.data);
       }
+
+      // 7. Mostrar toast de éxito
+      showSuccessToast('Perfil actualizado correctamente');
+    } catch (error) {
+      // Analizar el tipo de error y mostrar toast apropiado
+      const errorMessage =
+        error instanceof Error ? error.message : 'Error desconocido';
+      showErrorToast('Error al actualizar perfil', errorMessage);
     } finally {
       setIsLoading(false);
       setProgress('idle');
