@@ -1,7 +1,7 @@
 'use client';
 
 // React & Next.js imports
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { JSX } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -183,6 +183,30 @@ export default function GlobalMenu(): JSX.Element | null {
     setMounted(true);
   }, []);
 
+  // Close menu handler
+  const handleClose = useCallback((): void => {
+    closeMenu();
+  }, [closeMenu]);
+
+  // Handle keyboard events for closing menu
+  useEffect(() => {
+    if (!mounted || !isMenuOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent): void => {
+      if (event.key === 'Escape') {
+        handleClose();
+      }
+    };
+
+    // Add event listener
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Cleanup function to remove event listener
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isMenuOpen, mounted, handleClose]);
+
   // Theme and navigation handlers
   const toggleTheme = (): void => {
     const nextTheme = resolvedTheme === 'dark' ? 'light' : 'dark';
@@ -196,10 +220,6 @@ export default function GlobalMenu(): JSX.Element | null {
   const navigateTo = (path: string): void => {
     router.push(path);
     handleClose();
-  };
-
-  const handleClose = (): void => {
-    closeMenu();
   };
 
   // Don't render until mounted or when menu is closed
