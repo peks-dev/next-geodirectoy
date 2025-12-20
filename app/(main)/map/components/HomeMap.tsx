@@ -3,10 +3,8 @@ import { useCallback } from 'react';
 import { useMapEvents, useMap } from 'react-leaflet';
 import { BaseMap } from '@/map/index';
 import { useMapStateStore } from '../stores/useMapStateStore';
-import { usePanelLoaderStore } from '../stores/usePanelStore';
 import type { CommunityForMap } from '../../comunidad/types';
 import ClickableMarker from './ClickableMarker';
-import PanelLoader from './PanelLoader';
 
 interface HomeMapProps {
   communities: CommunityForMap[];
@@ -32,7 +30,6 @@ function MapEventHandler() {
 
 export default function HomeMap({ communities }: HomeMapProps) {
   const { center, zoom } = useMapStateStore();
-  const { isLoading } = usePanelLoaderStore();
 
   return (
     <>
@@ -42,9 +39,6 @@ export default function HomeMap({ communities }: HomeMapProps) {
         ))}
         <MapEventHandler />
       </BaseMap>
-
-      {/* Loading global para modales */}
-      {isLoading && <PanelLoader />}
     </>
   );
 }

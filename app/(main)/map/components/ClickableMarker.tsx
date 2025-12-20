@@ -15,11 +15,11 @@ export default function ClickableMarker({ community }: ClickableMarkerProps) {
 
   const handleClick = () => {
     setLoading(true); // ← Instantáneo
-    router.push(`/comunidad/${community.id}`, { scroll: false });
+    router.push(`/comunidad/ver/${community.id}`, { scroll: false });
   };
 
   const handleMouseEnter = () => {
-    router.prefetch(`/comunidad/${community.id}`);
+    router.prefetch(`/comunidad/ver/${community.id}`);
   };
 
   return (

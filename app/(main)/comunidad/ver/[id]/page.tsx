@@ -2,9 +2,9 @@ import { getCommunityById } from '@/app/(main)/comunidad/dbQueries';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import type { CommunityFullResponse } from '@/comunidad/types';
-import { generateCommunityMetadata } from '../utils/generateCommunityMetadata';
-import HeaderCommunity from '../components/HeaderCommunity';
-import ContentCommunity from '../components/ContentCommunity';
+import { generateCommunityMetadata } from '@/comunidad/utils/generateCommunityMetadata';
+import HeaderCommunity from '@/comunidad/components/HeaderCommunity';
+import ContentCommunity from '@/comunidad/components/ContentCommunity';
 
 interface PageProps {
   params: Promise<{

@@ -132,7 +132,7 @@ export default function CommunitiesScrollList({
             ref={(el) => {
               cardsRef.current[index] = el;
             }}
-            className="flex w-full max-w-[800px] origin-center justify-center will-change-transform"
+            className="flex w-full max-w-200 origin-center justify-center will-change-transform"
           >
             <div className="w-full">
               <CardCommunity data={community} isPopup={false} />

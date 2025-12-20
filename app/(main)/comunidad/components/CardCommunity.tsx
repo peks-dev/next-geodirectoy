@@ -1,8 +1,14 @@
+'use client';
+
 import { memo } from 'react';
+import { useRouter } from 'next/navigation';
 import NavigationButton from '../../../components/ui/Buttons/NavigationButton';
 import DeleteCommunityBtn from '@/comunidad/components/DeleteCommunityBtn';
 import ImageSlider from '../../../components/ui/Sliders/ImageSlider';
 import type { CommunityCard } from '@/comunidad/types';
+import { usePanelLoaderStore } from '../../map/stores/usePanelStore';
+import Button from '@/app/components/ui/Button';
+
 import {
   StarIcon,
   CommentsIcon,
@@ -22,6 +28,13 @@ function CardCommunity({ data, isPopup = true }: Props) {
     { icon: <StarIcon />, value: data.average_rating },
     { icon: <CommentsIcon />, value: data.total_reviews },
   ];
+  const { setLoading } = usePanelLoaderStore();
+  const router = useRouter();
+
+  const handleNavigation = () => {
+    setLoading(true);
+    router.push(`/comunidad/ver/${data.id}`, { scroll: false });
+  };
 
   return (
     <article className="p-lg text-foreground w-full">
@@ -62,9 +75,9 @@ function CardCommunity({ data, isPopup = true }: Props) {
               </li>
             ))}
           </ul>
-          <NavigationButton url={`comunidad/${data.id}`} variant="secondary">
+          <Button variant="secondary" onClick={handleNavigation}>
             explorar
-          </NavigationButton>
+          </Button>
         </footer>
       </div>
       <CornerIcon

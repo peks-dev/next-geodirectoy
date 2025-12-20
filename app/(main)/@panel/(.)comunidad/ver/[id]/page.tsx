@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getCommunityById } from '@/app/(main)/comunidad/dbQueries';
-import { generateCommunityMetadata } from '../../../comunidad/utils/generateCommunityMetadata';
+import { generateCommunityMetadata } from '@/comunidad/utils/generateCommunityMetadata';
 import type { CommunityFullResponse } from '@/comunidad/types';
 import PanelContent from './PanelContent';
 
@@ -21,6 +21,7 @@ export async function generateMetadata({
 
 export default async function CommunityModal({ params }: ModalPageProps) {
   const { id } = await params;
+
   const community = await getCommunityById(id);
 
   if (!community) {

@@ -36,7 +36,7 @@ export default function PanelContent({ community }: PanelContentProps) {
     <div className="fixed inset-0 z-50 flex flex-col">
       <div className="grow" onClick={handleClose}></div>
 
-      <div className="transparent-container relative mt-auto h-[94vh] w-[100vw] grow-0 overflow-hidden py-2 shadow-2xl">
+      <div className="transparent-container relative mt-auto h-[94vh] w-screen grow-0 overflow-hidden py-2 shadow-2xl">
         <div className="flex justify-center">
           <button
             onClick={handleClose}
