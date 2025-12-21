@@ -30,6 +30,7 @@ import DeleteIcon from './DeleteIcon';
 import BackboardIcon from './BackboardIcon';
 import EditIcon from './EditIcon';
 import SuccessIcon from './SuccessIcon';
+import ArrowUpIcon from './ArrowUpIcon';
 
 export {
   BathroomIcon,
@@ -64,4 +65,5 @@ export {
   BackboardIcon,
   EditIcon,
   SuccessIcon,
+  ArrowUpIcon,
 };
