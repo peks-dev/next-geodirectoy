@@ -6,7 +6,6 @@ import type { JSX } from 'react';
 import { useRouter } from 'next/navigation';
 
 // UI Components
-import Button from '../ui/Button';
 import IconBox from '../ui/IconBox';
 import { CornerIcon } from '../ui/svgs';
 
@@ -64,6 +63,7 @@ const MENU_CLASSES = {
   SECTION_NAV:
     'before:text-light-primary before:font-heading px-4 before:mb-10 before:block before:text-sm before:uppercase',
   SECTION_LIST: 'gap-lg flex flex-col items-center',
+  SECTION_TITLE: 'font-heading neon-effect text-light-secondary uppercase mb-5',
   FOOTER_DIVIDER: 'divider bg-border-secondary mx-auto mt-20 h-1 w-[90%]',
   FOOTER_NAV: 'my-5 flex items-center justify-around',
   FOOTER_BUTTON:
@@ -76,7 +76,7 @@ const MENU_CLASSES = {
   ARROW_ICON: (isOpen: boolean) =>
     `text-dark-primary  ${isOpen ? 'rotate-180' : ''} transition-transform duration-200`,
   MENU_CONTAINER: (isOpen: boolean) =>
-    `fixed inset-0 z-39 flex flex-col items-center transition-transform duration-200 ease-in-out justify-end pb-10 ${
+    `fixed inset-0 z-39 bg-black/50 flex flex-col items-center transition-transform duration-200 ease-in-out justify-end pb-10 ${
       isOpen ? 'translate-y-0 ' : 'translate-y-[calc(100%-0px)] '
     }`,
 } as const;
@@ -129,6 +129,7 @@ const ThemeSection = ({
   <nav
     className={`${MENU_CLASSES.SECTION_NAV} before:content-['${MENU_CONSTANTS.SECTIONS.THEME}']`}
   >
+    <div className={MENU_CLASSES.SECTION_TITLE}>tema</div>
     <ul className={MENU_CLASSES.SECTION_LIST}>
       <OptionMenu
         icon={<ThemeIcon />}
@@ -153,6 +154,7 @@ const NavigationSection = ({
   <nav
     className={`${MENU_CLASSES.SECTION_NAV} before:content-['${MENU_CONSTANTS.SECTIONS.NAVIGATION}']`}
   >
+    <div className={MENU_CLASSES.SECTION_TITLE}>navegacion</div>
     <ul className={MENU_CLASSES.SECTION_LIST}>
       <OptionMenu
         icon={<MapIcon />}
@@ -168,7 +170,7 @@ const NavigationSection = ({
   </nav>
 );
 
-const MenuFooter = ({ onClose }: { onClose: () => void }): JSX.Element => (
+const MenuFooter = (): JSX.Element => (
   <div>
     <div className={MENU_CLASSES.FOOTER_DIVIDER} />
     <nav className={MENU_CLASSES.FOOTER_NAV}>
@@ -179,7 +181,6 @@ const MenuFooter = ({ onClose }: { onClose: () => void }): JSX.Element => (
         <button className={MENU_CLASSES.FOOTER_BUTTON}>privacidad</button>
       </li>
     </nav>
-    {/*<Button onClick={onClose}>cerrar</Button>*/}
   </div>
 );
 
@@ -293,7 +294,7 @@ export default function GlobalMenu(): JSX.Element {
               <NavigationSection navigateTo={navigateTo} />
             </div>
 
-            <MenuFooter onClose={closeMenu} />
+            <MenuFooter />
           </div>
         </div>
       </div>
