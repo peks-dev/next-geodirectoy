@@ -4,7 +4,6 @@ import LogoutButton from '@/app/(auth)/components/LogoutButton';
 import ProfileBanner from './components/ProfileBanner';
 import EditProfileBtn from './components/EditProfileBtn';
 import DeleteAccountBtn from '@/app/(auth)/components/DeleteAccountBtn';
-import OpenMenuBtn from '@/app/components/Menu/OpenMenuBtn';
 import NavigationButton from '@/app/components/ui/Buttons/NavigationButton';
 import { AddCommunityIcon } from '@/app/components/ui/svgs';
 import ProfileCommunities from '../comunidad/components/ProfileCommunities';
@@ -19,7 +18,6 @@ export default async function ProfilePage() {
             <DeleteAccountBtn />
             <EditProfileBtn />
             <LogoutButton />
-            <OpenMenuBtn variant="primary" />
           </div>
         </header>
         <ProfileCommunities />
