@@ -1,4 +1,3 @@
-import Navbar from '@/components/ui/Navbar';
 import HomeMap from '@/app/(main)/map/components/HomeMap';
 import { fetchAllCommunitiesForMap } from '@/comunidad/dbQueries';
 import { transformToCommunityForMap } from '@/comunidad/transformers';
@@ -15,7 +14,6 @@ export default async function Home() {
   return (
     <div className="relative h-full w-full">
       <HomeMap communities={communitiesTransformed} />
-      <Navbar />
     </div>
   );
 }

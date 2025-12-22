@@ -7,17 +7,23 @@ import { useRouter } from 'next/navigation';
 
 // UI Components
 import Button from '../ui/Button';
+import IconBox from '../ui/IconBox';
 import { CornerIcon } from '../ui/svgs';
 
 // Icons
-import { ProfileIcon, MapIcon, ThemeIcon, GearIcon } from '../ui/svgs';
+import {
+  ProfileIcon,
+  MapIcon,
+  ThemeIcon,
+  GearIcon,
+  ArrowUpIcon,
+} from '../ui/svgs';
 
 // Menu components
 import OptionMenu from './OptionMenu';
 
 // Hooks & Stores
 import { useTheme } from 'next-themes';
-import { useGlobalMenuStore } from '@/lib/stores/useGlobalMenuStore';
 
 // Constants & Types
 type ThemeMode = 'light' | 'dark' | 'system';
@@ -47,10 +53,8 @@ const MENU_CONSTANTS = {
 } as const;
 
 const MENU_CLASSES = {
-  OVERLAY:
-    'menu-overlay fixed inset-0 bottom-0 left-0 z-100 flex h-full w-full flex-col bg-black/50 items-center',
   CLOSE_ZONE: 'close-zone w-full grow',
-  WRAPPER: 'menu-wrapper gap-md mt-auto flex w-full max-w-250 flex-col',
+  WRAPPER: 'menu-wrapper gap-md flex w-full max-w-250 flex-col',
   HEADER: 'menu-header bg-dark-secondary border-accent-primary border-t-2',
   TITLE:
     'font-heading neon-effect text-light-secondary px-4 py-2 text-lg uppercase',
@@ -64,6 +68,17 @@ const MENU_CLASSES = {
   FOOTER_NAV: 'my-5 flex items-center justify-around',
   FOOTER_BUTTON:
     'text-light-primary active:text-accent-primary hover-neon-text cursor-pointer text-xs active:scale-105',
+  // New classes for tab-style menu
+  OPEN_BUTTON_CONTAINER:
+    'fixed z-40 bottom-0 left-0 w-full h-10 flex justify-center',
+  OPEN_BUTTON:
+    'bg-accent-primary  transition-transform w-full max-w-250 flex items-center justify-center',
+  ARROW_ICON: (isOpen: boolean) =>
+    `text-dark-primary  ${isOpen ? 'rotate-180' : ''} transition-transform duration-200`,
+  MENU_CONTAINER: (isOpen: boolean) =>
+    `fixed inset-0 z-39 flex flex-col items-center transition-transform duration-200 ease-in-out justify-end pb-10 ${
+      isOpen ? 'translate-y-0 ' : 'translate-y-[calc(100%-0px)] '
+    }`,
 } as const;
 
 // Types
@@ -164,7 +179,29 @@ const MenuFooter = ({ onClose }: { onClose: () => void }): JSX.Element => (
         <button className={MENU_CLASSES.FOOTER_BUTTON}>privacidad</button>
       </li>
     </nav>
-    <Button onClick={onClose}>cerrar</Button>
+    {/*<Button onClick={onClose}>cerrar</Button>*/}
+  </div>
+);
+
+const MenuOpenButton = ({
+  isOpen,
+  onClick,
+}: {
+  isOpen: boolean;
+  onClick: () => void;
+}): JSX.Element => (
+  <div className={MENU_CLASSES.OPEN_BUTTON_CONTAINER}>
+    <button
+      className={MENU_CLASSES.OPEN_BUTTON}
+      onClick={onClick}
+      aria-label={isOpen ? 'Close menu' : 'Open menu'}
+    >
+      <IconBox
+        icon={<ArrowUpIcon />}
+        size="md"
+        className={MENU_CLASSES.ARROW_ICON(isOpen)}
+      />
+    </button>
   </div>
 );
 
@@ -172,10 +209,10 @@ const MenuFooter = ({ onClose }: { onClose: () => void }): JSX.Element => (
  * Global menu component that provides navigation and theme controls.
  * Renders as a slide-up overlay menu with theme settings and navigation options.
  */
-export default function GlobalMenu(): JSX.Element | null {
+export default function GlobalMenu(): JSX.Element {
   const router = useRouter();
   const { theme, setTheme, resolvedTheme } = useTheme();
-  const { isMenuOpen, closeMenu } = useGlobalMenuStore();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   // Ensure component is mounted before rendering
@@ -183,10 +220,14 @@ export default function GlobalMenu(): JSX.Element | null {
     setMounted(true);
   }, []);
 
-  // Close menu handler
-  const handleClose = useCallback((): void => {
-    closeMenu();
-  }, [closeMenu]);
+  // Menu state handlers
+  const closeMenu = useCallback((): void => {
+    setIsMenuOpen(false);
+  }, []);
+
+  const toggleMenu = useCallback((): void => {
+    setIsMenuOpen((prev) => !prev);
+  }, []);
 
   // Handle keyboard events for closing menu
   useEffect(() => {
@@ -194,7 +235,7 @@ export default function GlobalMenu(): JSX.Element | null {
 
     const handleKeyDown = (event: KeyboardEvent): void => {
       if (event.key === 'Escape') {
-        handleClose();
+        closeMenu();
       }
     };
 
@@ -205,7 +246,7 @@ export default function GlobalMenu(): JSX.Element | null {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isMenuOpen, mounted, handleClose]);
+  }, [isMenuOpen, mounted, closeMenu]);
 
   // Theme and navigation handlers
   const toggleTheme = (): void => {
@@ -219,39 +260,43 @@ export default function GlobalMenu(): JSX.Element | null {
 
   const navigateTo = (path: string): void => {
     router.push(path);
-    handleClose();
+    closeMenu();
   };
 
-  // Don't render until mounted or when menu is closed
-  if (!mounted || !isMenuOpen) return null;
+  // Don't render until mounted
+  if (!mounted) return <></>;
 
   // Computed values
   const isSystemSync = theme === 'system';
   const themeLabel = getThemeToggleLabel(resolvedTheme as ThemeMode);
 
   return (
-    <div className={MENU_CLASSES.OVERLAY}>
-      <div className={MENU_CLASSES.CLOSE_ZONE} onClick={handleClose} />
-      <div className={MENU_CLASSES.WRAPPER}>
-        <MenuHeader />
+    <>
+      <MenuOpenButton isOpen={isMenuOpen} onClick={toggleMenu} />
+      <div className={MENU_CLASSES.MENU_CONTAINER(isMenuOpen)}>
+        {/*<div className={MENU_CLASSES.CLOSE_ZONE} onClick={closeMenu} />*/}
 
-        <div className={MENU_CLASSES.CONTENT}>
-          <div className={MENU_CLASSES.CONTENT_WRAPPER}>
-            {generateCornerIcons()}
+        <div className={MENU_CLASSES.WRAPPER}>
+          <MenuHeader />
 
-            <ThemeSection
-              themeLabel={themeLabel}
-              toggleTheme={toggleTheme}
-              isSystemSync={isSystemSync}
-              syncWithSystem={syncWithSystem}
-            />
+          <div className={MENU_CLASSES.CONTENT}>
+            <div className={MENU_CLASSES.CONTENT_WRAPPER}>
+              {generateCornerIcons()}
 
-            <NavigationSection navigateTo={navigateTo} />
+              <ThemeSection
+                themeLabel={themeLabel}
+                toggleTheme={toggleTheme}
+                isSystemSync={isSystemSync}
+                syncWithSystem={syncWithSystem}
+              />
+
+              <NavigationSection navigateTo={navigateTo} />
+            </div>
+
+            <MenuFooter onClose={closeMenu} />
           </div>
-
-          <MenuFooter onClose={handleClose} />
         </div>
       </div>
-    </div>
+    </>
   );
 }
