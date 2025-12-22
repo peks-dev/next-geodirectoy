@@ -66,7 +66,7 @@ export default function ImageSlider({
   }
 
   return (
-    <div className="h-[20rem] w-full md:h-[35rem]">
+    <div className="h-80 w-full md:h-140">
       <Swiper
         modules={modules}
         spaceBetween={0}

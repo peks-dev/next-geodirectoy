@@ -48,7 +48,7 @@ export default function PanelContent({ community }: PanelContentProps) {
         </div>
 
         <div className="h-full overflow-y-auto">
-          <div className="gap-lg flex h-full w-full flex-col p-4 lg:flex-row">
+          <div className="gap-lg flex h-full w-full flex-col px-4 pt-4 lg:flex-row">
             <HeaderCommunity
               name={community.name}
               images={community.images}

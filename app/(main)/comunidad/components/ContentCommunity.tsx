@@ -76,7 +76,7 @@ export default function ContentCommunity({
     },
   ];
   return (
-    <div className="transparent-container flex grow overflow-hidden">
+    <div className="flex grow overflow-hidden">
       <DinamicSlider slides={slides} />
     </div>
   );

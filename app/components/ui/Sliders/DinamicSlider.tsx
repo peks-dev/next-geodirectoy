@@ -48,7 +48,7 @@ export default function DinamicSlider({
   // Si no hay slides, mostrar mensaje
   if (!slides || slides.length === 0) {
     return (
-      <div className="flex h-64 w-full items-center justify-center rounded-lg bg-[var(--color-dark-tertiary)]">
+      <div className="flex h-64 w-full items-center justify-center rounded-lg bg-(--color-dark-tertiary)">
         <p className="text-gray-400">No hay contenido disponible</p>
       </div>
     );
@@ -84,7 +84,7 @@ export default function DinamicSlider({
       </div>
 
       {/* Sección 2: Controles de navegación con iconos */}
-      <nav className="dinamic-slider-navigation bg-dark-primary mx-4 mb-4 flex flex-shrink-0 items-center justify-center">
+      <nav className="dinamic-slider-navigation bg-dark-primary mx-4 mb-10 flex shrink-0 items-center justify-center">
         <ul className="flex w-full justify-around">
           {slides.map((slide, index) => (
             <li
