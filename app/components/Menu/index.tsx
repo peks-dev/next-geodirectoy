@@ -25,6 +25,7 @@ import OptionMenu from './OptionMenu';
 // Hooks & Stores
 import { useTheme } from 'next-themes';
 import { useGlobalOverlayStore } from '@/lib/stores/useGlobalOverlayStore';
+import { useUIStateStore } from '@/lib/stores/useUIStateStore';
 
 // Constants & Types
 type ThemeMode = 'light' | 'dark' | 'system';
@@ -219,6 +220,7 @@ export default function GlobalMenu(): JSX.Element {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { toggle: toggleOverlay, deactivate } = useGlobalOverlayStore();
+  const { closeActivePanel, hasAnyPanelOpen } = useUIStateStore();
 
   // Ensure component is mounted before rendering
   useEffect(() => {
@@ -232,9 +234,15 @@ export default function GlobalMenu(): JSX.Element {
   }, [deactivate]);
 
   const toggleMenu = useCallback((): void => {
+    // Cerrar cualquier panel abierto antes de abrir el menú
+    if (!isMenuOpen && hasAnyPanelOpen()) {
+      closeActivePanel();
+      router.back();
+    }
+
     setIsMenuOpen((prev) => !prev);
     toggleOverlay();
-  }, [toggleOverlay]);
+  }, [toggleOverlay, isMenuOpen, closeActivePanel, hasAnyPanelOpen, router]);
 
   // Handle keyboard events for closing menu
   useEffect(() => {

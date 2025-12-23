@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useCallback } from 'react';
 import { usePanelLoaderStore } from '@/app/(main)/map/stores/usePanelStore';
+import { useUIStateStore } from '@/lib/stores/useUIStateStore';
 import type { CommunityFullResponse } from '@/comunidad/types';
 import HeaderCommunity from '@/comunidad/components/HeaderCommunity';
 import ContentCommunity from '@/comunidad/components/ContentCommunity';
@@ -14,11 +15,22 @@ interface PanelContentProps {
 export default function PanelContent({ community }: PanelContentProps) {
   const router = useRouter();
   const { setLoading } = usePanelLoaderStore();
+  const { openCommunityPanel, closeCommunityPanel } = useUIStateStore();
 
   // Ocultar loading cuando el modal se monta
   useEffect(() => {
     setLoading(false);
   }, [setLoading]);
+
+  // Registrar que el panel de comunidad está abierto
+  useEffect(() => {
+    openCommunityPanel();
+
+    // Cleanup: cerrar el panel cuando el componente se desmonte
+    return () => {
+      closeCommunityPanel();
+    };
+  }, [openCommunityPanel, closeCommunityPanel]);
 
   const handleClose = useCallback(() => {
     router.back();
