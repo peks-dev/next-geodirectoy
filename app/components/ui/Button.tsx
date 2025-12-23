@@ -11,7 +11,7 @@ const buttonStyles = {
     tertiary:
       'text-xs text-accent-primary hover:text-accent-primary text-foreground-accent',
     delete:
-      'bg-error text-white px-2 hover:shadow-[0_0_5px_var(--color-error),0_0_10px_var(--color-error)] active:scale-105',
+      'bg-error text-white text-center px-2 hover:shadow-[0_0_5px_var(--color-error),0_0_10px_var(--color-error)] active:scale-105',
     icon: 'self-center p-1 hover:text-foreground-accent text-accent-primary hover-neon-text',
   },
 };
