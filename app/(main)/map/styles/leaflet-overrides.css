@@ -53,6 +53,7 @@
   border-radius: 0 !important;
   overflow: hidden;
   boder: 2px solid var(--color-accent-primary) !important;
+  bottom: 20px !important;
 }
 
 /* Botones de zoom individuales */
