@@ -88,7 +88,9 @@ export const Modal = () => {
 
         <div className="transparent-container">
           {/* Contenido - sin scroll interno */}
-          <div className="p-sm flex-1 overflow-visible">{renderContent()}</div>
+          <div className="p-sm flex-1 overflow-visible text-center">
+            {renderContent()}
+          </div>
           {/* Footer */}
           {confirmButton && (
             <div className="p-sm">
