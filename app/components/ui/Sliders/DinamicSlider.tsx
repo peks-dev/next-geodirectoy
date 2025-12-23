@@ -56,7 +56,7 @@ export default function DinamicSlider({
 
   return (
     <div
-      className={`dinamic-slider-container gap-md flex w-full grow flex-col ${className}`}
+      className={`dinamic-slider-container flex w-full grow flex-col ${className}`}
     >
       {/* Sección 1: Área del componente */}
       <div className="dinamic-slider-content relative grow overflow-hidden">
