@@ -303,10 +303,11 @@ export default function GlobalMenu(): JSX.Element {
     </div>
   );
 
-  return (
+  return createPortal(
     <>
       <MenuOpenButton isOpen={isMenuOpen} onClick={toggleMenu} />
-      {createPortal(menuContent, document.body)}
-    </>
+      {menuContent}
+    </>,
+    document.body
   );
 }
