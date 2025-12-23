@@ -4,6 +4,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { JSX } from 'react';
 import { useRouter } from 'next/navigation';
+import { createPortal } from 'react-dom';
 
 // UI Components
 import IconBox from '../ui/IconBox';
@@ -276,33 +277,36 @@ export default function GlobalMenu(): JSX.Element {
   const isSystemSync = theme === 'system';
   const themeLabel = getThemeToggleLabel(resolvedTheme as ThemeMode);
 
+  const menuContent = (
+    <div className={MENU_CLASSES.MENU_CONTAINER(isMenuOpen)}>
+      <div className={MENU_CLASSES.OVERLAY} onClick={closeMenu}></div>
+      <div className={MENU_CLASSES.WRAPPER}>
+        <MenuHeader />
+
+        <div className={MENU_CLASSES.CONTENT}>
+          <div className={MENU_CLASSES.CONTENT_WRAPPER}>
+            {generateCornerIcons()}
+
+            <ThemeSection
+              themeLabel={themeLabel}
+              toggleTheme={toggleTheme}
+              isSystemSync={isSystemSync}
+              syncWithSystem={syncWithSystem}
+            />
+
+            <NavigationSection navigateTo={navigateTo} />
+          </div>
+
+          <MenuFooter />
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <>
       <MenuOpenButton isOpen={isMenuOpen} onClick={toggleMenu} />
-
-      <div className={MENU_CLASSES.MENU_CONTAINER(isMenuOpen)}>
-        <div className={MENU_CLASSES.OVERLAY} onClick={closeMenu}></div>
-        <div className={MENU_CLASSES.WRAPPER}>
-          <MenuHeader />
-
-          <div className={MENU_CLASSES.CONTENT}>
-            <div className={MENU_CLASSES.CONTENT_WRAPPER}>
-              {generateCornerIcons()}
-
-              <ThemeSection
-                themeLabel={themeLabel}
-                toggleTheme={toggleTheme}
-                isSystemSync={isSystemSync}
-                syncWithSystem={syncWithSystem}
-              />
-
-              <NavigationSection navigateTo={navigateTo} />
-            </div>
-
-            <MenuFooter />
-          </div>
-        </div>
-      </div>
+      {createPortal(menuContent, document.body)}
     </>
   );
 }
