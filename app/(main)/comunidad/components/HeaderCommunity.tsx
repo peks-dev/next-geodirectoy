@@ -15,8 +15,8 @@ export default function HeaderCommunity(data: Props) {
           {data.name}
         </h2>
       </header>
-      <div className="relative">
-        <div className="absolute top-3 right-3 z-30">
+      <div className="border-light-primary neon-effect relative border-2 border-solid">
+        <div className="absolute top-3 left-3 z-30">
           <ShareButton name={data.name} description={data.description} />
         </div>
         <ImageSlider images={data.images} enablePagination enableAutoplay />
