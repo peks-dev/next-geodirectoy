@@ -18,23 +18,18 @@ export default function DeleteAccountBtn() {
     openModal({
       title: 'Eliminar cuenta',
       confirmButton: {
-        text: 'si, eliminar',
-        variant: 'delete',
+        text: 'eliminar',
+        variant: 'primary',
         onClick: async () => {
-          if (profile) {
-            try {
-              const result = await deleteAccount(profile);
-              if (!result.success) {
-                throw new Error(result.error.message);
-              }
-              await logout();
-              showSuccessToast('Cuenta eliminada exitosamente');
-            } catch (error) {
-              if (error instanceof Error) {
-                showErrorToast(error.message);
-              }
-              showErrorToast('algo salio mal');
-            }
+          if (!profile) return;
+
+          const result = await deleteAccount(profile);
+
+          if (result.success) {
+            await logout();
+            showSuccessToast('Cuenta eliminada exitosamente');
+          } else {
+            showErrorToast(result.error.message);
           }
         },
       },
