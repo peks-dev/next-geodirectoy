@@ -1,5 +1,6 @@
 'use client';
 
+import { createPortal } from 'react-dom';
 import { useGlobalOverlayStore } from '@/lib/stores/useGlobalOverlayStore';
 
 export function GlobalOverlay() {
@@ -7,5 +8,8 @@ export function GlobalOverlay() {
 
   if (!isActive) return null;
 
-  return <div className="fixed inset-0 z-[35] bg-black/50" />;
+  return createPortal(
+    <div className="fixed inset-0 z-[35] bg-black/50" />,
+    document.body
+  );
 }

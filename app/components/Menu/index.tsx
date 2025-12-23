@@ -23,6 +23,7 @@ import OptionMenu from './OptionMenu';
 
 // Hooks & Stores
 import { useTheme } from 'next-themes';
+import { useGlobalOverlayStore } from '@/lib/stores/useGlobalOverlayStore';
 
 // Constants & Types
 type ThemeMode = 'light' | 'dark' | 'system';
@@ -53,7 +54,8 @@ const MENU_CONSTANTS = {
 
 const MENU_CLASSES = {
   CLOSE_ZONE: 'close-zone w-full grow',
-  WRAPPER: 'menu-wrapper gap-md flex w-full max-w-250 flex-col',
+  WRAPPER: 'menu-wrapper relative z-20 gap-md flex w-full max-w-250 flex-col',
+  OVERLAY: 'fixed z-10 top-0 left-0 w-full h-full',
   HEADER: 'menu-header bg-dark-secondary border-accent-primary border-t-2',
   TITLE:
     'font-heading neon-effect text-light-secondary px-4 py-2 text-lg uppercase',
@@ -76,7 +78,7 @@ const MENU_CLASSES = {
   ARROW_ICON: (isOpen: boolean) =>
     `text-dark-primary  ${isOpen ? 'rotate-180' : ''} transition-transform duration-200`,
   MENU_CONTAINER: (isOpen: boolean) =>
-    `fixed inset-0 z-39 bg-black/50 flex flex-col items-center transition-transform duration-200 ease-in-out justify-end pb-10 ${
+    `fixed inset-0 z-39 flex flex-col items-center transition-transform duration-200 ease-in-out justify-end pb-10 ${
       isOpen ? 'translate-y-0 ' : 'translate-y-[calc(100%-0px)] '
     }`,
 } as const;
@@ -215,6 +217,7 @@ export default function GlobalMenu(): JSX.Element {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const { toggle: toggleOverlay, deactivate } = useGlobalOverlayStore();
 
   // Ensure component is mounted before rendering
   useEffect(() => {
@@ -224,11 +227,13 @@ export default function GlobalMenu(): JSX.Element {
   // Menu state handlers
   const closeMenu = useCallback((): void => {
     setIsMenuOpen(false);
-  }, []);
+    deactivate();
+  }, [deactivate]);
 
   const toggleMenu = useCallback((): void => {
     setIsMenuOpen((prev) => !prev);
-  }, []);
+    toggleOverlay();
+  }, [toggleOverlay]);
 
   // Handle keyboard events for closing menu
   useEffect(() => {
@@ -247,7 +252,7 @@ export default function GlobalMenu(): JSX.Element {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isMenuOpen, mounted, closeMenu]);
+  }, [isMenuOpen, mounted, closeMenu, deactivate]);
 
   // Theme and navigation handlers
   const toggleTheme = (): void => {
@@ -274,9 +279,9 @@ export default function GlobalMenu(): JSX.Element {
   return (
     <>
       <MenuOpenButton isOpen={isMenuOpen} onClick={toggleMenu} />
-      <div className={MENU_CLASSES.MENU_CONTAINER(isMenuOpen)}>
-        {/*<div className={MENU_CLASSES.CLOSE_ZONE} onClick={closeMenu} />*/}
 
+      <div className={MENU_CLASSES.MENU_CONTAINER(isMenuOpen)}>
+        <div className={MENU_CLASSES.OVERLAY} onClick={closeMenu}></div>
         <div className={MENU_CLASSES.WRAPPER}>
           <MenuHeader />
 

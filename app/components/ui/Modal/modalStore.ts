@@ -1,6 +1,7 @@
 // components/ui/Modal/modalStore.ts
 import { create } from 'zustand';
 import { ReactNode, ComponentType } from 'react';
+import { useGlobalOverlayStore } from '@/lib/stores/useGlobalOverlayStore';
 
 interface ModalConfig {
   isOpen: boolean;
@@ -35,21 +36,25 @@ export const useModalStore = create<ModalConfig & ModalActions>((set, get) => ({
   isLoading: false,
 
   // Acciones con nombres claros
-  openModal: (config) =>
+  openModal: (config) => {
     set({
       ...config,
       isOpen: true,
       isLoading: false,
-    }),
+    });
+    useGlobalOverlayStore.getState().activate();
+  },
 
-  closeModal: () =>
+  closeModal: () => {
     set({
       isOpen: false,
       isLoading: false,
       content: undefined,
       ContentComponent: undefined,
       contentProps: undefined,
-    }),
+    });
+    useGlobalOverlayStore.getState().deactivate();
+  },
 
   handleConfirm: async () => {
     const { confirmButton, closeModal, setLoading } = get();
