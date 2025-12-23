@@ -49,7 +49,7 @@ export default function CategoryCardDisplay({
   category,
 }: CategoryCardInfoProps) {
   return (
-    <ItemContainer className="h-full max-h-[250px] max-w-[160px] min-w-[130px]">
+    <ItemContainer className="h-full max-h-[250px] min-w-[160px]">
       <div className="mb-1.5 text-center">
         <h4 className="text-md font-bold uppercase">{category.category}</h4>
         <span className="text-xs font-bold">

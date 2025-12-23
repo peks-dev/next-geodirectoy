@@ -97,10 +97,9 @@ export function useContributionForm({
       setIsSuccess(true);
 
       // 7. Navegar a la página de detalles de la comunidad
-      router.push(`/comunidad/${result.data.id}`);
+      router.push(`/comunidad/ver/${result.data.id}`);
     } catch (error) {
       // Errores inesperados (no deberían llegar aquí si Actions manejan todo)
-      console.error('Error inesperado en handleSubmit:', error);
       showErrorToast('algo inesperado sucedio');
     } finally {
       setIsLoading(false);
