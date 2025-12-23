@@ -55,7 +55,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       'outline-none',
       'border-none',
       'bg-transparent',
-      'text-foreground-on-interactive',
+      'text-foreground',
       'placeholder:text-(--color-border)',
       'resize-none', // Prevent resizing
     ].join(' ');

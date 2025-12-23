@@ -31,7 +31,7 @@ export default function NavigationControls({
         text: 'si, salir',
         variant: 'primary',
         onClick: async () => {
-          router.push('/');
+          router.push('/perfil');
         },
       },
     });
