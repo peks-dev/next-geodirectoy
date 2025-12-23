@@ -42,8 +42,9 @@ export default function DeleteCommunityBtn({
   return (
     <Button
       variant="icon"
-      className="bg-error text-light-primary p-4"
+      className="bg-border-secondary p-4"
       onClick={handleDeleteCommunity}
+      size="small"
     >
       <DeleteIcon />
     </Button>

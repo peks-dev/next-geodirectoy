@@ -38,21 +38,22 @@ function CardCommunity({ data, isPopup = true }: Props) {
 
   return (
     <article className="p-lg text-foreground w-full">
-      <div className="transparent-container p-md flex flex-col gap-5">
+      <div className="flex flex-col gap-5">
         <header className="bg-border-secondary py-1">
           <h2 className="text-md text-foreground neon-effect text-center uppercase">
             {data.name}
           </h2>
         </header>
 
-        <div className="relative">
+        <div className="border-border-secondary relative border-2">
           {/*profile buttons*/}
           {isPopup === false && (
-            <div className="gap-md absolute top-5 right-5 z-50 flex flex-col">
+            <div className="bg-border-secondary gap-md absolute bottom-0 left-0 z-50 flex">
               <NavigationButton
                 url={`/comunidad/contribuir/editar/${data.id}`}
                 variant="icon"
-                className="bg-background-interactive p-4"
+                size="small"
+                className="bg-border-secondary p-4"
               >
                 <EditIcon />
               </NavigationButton>
