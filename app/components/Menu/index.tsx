@@ -76,7 +76,7 @@ const MENU_CLASSES = {
   OPEN_BUTTON_CONTAINER:
     'fixed z-40 bottom-0 left-0 w-full h-10 flex justify-center',
   OPEN_BUTTON:
-    'bg-accent-primary  transition-transform w-full max-w-250 flex items-center justify-center',
+    'bg-accent-primary w-full max-w-250 flex items-center justify-center cursor-pointer hover-neon transition-all duration-200',
   ARROW_ICON: (isOpen: boolean) =>
     `text-dark-primary  ${isOpen ? 'rotate-180' : ''} transition-transform duration-200`,
   MENU_CONTAINER: (isOpen: boolean) =>
