@@ -31,6 +31,9 @@ import BackboardIcon from './BackboardIcon';
 import EditIcon from './EditIcon';
 import SuccessIcon from './SuccessIcon';
 import ArrowUpIcon from './ArrowUpIcon';
+import MaleIcon from './MaleIcon';
+import FemaleIcon from './FemaleIcon';
+import GenderIcon from './GenderIcon';
 
 export {
   BathroomIcon,
@@ -66,4 +69,7 @@ export {
   EditIcon,
   SuccessIcon,
   ArrowUpIcon,
+  MaleIcon,
+  FemaleIcon,
+  GenderIcon,
 };
