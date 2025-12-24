@@ -1,4 +1,6 @@
 import { Gender } from '@/comunidad/types'; // Added imports for types used in props
+import { FemaleIcon, MaleIcon, GenderIcon } from '@/app/components/ui/svgs';
+import IconBox from '@/app/components/ui/IconBox';
 
 interface CategoriesListControllersProps {
   filter: Gender | 'all';
@@ -11,13 +13,12 @@ export default function CategoriesListControllers({
   setFilter,
 }: CategoriesListControllersProps) {
   return (
-    <div className="mb-5 flex items-center justify-between">
-      <h3 className="text-center text-sm uppercase">categorías:</h3>
+    <div className="flex grow items-center justify-center">
       {/* Botones de filtro */}
-      <div className="flex gap-2">
+      <div className="flex gap-5">
         <button
           onClick={() => setFilter('all')}
-          className={`cursor-pointer px-2 py-0.5 text-xs font-bold transition-all ${
+          className={`cursor-pointer px-2 py-1 text-xs font-bold transition-all ${
             filter === 'all'
               ? 'bg-accent-primary text-dark-primary neon-shadow'
               : 'text-accent-primary bg-background-interactive'
@@ -27,33 +28,33 @@ export default function CategoriesListControllers({
         </button>
         <button
           onClick={() => setFilter('male')}
-          className={`px-2 py-0.5 text-xs font-medium transition-all ${
+          className={`cursor-pointer px-2 py-1 text-sm font-medium transition-all ${
             filter === 'male'
               ? 'bg-blue-500 text-white'
               : 'text-accent-primary bg-background-interactive'
           }`}
         >
-          ♂
+          <IconBox icon={<MaleIcon />} size="small" />
         </button>
         <button
           onClick={() => setFilter('female')}
-          className={`px-2 py-0.5 text-xs font-medium transition-all ${
+          className={`cursor-pointer px-2 py-1 text-sm font-medium transition-all ${
             filter === 'female'
               ? 'bg-pink-500 text-white'
               : 'text-accent-primary bg-background-interactive'
           }`}
         >
-          ♀
+          <IconBox icon={<FemaleIcon />} size="small" />
         </button>
         <button
           onClick={() => setFilter('mixed')}
-          className={`px-2 py-0.5 text-xs font-medium transition-all ${
+          className={`cursor-pointer px-2 py-1 text-sm font-medium transition-all ${
             filter === 'mixed'
               ? 'bg-purple-500 text-white'
               : 'text-accent-primary bg-background-interactive'
           }`}
         >
-          ⚥
+          <IconBox icon={<GenderIcon />} size="small" />
         </button>
       </div>
     </div>

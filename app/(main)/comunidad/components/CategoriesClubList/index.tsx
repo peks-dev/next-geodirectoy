@@ -19,16 +19,17 @@ export default function CategoriesClubList({
       : categories.filter((cat) => cat.genders?.includes(filter));
 
   return (
-    <div className="swiper-no-swiping flex flex-shrink-0 flex-col">
-      <CategoriesListControllers filter={filter} setFilter={setFilter} />
+    <div className="flex grow flex-col">
       {/* Scroll horizontal de categorías */}
-      <div className="-mx-3 flex-1 overflow-x-auto overflow-y-hidden px-3">
-        <ul className="flex h-full gap-5 pb-2">
+      <div className="swiper-no-swiping overflow-x-auto overflow-y-hidden px-3 pb-10">
+        <ul className="flex h-full gap-5">
           {filteredCategories.map((cat, idx) => (
             <CategoryCardDisplay key={idx} category={cat} />
           ))}
         </ul>
       </div>
+
+      <CategoriesListControllers filter={filter} setFilter={setFilter} />
     </div>
   );
 }
