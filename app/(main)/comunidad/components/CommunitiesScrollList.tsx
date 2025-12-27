@@ -1,12 +1,9 @@
 'use client';
 import { useRef, useEffect } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { scroll, animate, DOMKeyframesDefinition } from 'motion';
 import CardCommunity from '@/comunidad/components/CardCommunity';
 import { useCommunitiesProfileStore } from '../../perfil/stores/useCommunitiesProfileStore';
 import { Community } from '@/comunidad/types';
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface CommunitiesScrollListProps {
   initialItems: Community[];
@@ -18,13 +15,14 @@ export default function CommunitiesScrollList({
   const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLLIElement | null)[]>([]);
   const isInitializedRef = useRef(false);
+  const scrollAnimationsRef = useRef<(() => void)[]>([]);
 
   const communities = useCommunitiesProfileStore((state) => state.communities);
   const setCommunities = useCommunitiesProfileStore(
     (state) => state.setCommunities
   );
 
-  //  Inicializar el store en el primer render
+  // Inicializar el store en el primer render
   useEffect(() => {
     if (!isInitializedRef.current && initialItems.length > 0) {
       console.log('Inicializando communities:', initialItems);
@@ -33,7 +31,7 @@ export default function CommunitiesScrollList({
     }
   }, [initialItems, setCommunities]);
 
-  // Actualizar cuando initialItems cambie (después de la inicialización)
+  // Actualizar cuando initialItems cambie
   useEffect(() => {
     if (isInitializedRef.current && initialItems.length > 0) {
       const hasChanged =
@@ -52,71 +50,44 @@ export default function CommunitiesScrollList({
     cardsRef.current = cardsRef.current.slice(0, communities.length);
   }, [communities.length]);
 
+  // Animaciones con Motion One
   useEffect(() => {
-    if (communities.length === 0) return;
+    if (communities.length === 0 || !containerRef.current) return;
 
-    ScrollTrigger.getAll().forEach((trigger) => {
-      if (trigger.scroller === containerRef.current) {
-        trigger.kill();
-      }
+    // Limpiar animaciones previas
+    scrollAnimationsRef.current.forEach((cleanup) => cleanup());
+    scrollAnimationsRef.current = [];
+
+    const container = containerRef.current;
+
+    cardsRef.current.forEach((card) => {
+      if (!card) return;
+
+      // Animar scale y opacity con Motion One
+      const scaleCleanup = scroll(
+        animate(card, { scale: [0.5, 1, 1, 0.5] } as DOMKeyframesDefinition),
+        {
+          target: card,
+          container: container,
+          offset: ['start end', 'start center', 'end center', 'end start'],
+        }
+      );
+
+      const opacityCleanup = scroll(
+        animate(card, { opacity: [0.5, 1, 1, 0.5] } as DOMKeyframesDefinition),
+        {
+          target: card,
+          container: container,
+          offset: ['start end', 'start center', 'end center', 'end start'],
+        }
+      );
+
+      scrollAnimationsRef.current.push(scaleCleanup, opacityCleanup);
     });
 
-    const ctx = gsap.context(() => {
-      cardsRef.current.forEach((card) => {
-        if (!card) return;
-
-        gsap.fromTo(
-          card,
-          { scale: 0.5, opacity: 0.5 },
-          {
-            scale: 1,
-            opacity: 1,
-            ease: 'power2.out',
-            immediateRender: false,
-            scrollTrigger: {
-              trigger: card,
-              scroller: containerRef.current,
-              start: 'top 85%',
-              end: 'center center',
-              scrub: true,
-              onRefresh: (self) => {
-                self.animation?.progress(self.progress);
-              },
-            },
-          }
-        );
-
-        gsap.fromTo(
-          card,
-          { scale: 1, opacity: 1 },
-          {
-            scale: 0.5,
-            opacity: 0.5,
-            ease: 'power2.in',
-            immediateRender: false,
-            scrollTrigger: {
-              trigger: card,
-              scroller: containerRef.current,
-              start: 'center center',
-              end: 'bottom 15%',
-              scrub: true,
-              onRefresh: (self) => {
-                self.animation?.progress(self.progress);
-              },
-            },
-          }
-        );
-      });
-
-      requestAnimationFrame(() => {
-        ScrollTrigger.refresh();
-        ScrollTrigger.update();
-      });
-    }, containerRef);
-
     return () => {
-      ctx.revert();
-      ScrollTrigger.refresh();
+      scrollAnimationsRef.current.forEach((cleanup) => cleanup());
+      scrollAnimationsRef.current = [];
     };
   }, [communities]);
 
