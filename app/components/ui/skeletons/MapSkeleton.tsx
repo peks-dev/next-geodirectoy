@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { animate } from 'motion/react';
 import CornerIcon from '@/app/components/ui/svgs/CornerIcon';
 
 export default function MapSkeleton() {
@@ -10,52 +10,58 @@ export default function MapSkeleton() {
   const pulseRingRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Animación de la línea de escaneo vertical
-      if (scanLineRef.current) {
-        gsap.fromTo(
-          scanLineRef.current,
-          { y: '-100%' },
-          {
-            y: '100vh',
-            duration: 3,
-            ease: 'none',
-            repeat: -1,
-            repeatDelay: 0.5,
-            immediateRender: true,
-          }
-        );
-      }
+    const controls: Array<{ stop: () => void }> = [];
 
-      // Anillo central - rotación suave
-      if (centerRingRef.current) {
-        gsap.to(centerRingRef.current, {
-          rotation: 360,
+    // Animación de la línea de escaneo vertical
+    if (scanLineRef.current) {
+      const scanLineAnimation = animate(
+        scanLineRef.current,
+        { y: ['-100%', '100vh'] },
+        {
+          duration: 3,
+          ease: 'linear',
+          repeat: Infinity,
+          delay: 0.5,
+        }
+      );
+      controls.push(scanLineAnimation);
+    }
+
+    // Anillo central - rotación suave
+    if (centerRingRef.current) {
+      const centerRingAnimation = animate(
+        centerRingRef.current,
+        { rotate: [0, 360] },
+        {
           duration: 8,
-          ease: 'none',
-          repeat: -1,
-          immediateRender: true,
-        });
-      }
+          ease: 'linear',
+          repeat: Infinity,
+        }
+      );
+      controls.push(centerRingAnimation);
+    }
 
-      // Anillo de pulso - escala y opacidad
-      if (pulseRingRef.current) {
-        gsap.fromTo(
-          pulseRingRef.current,
-          { scale: 1, opacity: 0.6 },
-          {
-            scale: 1.5,
-            opacity: 0,
-            duration: 2,
-            ease: 'power1.out',
-            repeat: -1,
-            immediateRender: true,
-          }
-        );
-      }
-    }, containerRef);
+    // Anillo de pulso - escala y opacidad
+    if (pulseRingRef.current) {
+      const pulseRingAnimation = animate(
+        pulseRingRef.current,
+        {
+          scale: [1, 1.5],
+          opacity: [0.6, 0],
+        },
+        {
+          duration: 2,
+          ease: [0.25, 0.1, 0.25, 1],
+          repeat: Infinity,
+        }
+      );
+      controls.push(pulseRingAnimation);
+    }
 
-    return () => ctx.revert();
+    return () => {
+      // Detener todas las animaciones al desmontar
+      controls.forEach((control) => control.stop());
+    };
   }, []);
 
   return (
