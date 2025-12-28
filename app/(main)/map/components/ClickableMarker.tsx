@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useCustomNavigation } from '@/lib/hooks/useNavigation';
 import { BaseMarker } from '@/map/index';
 import { usePanelLoaderStore } from '../stores/usePanelStore';
 import type { CommunityForMap } from '../../comunidad/types';
@@ -10,16 +10,16 @@ interface ClickableMarkerProps {
 }
 
 export default function ClickableMarker({ community }: ClickableMarkerProps) {
-  const router = useRouter();
+  const { navigate } = useCustomNavigation();
   const { setLoading } = usePanelLoaderStore();
 
   const handleClick = () => {
     setLoading(true); // ← Instantáneo
-    router.push(`/comunidad/ver/${community.id}`, { scroll: false });
+    navigate(`/comunidad/ver/${community.id}`, { scroll: false });
   };
 
   const handleMouseEnter = () => {
-    router.prefetch(`/comunidad/ver/${community.id}`);
+    // Prefetch is handled by the custom navigate hook internally
   };
 
   return (

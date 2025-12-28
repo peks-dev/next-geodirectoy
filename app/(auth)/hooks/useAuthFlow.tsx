@@ -9,7 +9,8 @@ import {
 } from '@/shared/notifications';
 import { sendLoginCode } from '@/app/(auth)/database/dbQueries.browser';
 import { verifyOtpAndFetchProfile } from '@/auth/actions/verifyAndFetch';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useCustomNavigation } from '@/lib/hooks/useNavigation';
 import { useProfileStore } from '@/app/(main)/perfil/stores/useProfileStore';
 import { cacheService } from '@/auth/utils/cacheService';
 import { useAuth } from '../hooks/useAuth';
@@ -32,7 +33,7 @@ export const useAuthFlow = () => {
   const [timeLeft, setTimeLeft] = useState(600);
   const timerId = useRef<NodeJS.Timeout | null>(null);
 
-  const router = useRouter();
+  const { navigate } = useCustomNavigation();
   const searchParams = useSearchParams();
   const { updateProfile: updateProfileStore } = useProfileStore();
   const { setUserAndSession } = useAuth();
@@ -122,7 +123,7 @@ export const useAuthFlow = () => {
     showSuccessToast('Bienvenido', '¡Bienvenido de nuevo!');
     setState('success');
 
-    router.push(destination);
+    navigate(destination);
     setLoading(false);
     return true;
   };

@@ -13,7 +13,8 @@ import {
 } from '../actions/';
 import { useAuth } from '@/app/(auth)/hooks/useAuth';
 import { showErrorToast, showSuccessToast } from '@/shared/notifications';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { useCustomNavigation } from '@/lib/hooks/useNavigation';
 import { handleServiceError } from '@/lib/errors/handler';
 
 interface UseReviewsProps {
@@ -48,7 +49,7 @@ export function useReviews({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const pathname = usePathname();
-  const router = useRouter();
+  const { navigate } = useCustomNavigation();
 
   // Estados locales para el conteo y promedio de valoraciones
   const [totalReviews, setTotalReviews] = useState(initialTotalReviews);
@@ -136,7 +137,7 @@ export function useReviews({
       );
       // Redirige a sign-in con la URL actual como returnUrl
       const returnUrl = encodeURIComponent(pathname);
-      router.push(`/sign-in?returnUrl=${returnUrl}`);
+      navigate(`/sign-in?returnUrl=${returnUrl}`);
       return;
     }
 

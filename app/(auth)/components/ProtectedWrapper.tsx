@@ -2,7 +2,8 @@
 
 import { useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { useCustomNavigation } from '@/lib/hooks/useNavigation';
 import { ReactNode } from 'react';
 
 interface ProtectedWrapperProps {
@@ -18,7 +19,7 @@ export function ProtectedWrapper({
 }: ProtectedWrapperProps) {
   const { user, isLoggingOut } = useAuth();
 
-  const router = useRouter();
+  const { navigate } = useCustomNavigation();
   const pathname = usePathname();
 
   // evitar llamadas durante render
@@ -27,9 +28,9 @@ export function ProtectedWrapper({
       console.log('ejecutado', user);
       // ✅ Guarda la URL actual como parámetro de retorno
       const returnUrl = encodeURIComponent(pathname);
-      router.push(`${redirectTo}?returnUrl=${returnUrl}`);
+      navigate(`${redirectTo}?returnUrl=${returnUrl}`);
     }
-  }, [user, isLoggingOut, router, redirectTo, pathname]);
+  }, [user, isLoggingOut, navigate, redirectTo, pathname]);
 
   // isLoggingOut state
   if (isLoggingOut) {

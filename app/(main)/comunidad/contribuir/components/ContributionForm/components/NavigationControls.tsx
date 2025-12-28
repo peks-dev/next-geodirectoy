@@ -3,7 +3,7 @@ import Button from '@/app/components/ui/Button';
 
 import { TriangleIcon, CloseIcon, SendIcon } from '@/app/components/ui/svgs/';
 
-import { useRouter } from 'next/navigation';
+import { useCustomNavigation } from '@/lib/hooks/useNavigation';
 import { useModalStore } from '@/app/components/ui/Modal';
 
 interface Props {
@@ -20,7 +20,7 @@ export default function NavigationControls({
   isLoading,
 }: Props) {
   // close form logic
-  const router = useRouter();
+  const { navigate } = useCustomNavigation();
   const { openModal } = useModalStore();
 
   const handleCloseForm = () => {
@@ -31,7 +31,7 @@ export default function NavigationControls({
         text: 'si, salir',
         variant: 'primary',
         onClick: async () => {
-          router.push('/perfil');
+          navigate('/perfil');
         },
       },
     });

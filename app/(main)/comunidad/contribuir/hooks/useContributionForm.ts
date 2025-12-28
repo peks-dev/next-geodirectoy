@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useCustomNavigation } from '@/lib/hooks/useNavigation';
 import { useNavigationStore } from '../stores/useNavigationStore';
 import { useContributionStore } from '../stores/useContributionStore';
 import { useCommunitiesProfileStore } from '@/app/(main)/perfil/stores/useCommunitiesProfileStore';
@@ -16,7 +16,7 @@ interface UseContributionFormProps {
 export function useContributionForm({
   initialData,
 }: UseContributionFormProps = {}) {
-  const router = useRouter();
+  const { navigate } = useCustomNavigation();
   const { currentStep, nextStep, prevStep, resetToStart } =
     useNavigationStore();
   const { reset, setFormData, getFormData } = useContributionStore();
@@ -97,7 +97,7 @@ export function useContributionForm({
       setIsSuccess(true);
 
       // 7. Navegar a la página de detalles de la comunidad
-      router.push(`/comunidad/ver/${result.data.id}`);
+      navigate(`/comunidad/ver/${result.data.id}`);
     } catch (error) {
       // Errores inesperados (no deberían llegar aquí si Actions manejan todo)
       showErrorToast('algo inesperado sucedio');

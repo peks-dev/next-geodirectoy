@@ -3,7 +3,7 @@
 // React & Next.js imports
 import { useCallback, useEffect, useState } from 'react';
 import type { JSX } from 'react';
-import { useRouter } from 'next/navigation';
+import { useCustomNavigation } from '@/lib/hooks/useNavigation';
 import { createPortal } from 'react-dom';
 
 // UI Components
@@ -215,7 +215,7 @@ const MenuOpenButton = ({
  * Renders as a slide-up overlay menu with theme settings and navigation options.
  */
 export default function GlobalMenu(): JSX.Element {
-  const router = useRouter();
+  const { navigate } = useCustomNavigation();
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -237,12 +237,12 @@ export default function GlobalMenu(): JSX.Element {
     // Cerrar cualquier panel abierto antes de abrir el menú
     if (!isMenuOpen && hasAnyPanelOpen()) {
       closeActivePanel();
-      router.back();
+      navigate('/');
     }
 
     setIsMenuOpen((prev) => !prev);
     toggleOverlay();
-  }, [toggleOverlay, isMenuOpen, closeActivePanel, hasAnyPanelOpen, router]);
+  }, [toggleOverlay, isMenuOpen, closeActivePanel, hasAnyPanelOpen, navigate]);
 
   // Handle keyboard events for closing menu
   useEffect(() => {
@@ -274,7 +274,7 @@ export default function GlobalMenu(): JSX.Element {
   };
 
   const navigateTo = (path: string): void => {
-    router.push(path);
+    navigate(path);
     closeMenu();
   };
 

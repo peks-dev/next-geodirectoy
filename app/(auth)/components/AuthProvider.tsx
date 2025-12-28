@@ -19,6 +19,7 @@ import { useCommunitiesProfileStore } from '@/app/(main)/perfil/stores/useCommun
 import { showErrorToast, showSuccessToast } from '@/shared/notifications';
 import type { User, AuthChangeEvent, Session } from '@/lib/supabase/types';
 import { DatabaseError } from '@/lib/errors/database';
+import { useCustomNavigation } from '@/lib/hooks/useNavigation';
 
 interface AuthContextType {
   user: User | null;
@@ -40,7 +41,7 @@ export function AuthProvider({
   initialUser: User | null;
 }) {
   const [user, setUser] = useState<User | null>(initialUser);
-  const router = useRouter();
+  const { navigate } = useCustomNavigation();
   const authResolvers = useRef<Array<(user: User | null) => void>>([]);
 
   useEffect(() => {
@@ -109,7 +110,7 @@ export function AuthProvider({
     try {
       await logoutQuery();
       showSuccessToast('Sesión cerrada correctamente');
-      router.push('/');
+      navigate('/');
     } catch (error) {
       let errorMessage = 'Error inesperado al cerrar sesión';
       if (error instanceof DatabaseError) {
@@ -120,7 +121,7 @@ export function AuthProvider({
       showErrorToast('Error al cerrar sesión', errorMessage);
       throw error;
     }
-  }, [router]);
+  }, [navigate]);
 
   return (
     <AuthContext.Provider

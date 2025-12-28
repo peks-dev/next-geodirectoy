@@ -1,7 +1,7 @@
 'use client';
 
 import { memo } from 'react';
-import { useRouter } from 'next/navigation';
+import { useCustomNavigation } from '@/lib/hooks/useNavigation';
 import NavigationButton from '../../../components/ui/Buttons/NavigationButton';
 import DeleteCommunityBtn from '@/comunidad/components/DeleteCommunityBtn';
 import ImageSlider from '../../../components/ui/Sliders/ImageSlider';
@@ -29,11 +29,11 @@ function CardCommunity({ data, isPopup = true }: Props) {
     { icon: <CommentsIcon />, value: data.total_reviews },
   ];
   const { setLoading } = usePanelLoaderStore();
-  const router = useRouter();
+  const { navigate } = useCustomNavigation();
 
   const handleNavigation = () => {
     setLoading(true);
-    router.push(`/comunidad/ver/${data.id}`, { scroll: false });
+    navigate(`/comunidad/ver/${data.id}`, { scroll: false });
   };
 
   return (

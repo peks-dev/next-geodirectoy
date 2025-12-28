@@ -1,6 +1,6 @@
 'use client';
 import Button from '../Button';
-import { useRouter } from 'next/navigation';
+import { useCustomNavigation } from '@/lib/hooks/useNavigation';
 import { IconSize } from '@/lib/utils/getIconSize';
 
 type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'delete' | 'icon';
@@ -20,11 +20,11 @@ export default function NavigationButton({
   children,
   className,
 }: NavigationButtonProps) {
-  const router = useRouter();
+  const { navigate } = useCustomNavigation();
 
   return (
     <Button
-      onClick={() => router.push(url)}
+      onClick={() => navigate(url)}
       variant={variant}
       size={size}
       className={className}

@@ -2,7 +2,7 @@
 
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useCallback } from 'react';
-import { useNavigationLoaderStore } from '../stores/useNavigationStore';
+import { useNavigationLoaderStore } from '@/lib/stores/useNavigationStore';
 
 export function useCustomNavigation() {
   const router = useRouter();
