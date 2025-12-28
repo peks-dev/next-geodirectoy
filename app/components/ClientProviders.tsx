@@ -5,6 +5,7 @@ import { GlobalOverlay } from '@/app/components/ui/GlobalOverlay';
 import GlobalMenu from './Menu';
 import PanelLoader from '../(main)/map/components/PanelLoader';
 import { usePanelLoaderStore } from '../(main)/map/stores/usePanelStore';
+import { NavigationLoader } from '@/components/ui/NavigationLoader';
 
 export default function ClientProviders({
   children,
@@ -19,6 +20,7 @@ export default function ClientProviders({
       <GlobalOverlay />
       <Modal />
       <GlobalMenu />
+      <NavigationLoader />
       {isLoading && <PanelLoader />}
     </>
   );
