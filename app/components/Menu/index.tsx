@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import type { JSX } from 'react';
 import { useCustomNavigation } from '@/lib/hooks/useNavigation';
 import { createPortal } from 'react-dom';
+import { useRouter, usePathname } from 'next/navigation';
 
 // UI Components
 import IconBox from '../ui/IconBox';
@@ -221,6 +222,8 @@ export default function GlobalMenu(): JSX.Element {
   const [mounted, setMounted] = useState(false);
   const { toggle: toggleOverlay, deactivate } = useGlobalOverlayStore();
   const { closeActivePanel, hasAnyPanelOpen } = useUIStateStore();
+  const router = useRouter();
+  const pathname = usePathname();
 
   // Ensure component is mounted before rendering
   useEffect(() => {
@@ -237,7 +240,7 @@ export default function GlobalMenu(): JSX.Element {
     // Cerrar cualquier panel abierto antes de abrir el menú
     if (!isMenuOpen && hasAnyPanelOpen()) {
       closeActivePanel();
-      navigate('/');
+      router.back();
     }
 
     setIsMenuOpen((prev) => !prev);
@@ -274,6 +277,12 @@ export default function GlobalMenu(): JSX.Element {
   };
 
   const navigateTo = (path: string): void => {
+    // Verificar si ya estamos en la ruta destino
+    if (pathname === path) {
+      closeMenu();
+      return;
+    }
+
     navigate(path);
     closeMenu();
   };
