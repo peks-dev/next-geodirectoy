@@ -1,7 +1,8 @@
 // components/ui/Modal/Modal.tsx
 'use client';
 import { createPortal } from 'react-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useModalStore } from './modalStore';
 import Button from '@/components/ui/Button';
 import { CloseIcon } from '../svgs/';
@@ -19,6 +20,12 @@ export const Modal = () => {
     handleConfirm,
     size,
   } = useModalStore();
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Efecto para manejar la tecla Escape en desktop
   useEffect(() => {
@@ -38,7 +45,7 @@ export const Modal = () => {
     };
   }, [isOpen, closeModal]);
 
-  if (!isOpen) return null;
+  if (!mounted) return null;
 
   const renderContent = () => {
     if (ContentComponent) {
@@ -63,50 +70,66 @@ export const Modal = () => {
   };
 
   return createPortal(
-    <div className="p-sm fixed inset-0 z-50 flex items-center justify-center">
-      <div className="fixed inset-0 z-10 bg-black/50" onClick={closeModal} />
-
-      <div
-        className="z-20 w-full"
-        style={{
-          maxWidth: getMaxWidth(),
-          minHeight: '20vh',
-          maxHeight: '90vh',
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        {/* Header */}
-        <div className="bg-dark-primary p-sm mb-3 flex items-center justify-between">
-          <h2 className="neon-effect text-light-secondary text-sm font-bold uppercase">
-            {title}
-          </h2>
-          <Button variant="icon" onClick={closeModal} disabled={isLoading}>
-            <CloseIcon />
-          </Button>
-        </div>
-
-        <div className="transparent-container">
-          {/* Contenido - sin scroll interno */}
-          <div className="p-sm flex-1 overflow-visible text-center">
-            {renderContent()}
-          </div>
-          {/* Footer */}
-          {confirmButton && (
-            <div className="p-sm">
-              <Button
-                variant={confirmButton.variant}
-                onClick={handleConfirm}
-                disabled={isLoading}
-                className="w-full"
-              >
-                {isLoading ? <p>...cargando</p> : confirmButton.text}
+    <AnimatePresence mode="wait">
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="p-sm fixed inset-0 z-50 flex items-center justify-center"
+        >
+          <motion.div
+            initial={{ scale: 0.95, y: 20, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            exit={{
+              scale: 0.95,
+              y: -20,
+              opacity: 0,
+              transition: { duration: 0.15, ease: 'easeIn' },
+            }}
+            transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+            className="z-20 w-full"
+            style={{
+              maxWidth: getMaxWidth(),
+              minHeight: '20vh',
+              maxHeight: '90vh',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            {/* Header */}
+            <div className="bg-dark-primary p-sm mb-3 flex items-center justify-between">
+              <h2 className="neon-effect text-light-secondary text-sm font-bold uppercase">
+                {title}
+              </h2>
+              <Button variant="icon" onClick={closeModal} disabled={isLoading}>
+                <CloseIcon />
               </Button>
             </div>
-          )}
-        </div>
-      </div>
-    </div>,
+
+            <div className="transparent-container">
+              {/* Contenido - sin scroll interno */}
+              <div className="p-sm flex-1 overflow-visible text-center">
+                {renderContent()}
+              </div>
+              {/* Footer */}
+              {confirmButton && (
+                <div className="p-sm">
+                  <Button
+                    variant={confirmButton.variant}
+                    onClick={handleConfirm}
+                    disabled={isLoading}
+                    className="w-full"
+                  >
+                    {isLoading ? <p>...cargando</p> : confirmButton.text}
+                  </Button>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>,
     document.body
   );
 };
