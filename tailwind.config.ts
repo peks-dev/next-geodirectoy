@@ -1,4 +1,4 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
@@ -9,6 +9,6 @@ const config: Config = {
   ],
   // Para Tailwind v4, la configuración del theme se hace en CSS con @theme
   theme: {},
-}
+};
 
-export default config
+export default config;
