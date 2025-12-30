@@ -2,7 +2,7 @@
 import { Toaster } from 'sonner';
 import { Modal } from '@/app/components/ui/Modal';
 import { GlobalOverlay } from '@/app/components/ui/GlobalOverlay';
-import GlobalMenu from './Menu';
+import GlobalMenu from '@/app/(shared)/GlobalMenu';
 import PanelLoader from '../(main)/map/components/PanelLoader';
 import { usePanelLoaderStore } from '../(main)/map/stores/usePanelStore';
 import { NavigationLoader } from '@/app/components/ui/NavigationLoader';

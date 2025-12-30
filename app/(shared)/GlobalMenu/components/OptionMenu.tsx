@@ -1,4 +1,4 @@
-import IconBox from '../ui/IconBox';
+import IconBox from '@/app/components/ui/IconBox';
 
 interface Props {
   icon: React.ReactNode;
