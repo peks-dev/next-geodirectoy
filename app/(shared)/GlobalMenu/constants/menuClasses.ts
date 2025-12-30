@@ -25,13 +25,9 @@ export const MENU_CLASSES = {
     'bg-accent-primary w-full max-w-250 flex items-center justify-center cursor-pointer hover-neon transition-all duration-200',
   ARROW_ICON: (isOpen: boolean) =>
     `text-dark-primary  ${isOpen ? 'rotate-180' : ''} transition-transform duration-200`,
-  MENU_CONTAINER: (isOpen: boolean) =>
-    `fixed inset-0 z-39 flex flex-col items-center justify-end pb-10 ${
-      isOpen ? 'translate-y-0 ' : 'translate-y-[calc(100%-0px)] '
-    }`,
   // Clases para gestos de arrastre
   WRAPPER_DRAGGABLE:
-    'menu-wrapper relative z-20 gap-md flex w-full max-w-250 flex-col cursor-grab',
+    'menu-wrapper relative z-20 gap-md flex w-full max-w-250 flex-col',
   MENU_DRAGGING: 'menu-dragging',
   MENU_GRABBING: 'cursor-grabbing',
 } as const;
