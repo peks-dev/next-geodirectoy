@@ -26,7 +26,12 @@ export const MENU_CLASSES = {
   ARROW_ICON: (isOpen: boolean) =>
     `text-dark-primary  ${isOpen ? 'rotate-180' : ''} transition-transform duration-200`,
   MENU_CONTAINER: (isOpen: boolean) =>
-    `fixed inset-0 z-39 flex flex-col items-center transition-transform duration-200 ease-in-out justify-end pb-10 ${
+    `fixed inset-0 z-39 flex flex-col items-center justify-end pb-10 ${
       isOpen ? 'translate-y-0 ' : 'translate-y-[calc(100%-0px)] '
     }`,
+  // Clases para gestos de arrastre
+  WRAPPER_DRAGGABLE:
+    'menu-wrapper relative z-20 gap-md flex w-full max-w-250 flex-col cursor-grab',
+  MENU_DRAGGING: 'menu-dragging',
+  MENU_GRABBING: 'cursor-grabbing',
 } as const;

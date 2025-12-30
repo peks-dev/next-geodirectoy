@@ -6,6 +6,7 @@ import { JSX } from 'react';
 import { CornerIcon } from '@/app/components/ui/svgs';
 import { MENU_CLASSES } from './constants/menuClasses';
 import { MENU_CONSTANTS } from './constants/menuConstants';
+import { useGlobalMenuGestures } from './hooks/useGlobalMenuGestures';
 import {
   MenuHeader,
   MenuFooter,
@@ -42,28 +43,35 @@ export const MenuContent = ({
   toggleTheme,
   syncWithSystem,
   navigateTo,
-}: MenuContentProps): JSX.Element => (
-  <div className={MENU_CLASSES.MENU_CONTAINER(isMenuOpen)}>
-    <div className={MENU_CLASSES.OVERLAY} onClick={closeMenu}></div>
-    <div className={MENU_CLASSES.WRAPPER}>
-      <MenuHeader />
+}: MenuContentProps): JSX.Element => {
+  const { panelRef } = useGlobalMenuGestures({
+    closeMenu,
+    dragThreshold: 100,
+  });
 
-      <div className={MENU_CLASSES.CONTENT}>
-        <div className={MENU_CLASSES.CONTENT_WRAPPER}>
-          {generateCornerIcons()}
+  return (
+    <div className={MENU_CLASSES.MENU_CONTAINER(isMenuOpen)}>
+      <div className={MENU_CLASSES.OVERLAY} onClick={closeMenu}></div>
+      <div ref={panelRef} className={MENU_CLASSES.WRAPPER_DRAGGABLE}>
+        <MenuHeader />
 
-          <ThemeSection
-            themeLabel={themeLabel}
-            toggleTheme={toggleTheme}
-            isSystemSync={isSystemSync}
-            syncWithSystem={syncWithSystem}
-          />
+        <div className={MENU_CLASSES.CONTENT}>
+          <div className={MENU_CLASSES.CONTENT_WRAPPER}>
+            {generateCornerIcons()}
 
-          <NavigationSection navigateTo={navigateTo} />
+            <ThemeSection
+              themeLabel={themeLabel}
+              toggleTheme={toggleTheme}
+              isSystemSync={isSystemSync}
+              syncWithSystem={syncWithSystem}
+            />
+
+            <NavigationSection navigateTo={navigateTo} />
+          </div>
+
+          <MenuFooter />
         </div>
-
-        <MenuFooter />
       </div>
     </div>
-  </div>
-);
+  );
+};
