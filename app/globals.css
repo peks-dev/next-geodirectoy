@@ -293,3 +293,39 @@
     background-position: 100% 0;
   }
 }
+
+/* --- PANEL DRAG GESTURE FEEDBACK --- */
+.panel-dragging {
+  transition: transform 0s !important;
+  box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.panel-dragging::after {
+  content: '👇 Suelta para cerrar';
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  opacity: 0;
+  animation: fadeIn 0.2s ease-out forwards;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 1000;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Mejora del cursor durante el arrastre */
+.cursor-grabbing {
+  cursor: grabbing !important;
+}

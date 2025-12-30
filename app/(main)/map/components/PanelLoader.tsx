@@ -1,13 +1,28 @@
 'use client';
 
+import { usePanelMotion } from './hooks/usePanelMotion';
+
 export default function PanelLoader() {
+  const handleClose = () => {
+    // El loader se maneja automáticamente por el sistema de routing
+  };
+
+  const { panelRef, getPanelStyle } = usePanelMotion({
+    onClose: handleClose,
+    dragThreshold: 80,
+  });
+
   return (
     <div className="fixed inset-0 z-50 flex flex-col">
       {/* Backdrop */}
       <div className="grow"></div>
 
-      {/* Modal skeleton */}
-      <div className="transparent-container relative mt-auto h-[94vh] w-[100vw] grow-0 overflow-hidden py-2 shadow-2xl">
+      {/* Modal skeleton con animación */}
+      <div
+        ref={panelRef}
+        className="transparent-container relative mt-auto h-[94vh] w-[100vw] grow-0 overflow-hidden py-2 shadow-2xl"
+        style={getPanelStyle()}
+      >
         {/* Barra de cerrar */}
         <div className="flex justify-center">
           <div className="bg-background-accent h-2 w-40 animate-pulse rounded-full"></div>

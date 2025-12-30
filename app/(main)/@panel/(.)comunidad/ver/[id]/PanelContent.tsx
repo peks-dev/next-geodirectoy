@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useCallback } from 'react';
 import { usePanelLoaderStore } from '@/app/(main)/map/stores/usePanelStore';
 import { useUIStateStore } from '@/lib/stores/useUIStateStore';
+import { usePanelUniversalGesture } from '@/app/(main)/map/components/hooks/usePanelUniversalGesture';
 import type { CommunityFullResponse } from '@/comunidad/types';
 import HeaderCommunity from '@/comunidad/components/HeaderCommunity';
 import ContentCommunity from '@/comunidad/components/ContentCommunity';
@@ -44,11 +45,19 @@ export default function PanelContent({ community }: PanelContentProps) {
     return () => window.removeEventListener('keydown', handleEsc);
   }, [handleClose]);
 
+  const { panelRef } = usePanelUniversalGesture({
+    onClose: handleClose,
+    dragThreshold: 150,
+  });
+
   return (
     <div className="fixed inset-0 z-50 flex flex-col">
       <div className="grow" onClick={handleClose}></div>
 
-      <div className="transparent-container relative mt-auto h-[94vh] w-screen grow-0 overflow-hidden py-2 shadow-2xl">
+      <div
+        ref={panelRef}
+        className="transparent-container shadow-2-xl relative mt-auto h-[94vh] w-screen grow-0 cursor-grab overflow-hidden py-2"
+      >
         <div className="flex justify-center">
           <button
             onClick={handleClose}
