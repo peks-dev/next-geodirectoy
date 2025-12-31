@@ -1,26 +1,31 @@
 ---
 # yaml-language-server: $schema=schemas/document.schema.json
 Object type:
-    - Document
+  - Document
 Tag:
-    - documentation
-    - software
-    - architecture
+  - documentation
+  - software
+  - architecture
 Description: ¿Qué hice y por qué importa? (máx. 12–15 palabras)
 Created by:
-    - peks
-Creation date: "2025-11-28T06:38:21Z"
+  - peks
+Creation date: '2025-11-28T06:38:21Z'
 id: bafyreidl4ggl7nk4fhqjpaoodnjw4ymbvyyzmjcig5vuklbq3bce46arha
 ---
-# Sistema de Manejo de Errores - Basket Places   
-## Filosofía   
-**"Throw at the boundaries, handle at the edges"**   
-- **Services**: Lanzan errores específicos ( `throw`)   
-- **Actions**: Convierten errores a `Result<T>` (nunca lanzan)   
-- **UI**: Muestra mensajes al usuario   
- --- 
-   
-## Arquitectura de Carpetas   
+
+# Sistema de Manejo de Errores - Basket Places
+
+## Filosofía
+
+**"Throw at the boundaries, handle at the edges"**
+
+- **Services**: Lanzan errores específicos ( `throw`)
+- **Actions**: Convierten errores a `Result<T>` (nunca lanzan)
+- **UI**: Muestra mensajes al usuario
+  ***
+
+## Arquitectura de Carpetas
+
 ```
 lib/
 ├── errors/
@@ -48,8 +53,11 @@ lib/
         ├── errors.ts        # ReviewError + REVIEW_ERROR_CODES
         └── types.ts
 ```
-## Componentes del Sistema   
-### 1. Errores Centralizados   
+
+## Componentes del Sistema
+
+### 1. Errores Centralizados
+
 ```
 // lib/errors/base.ts
 export abstract class AppError extends Error {
@@ -64,6 +72,7 @@ export abstract class AppError extends Error {
   }
 }
 ```
+
 ```
 // lib/errors/common-codes.ts
 export const CommonErrorCodes = {
@@ -71,16 +80,17 @@ export const CommonErrorCodes = {
   UNAUTHORIZED: 'UNAUTHORIZED',
   SESSION_EXPIRED: 'SESSION_EXPIRED',
   FORBIDDEN: 'FORBIDDEN',
-  
+
   // Validación
   VALIDATION_ERROR: 'VALIDATION_ERROR',
   INVALID_INPUT: 'INVALID_INPUT',
-  
+
   // Internos
   INTERNAL_ERROR: 'INTERNAL_ERROR',
   UNKNOWN_ERROR: 'UNKNOWN_ERROR',
 } as const;
 ```
+
 ```
 // lib/errors/validation.ts
 export class ValidationError extends AppError {
@@ -108,6 +118,7 @@ export function validateOrThrow<T>(schema: z.ZodSchema<T>, data: unknown): T {
   return result.data;
 }
 ```
+
 ```
 // lib/errors/handler.ts
 export function handleServiceError(error: unknown): Failure {
@@ -123,8 +134,8 @@ export function handleServiceError(error: unknown): Failure {
   if (error instanceof AIError) {
     return fail(error.code, error.message, {
       provider: error.provider,
-      ...(error.details && typeof error.details === 'object' 
-        ? error.details 
+      ...(error.details && typeof error.details === 'object'
+        ? error.details
         : { details: error.details }),
     });
   }
@@ -142,7 +153,9 @@ export function handleServiceError(error: unknown): Failure {
   return fail(CommonErrorCodes.UNKNOWN_ERROR, 'Error desconocido', error);
 }
 ```
-### 2. Errores por Dominio/Servicio   
+
+### 2. Errores por Dominio/Servicio
+
 ```
 // lib/services/community/errors.ts
 import { AppError } from '@/lib/errors/base';
@@ -163,6 +176,7 @@ export class CommunityError extends AppError {
   }
 }
 ```
+
 ```
 // lib/services/review/errors.ts
 export const ReviewErrorCodes = {
@@ -181,6 +195,7 @@ export class ReviewError extends AppError {
   }
 }
 ```
+
 ```
 // lib/services/ai/errors.ts
 export const AIErrorCodes = {
@@ -201,7 +216,9 @@ export class AIError extends AppError {
   }
 }
 ```
-### 3. Result Type   
+
+### 3. Result Type
+
 ```
 // lib/types/result.ts
 export type Success<T> = {
@@ -234,10 +251,15 @@ export function fail(
   return { success: false, error: { code, message, details, field } };
 }
 ```
- --- 
- --- 
-## Flujo Completo (Ejemplo)   
-### 1. Service (Lanza errores)   
+
+---
+
+---
+
+## Flujo Completo (Ejemplo)
+
+### 1. Service (Lanza errores)
+
 ```
 // lib/services/review/reviewService.ts
 import { ReviewError, ReviewErrorCodes } from './errors';
@@ -245,7 +267,7 @@ import { ReviewError, ReviewErrorCodes } from './errors';
 export async function createReview(review: ReviewInput): Promise<string> {
   // Verificar duplicados
   const exists = await hasUserReviewedCommunity(review.user_id, review.community_id);
-  
+
   if (exists) {
     throw new ReviewError(
       'Ya has valorado esta comunidad',
@@ -267,7 +289,9 @@ export async function createReview(review: ReviewInput): Promise<string> {
   return data.id;
 }
 ```
-### 2. Server Action (Convierte a Result)   
+
+### 2. Server Action (Convierte a Result)
+
 ```
 // app/(main)/comunidad/[id]/reviews/actions.ts
 'use server';
@@ -286,7 +310,7 @@ export async function createReviewAction(
     // Auth
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    
+
     if (!user) {
       return fail(CommonErrorCodes.UNAUTHORIZED, 'Debes iniciar sesión');
     }
@@ -303,7 +327,9 @@ export async function createReviewAction(
   }
 }
 ```
-### 3. Client Component (Muestra al usuario)   
+
+### 3. Client Component (Muestra al usuario)
+
 ```
 // app/(main)/comunidad/[id]/reviews/ReviewForm.tsx
 'use client';
@@ -311,7 +337,7 @@ export async function createReviewAction(
 export function ReviewForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const result = await createReviewAction(formData);
 
     if (!result.success) {
@@ -325,41 +351,56 @@ export function ReviewForm() {
   return <form onSubmit={handleSubmit}>...</form>;
 }
 ```
- --- 
-## Reglas Rápidas   
-### ✅ Services   
-- Lanzan errores: `throw new ReviewError(...)`   
-- Devuelven datos directamente: `return data`   
-   
-### ✅ Actions   
-- Devuelven `Result<T>`: `return ok(data)` o `return fail(...)`   
-- Usan `handleServiceError` en el catch   
-- Nunca lanzan errores   
-   
-### ✅ UI   
-- Checa `result.success`   
-- Muestra `result.error.message` al usuario   
-- Opcional: Lógica según `result.error.code`   
- --- 
-   
-## Checklist para Nueva Feature   
-- [ ] Crear `lib/services/[feature]/errors.ts`   
-- Define `[Feature]ErrorCodes`   
-- Define `[Feature]Error extends AppError`   
-   
-- [ ] Actualizar `lib/errors/handler.ts`   
-- Añadir `if (error instanceof [Feature]Error)`   
-   
-- [ ] En service: lanzar `[Feature]Error`   
-- [ ] En action: usar `try/catch + handleServiceError`   
-- [ ] En UI: manejar `Result<T>`   
- --- 
-## Cuando Añadir un Nuevo Error   
-### ¿Es compartido entre múltiples dominios?   
-→ Añádelo a `lib/errors/common-codes.ts`   
-### ¿Es específico de un dominio/servicio?   
-→ Añádelo a `lib/services/[feature]/errors.ts`   
- --- 
- --- 
-**Versión**: 1.0   
-**Mantenedores**: Basket Places Team   
+
+---
+
+## Reglas Rápidas
+
+### ✅ Services
+
+- Lanzan errores: `throw new ReviewError(...)`
+- Devuelven datos directamente: `return data`
+
+### ✅ Actions
+
+- Devuelven `Result<T>`: `return ok(data)` o `return fail(...)`
+- Usan `handleServiceError` en el catch
+- Nunca lanzan errores
+
+### ✅ UI
+
+- Checa `result.success`
+- Muestra `result.error.message` al usuario
+- Opcional: Lógica según `result.error.code`
+  ***
+
+## Checklist para Nueva Feature
+
+- [ ] Crear `lib/services/[feature]/errors.ts`
+- Define `[Feature]ErrorCodes`
+- Define `[Feature]Error extends AppError`
+
+- [ ] Actualizar `lib/errors/handler.ts`
+- Añadir `if (error instanceof [Feature]Error)`
+
+- [ ] En service: lanzar `[Feature]Error`
+- [ ] En action: usar `try/catch + handleServiceError`
+- [ ] En UI: manejar `Result<T>`
+  ***
+
+## Cuando Añadir un Nuevo Error
+
+### ¿Es compartido entre múltiples dominios?
+
+→ Añádelo a `lib/errors/common-codes.ts`
+
+### ¿Es específico de un dominio/servicio?
+
+→ Añádelo a `lib/services/[feature]/errors.ts`
+
+---
+
+---
+
+**Versión**: 1.0  
+**Mantenedores**: Basket Places Team
