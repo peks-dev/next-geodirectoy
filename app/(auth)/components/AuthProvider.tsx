@@ -8,7 +8,7 @@ import {
   useCallback,
   useRef,
 } from 'react';
-import { useRouter } from 'next/navigation';
+
 import {
   onAuthStateChange,
   logout as logoutQuery,

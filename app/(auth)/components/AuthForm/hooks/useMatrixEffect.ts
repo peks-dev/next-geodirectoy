@@ -34,7 +34,7 @@ export const useMatrixEffect = (text: string) => {
     }, 30);
 
     return () => clearInterval(interval);
-  }, [text]);
+  }, [text, display.length]);
 
   return display;
 };

@@ -98,7 +98,7 @@ export function useContributionForm({
 
       // 7. Navegar a la página de detalles de la comunidad
       navigate(`/comunidad/ver/${result.data.id}`);
-    } catch (error) {
+    } catch {
       // Errores inesperados (no deberían llegar aquí si Actions manejan todo)
       showErrorToast('algo inesperado sucedio');
     } finally {

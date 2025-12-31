@@ -14,6 +14,7 @@ export function useCustomNavigation() {
     if (isNavigating) {
       setIsNavigating(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]); // Se ejecuta cada vez que cambia la ruta
 
   const navigate = useCallback(
