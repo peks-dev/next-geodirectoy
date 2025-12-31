@@ -2,8 +2,7 @@
 import { ProtectedWrapper } from '@/app/(auth)/components/ProtectedWrapper';
 import LogoutButton from '@/app/(auth)/components/LogoutButton';
 import ProfileBanner from './components/ProfileBanner';
-import EditProfileBtn from './components/EditProfileBtn';
-import DeleteAccountBtn from '@/app/(auth)/components/DeleteAccountBtn';
+import DropdownProfileOptions from './components/DropdownProfileOptions';
 import NavigationButton from '@/app/components/ui/Buttons/NavigationButton';
 import { AddCommunityIcon } from '@/app/components/ui/svgs';
 import ProfileCommunities from '../comunidad/components/ProfileCommunities';
@@ -15,8 +14,7 @@ export default async function ProfilePage() {
         <header className="border-border flex w-full justify-between border-b-2 py-4">
           <ProfileBanner />
           <div className="gap-md flex items-center">
-            <DeleteAccountBtn />
-            <EditProfileBtn />
+            <DropdownProfileOptions />
             <LogoutButton />
           </div>
         </header>

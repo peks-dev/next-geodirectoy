@@ -1,7 +1,7 @@
 'use client';
 
-import Button from '@/app/components/ui/Button';
 import { DeleteIcon } from '@/app/components/ui/svgs';
+import IconBox from '@/app/components/ui/IconBox';
 import { useModalStore } from '@/app/components/ui/Modal';
 import { useProfileStore } from '@/app/(main)/perfil/stores/useProfileStore';
 import { deleteAccount } from '@/app/(auth)/actions/deleteAccount';
@@ -38,8 +38,12 @@ export default function DeleteAccountBtn() {
   };
 
   return (
-    <Button variant="icon" onClick={handleClick} className="text-error">
-      <DeleteIcon />
-    </Button>
+    <button
+      onClick={handleClick}
+      className={`text-error hover-neon-text flex w-full cursor-pointer items-start justify-start gap-2 px-4 py-2`}
+    >
+      <IconBox icon={<DeleteIcon />} size="small" />
+      <span>Eliminar cuenta</span>
+    </button>
   );
 }
