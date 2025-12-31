@@ -57,7 +57,7 @@ export default function ImageSlider({
   if (!images || images.length === 0) {
     return (
       <div
-        className="bg-border-dark flex w-full items-center justify-center"
+        className="flex w-full items-center justify-center bg-red-600"
         style={{ height: 'clamp(18rem, 27vh, 25rem)' }}
       >
         <p className="text-gray-400">Sin imágenes disponibles</p>
@@ -84,7 +84,7 @@ export default function ImageSlider({
                 src={image}
                 alt={altTexts?.[index] || `Imagen ${index + 1} del slider`}
                 fill
-                className="bg-border object-cover"
+                className="bg-border pulse-bg object-cover"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1000px"
                 priority={index === 0}
               />
