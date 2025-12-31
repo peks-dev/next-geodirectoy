@@ -46,7 +46,7 @@ export class GeminiService implements BaseAIService {
       }
 
       return false;
-    } catch (error) {
+    } catch {
       return false;
     }
   }

@@ -94,7 +94,7 @@ export async function registerCommunity(
         await Promise.all(
           pathsToRollback.map((path) => deleteImage(path, 'COMMUNITIES'))
         );
-      } catch (rollbackError) {
+      } catch {
         // Rollback falló - manejar según necesidades
       }
     }

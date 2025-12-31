@@ -69,7 +69,7 @@ export async function updateSession(request: NextRequest) {
     }
 
     return supabaseResponse;
-  } catch (error) {
+  } catch {
     const url = request.nextUrl.clone();
     url.pathname = '/sign-in';
     return NextResponse.redirect(url);

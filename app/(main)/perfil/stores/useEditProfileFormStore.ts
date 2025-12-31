@@ -42,7 +42,7 @@ export const useEditProfileFormStore = create<EditProfileFormState>(
           avatarPreviewUrl: newUrl,
           avatarInfo: imageInfo,
         });
-      } catch (error) {
+      } catch {
         // Manejar el caso en que getImageInfo falle
       }
     },

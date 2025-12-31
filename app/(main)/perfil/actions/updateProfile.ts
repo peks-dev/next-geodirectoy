@@ -131,7 +131,7 @@ export async function updateProfileController(
     if (pathToRollback && error instanceof DatabaseError) {
       try {
         await deleteImage(pathToRollback, 'AVATARS');
-      } catch (rollbackError) {
+      } catch {
         // Rollback falló - manejar según necesidades
       }
     }

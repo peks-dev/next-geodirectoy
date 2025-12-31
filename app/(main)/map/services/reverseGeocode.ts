@@ -31,7 +31,7 @@ export async function reverseGeocode(
     const country = address.country || null;
 
     return { city, state, country };
-  } catch (error) {
+  } catch {
     return {
       city: null,
       state: null,
