@@ -34,6 +34,7 @@ import ArrowUpIcon from './ArrowUpIcon';
 import MaleIcon from './MaleIcon';
 import FemaleIcon from './FemaleIcon';
 import GenderIcon from './GenderIcon';
+import SettingsIcon from './SettingsIcon';
 
 export {
   BathroomIcon,
@@ -72,4 +73,5 @@ export {
   MaleIcon,
   FemaleIcon,
   GenderIcon,
+  SettingsIcon,
 };
