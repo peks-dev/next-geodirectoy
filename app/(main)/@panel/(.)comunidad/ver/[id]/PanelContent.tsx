@@ -56,7 +56,7 @@ export default function PanelContent({ community }: PanelContentProps) {
 
       <div
         ref={panelRef}
-        className="transparent-container shadow-2-xl relative mt-auto h-[94vh] w-screen grow-0 cursor-grab overflow-hidden py-2"
+        className="transparent-container shadow-2-xl relative mt-auto h-[94vh] w-screen grow-0 cursor-grab py-2"
       >
         <div className="flex justify-center">
           <button

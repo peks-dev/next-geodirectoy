@@ -88,7 +88,7 @@ export const Modal = () => {
               transition: { duration: 0.15, ease: 'easeIn' },
             }}
             transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-            className="z-20 w-full"
+            className="z-20 w-[90%]"
             style={{
               maxWidth: getMaxWidth(),
               minHeight: '20vh',
