@@ -22,7 +22,7 @@ export default function DeleteCommunityBtn({
       title: '¿eliminar comunidad?',
       content: 'esta acción es irreversible y permanente',
       confirmButton: {
-        text: 'si, eliminar',
+        text: 'eliminar',
         variant: 'delete',
         onClick: async () => {
           const result = await deleteCommunity(communityId);
