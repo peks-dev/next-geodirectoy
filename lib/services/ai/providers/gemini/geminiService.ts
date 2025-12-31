@@ -45,15 +45,8 @@ export class GeminiService implements BaseAIService {
         return true;
       }
 
-      // Log del error para debugging
-      const errorText = await response.text().catch(() => 'No error details');
-      console.error(
-        `Gemini isAvailable check failed: ${response.status} - ${errorText}`
-      );
       return false;
     } catch (error) {
-      // Log del error para debugging
-      console.error('Gemini isAvailable check error:', error);
       return false;
     }
   }

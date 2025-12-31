@@ -31,8 +31,6 @@ export async function getAuthShellData(): Promise<AuthShellData> {
   } catch (error) {
     // ✅ Solo capturar errores reales de autenticación, no errores de prerendering
     if (isAuthRelatedError(error)) {
-      console.error('Error obteniendo datos de auth en SSR:', error);
-
       // ✅ Mapeo específico de errores usando el sistema de errores especializado
       const authError = mapToAuthError(error);
 
@@ -48,7 +46,6 @@ export async function getAuthShellData(): Promise<AuthShellData> {
     }
 
     // ✅ Para errores no relacionados con auth (como prerendering), continuar normalmente
-    console.warn('Error no relacionado con auth durante SSR:', error);
     return {
       initialUser: null,
       authError: null,

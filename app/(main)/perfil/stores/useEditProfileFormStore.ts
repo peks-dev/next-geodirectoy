@@ -30,7 +30,6 @@ export const useEditProfileFormStore = create<EditProfileFormState>(
         // --- Punto ideal para validaciones ---
         if (imageInfo.size > 5 * 1024 * 1024) {
           // Ejemplo: max 5MB
-          console.error('La imagen es demasiado grande.');
           // Aquí podrías establecer un estado de error en el store
           return;
         }
@@ -44,7 +43,6 @@ export const useEditProfileFormStore = create<EditProfileFormState>(
           avatarInfo: imageInfo,
         });
       } catch (error) {
-        console.error('No se pudo procesar la imagen:', error);
         // Manejar el caso en que getImageInfo falle
       }
     },

@@ -32,10 +32,6 @@ export async function reverseGeocode(
 
     return { city, state, country };
   } catch (error) {
-    console.error(
-      'Error en el servicio de Reverse Geocoding (Nominatim):',
-      error
-    );
     return {
       city: null,
       state: null,

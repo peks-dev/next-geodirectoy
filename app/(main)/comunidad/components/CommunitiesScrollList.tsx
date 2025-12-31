@@ -25,7 +25,6 @@ export default function CommunitiesScrollList({
   // Inicializar el store en el primer render
   useEffect(() => {
     if (!isInitializedRef.current && initialItems.length > 0) {
-      console.log('Inicializando communities:', initialItems);
       setCommunities(initialItems);
       isInitializedRef.current = true;
     }

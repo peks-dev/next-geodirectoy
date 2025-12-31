@@ -46,8 +46,5 @@ export function getAIService(): BaseAIService {
  * NO usar en producción
  */
 export function resetAIService(): void {
-  if (process.env.NODE_ENV !== 'test') {
-    console.warn('⚠️  resetAIService() solo debe usarse en tests');
-  }
   aiServiceInstance = null;
 }

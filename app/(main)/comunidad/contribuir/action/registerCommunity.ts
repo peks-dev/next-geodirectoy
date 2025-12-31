@@ -95,11 +95,7 @@ export async function registerCommunity(
           pathsToRollback.map((path) => deleteImage(path, 'COMMUNITIES'))
         );
       } catch (rollbackError) {
-        console.error('✗ ROLLBACK FALLÓ - Imágenes huérfanas:', {
-          paths: pathsToRollback,
-          originalError: error,
-          rollbackError,
-        });
+        // Rollback falló - manejar según necesidades
       }
     }
     return handleServiceError(error);

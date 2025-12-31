@@ -22,7 +22,6 @@ export default async function checkExistingReview(
   }
 
   if (existingReviewError && existingReviewError.code !== 'PGRST116') {
-    console.error('Error checking for existing review:', existingReviewError);
     return fail(
       ErrorCodes.DATABASE_ERROR,
       'No se pudo verificar si ya has valorado esta comunidad.'

@@ -132,11 +132,7 @@ export async function updateProfileController(
       try {
         await deleteImage(pathToRollback, 'AVATARS');
       } catch (rollbackError) {
-        console.error('✗ ROLLBACK FALLÓ - Avatar huérfano:', {
-          path: pathToRollback,
-          originalError: error,
-          rollbackError,
-        });
+        // Rollback falló - manejar según necesidades
       }
     }
     return handleServiceError(error);

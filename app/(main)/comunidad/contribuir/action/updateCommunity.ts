@@ -103,12 +103,7 @@ export async function updateCommunity(
           pathsToRollback.map((path) => deleteImage(path, 'COMMUNITIES'))
         );
       } catch (rollbackError) {
-        // CRÍTICO: Loguear para monitoreo (Sentry, Datadog, etc.)
-        console.error('✗ ROLLBACK FALLÓ - Imágenes huérfanas:', {
-          paths: pathsToRollback,
-          originalError: error,
-          rollbackError,
-        });
+        // Rollback falló - manejar según necesidades
       }
     }
     return handleServiceError(error);

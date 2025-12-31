@@ -65,7 +65,7 @@ export const useModalStore = create<ModalConfig & ModalActions>((set, get) => ({
       await confirmButton.onClick();
       closeModal();
     } catch (error) {
-      console.error('Modal confirmation error:', error);
+      // Error handled silently
     } finally {
       setLoading(false);
     }

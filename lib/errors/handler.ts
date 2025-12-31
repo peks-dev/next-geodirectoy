@@ -57,7 +57,6 @@ export function handleServiceError(error: unknown): Failure {
 
   // Error genérico de JavaScript
   if (error instanceof Error) {
-    console.error('Error no manejado:', error);
     return fail(
       ErrorCodes.INTERNAL_ERROR,
       'Ocurrió un error inesperado. Intenta de nuevo.',
@@ -66,6 +65,5 @@ export function handleServiceError(error: unknown): Failure {
   }
 
   // Error completamente desconocido
-  console.error('Error desconocido:', error);
   return fail(ErrorCodes.UNKNOWN_ERROR, 'Ocurrió un error desconocido', error);
 }

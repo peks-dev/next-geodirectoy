@@ -50,7 +50,6 @@ export async function updateSession(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (error) {
-      console.error('Error fetching user:', error);
       const url = request.nextUrl.clone();
       url.pathname = '/sign-in';
       return NextResponse.redirect(url);
@@ -71,7 +70,6 @@ export async function updateSession(request: NextRequest) {
 
     return supabaseResponse;
   } catch (error) {
-    console.error('Unexpected error in middleware:', error);
     const url = request.nextUrl.clone();
     url.pathname = '/sign-in';
     return NextResponse.redirect(url);
