@@ -76,18 +76,18 @@ export const Modal = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
           className="p-sm fixed inset-0 z-50 flex items-center justify-center"
         >
+          {/* Modal container - Materialización holográfica */}
           <motion.div
-            initial={{ scale: 0.95, y: 20, opacity: 0 }}
-            animate={{ scale: 1, y: 0, opacity: 1 }}
-            exit={{
-              scale: 0.95,
-              y: -20,
-              opacity: 0,
-              transition: { duration: 0.15, ease: 'easeIn' },
+            initial={{ opacity: 0, scale: 0.94, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.96, y: -20 }}
+            transition={{
+              duration: 0.35,
+              ease: [0.16, 1, 0.3, 1],
             }}
-            transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
             className="z-20 w-[90%]"
             style={{
               maxWidth: getMaxWidth(),
@@ -95,23 +95,68 @@ export const Modal = () => {
               maxHeight: '90vh',
               display: 'flex',
               flexDirection: 'column',
+              position: 'relative',
+              overflow: 'hidden',
             }}
           >
-            {/* Header */}
-            <div className="bg-dark-primary p-sm mb-3 flex items-center justify-between">
+            {/* Scan line holográfico */}
+            <motion.div
+              initial={{ scaleY: 0, opacity: 0 }}
+              animate={{
+                scaleY: [0, 1, 0],
+                opacity: [0, 0.5, 0],
+              }}
+              transition={{
+                duration: 0.5,
+                times: [0, 0.5, 1],
+                ease: 'easeInOut',
+                delay: 0.1,
+              }}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background:
+                  'linear-gradient(180deg, transparent, var(--color-border-interactive), transparent)',
+                transformOrigin: 'top',
+                pointerEvents: 'none',
+                zIndex: 50,
+              }}
+            />
+
+            {/* Header con stagger */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{
+                duration: 0.3,
+                ease: 'easeOut',
+                delay: 0.15,
+              }}
+              className="bg-dark-primary p-sm mb-3 flex items-center justify-between"
+            >
               <h2 className="neon-effect text-light-secondary text-sm font-bold uppercase">
                 {title}
               </h2>
               <Button variant="icon" onClick={closeModal} disabled={isLoading}>
                 <CloseIcon />
               </Button>
-            </div>
+            </motion.div>
 
-            <div className="transparent-container">
+            {/* Contenido con fade */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{
+                duration: 0.3,
+                delay: 0.2,
+              }}
+              className="transparent-container"
+            >
               {/* Contenido - sin scroll interno */}
               <div className="p-sm text-light-primary flex-1 overflow-visible text-center">
                 {renderContent()}
               </div>
+
               {/* Footer */}
               {confirmButton && (
                 <div className="p-sm">
@@ -125,7 +170,7 @@ export const Modal = () => {
                   </Button>
                 </div>
               )}
-            </div>
+            </motion.div>
           </motion.div>
         </motion.div>
       )}
