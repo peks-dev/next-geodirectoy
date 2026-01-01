@@ -1,7 +1,5 @@
 // MenuContent component for the GlobalMenu
-
 'use client';
-
 import { JSX } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CornerIcon } from '@/app/components/ui/svgs';
@@ -44,23 +42,14 @@ export const MenuContent = ({
   syncWithSystem,
   navigateTo,
 }: MenuContentProps): JSX.Element => {
-  // Base container classes without animation
   const containerClasses =
     'fixed inset-0 z-39 flex flex-col items-center justify-end pb-10';
 
   return (
     <AnimatePresence mode="wait">
       {isMenuOpen && (
-        <motion.div
-          initial={{ y: '100%' }}
-          animate={{ y: 0 }}
-          exit={{ y: '100%' }}
-          transition={{
-            duration: 0.3,
-            ease: [0.25, 0.1, 0.25, 1],
-          }}
-          className={containerClasses}
-        >
+        <motion.div className={containerClasses}>
+          {/* Overlay */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -69,32 +58,92 @@ export const MenuContent = ({
             className={MENU_CLASSES.OVERLAY}
             onClick={closeMenu}
           />
+
+          {/* Menu wrapper - Materialización holográfica */}
           <motion.div
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
+            initial={{ y: '100%', opacity: 0, scale: 0.96 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: '100%', opacity: 0, scale: 0.98 }}
             transition={{
-              duration: 0.3,
-              ease: [0.25, 0.1, 0.25, 1],
-              delay: 0.05,
+              duration: 0.35,
+              ease: [0.16, 1, 0.3, 1],
             }}
             className={MENU_CLASSES.WRAPPER_DRAGGABLE}
+            style={{ position: 'relative', overflow: 'hidden' }}
           >
+            {/* Scan line holográfico - efecto de activación */}
+            <motion.div
+              initial={{ scaleY: 0, opacity: 0 }}
+              animate={{
+                scaleY: [0, 1, 0],
+                opacity: [0, 0.4, 0],
+              }}
+              transition={{
+                duration: 0.5,
+                times: [0, 0.5, 1],
+                ease: 'easeInOut',
+              }}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background:
+                  'linear-gradient(180deg, transparent, var(--color-border-interactive), transparent)',
+                transformOrigin: 'top',
+                pointerEvents: 'none',
+                zIndex: 50,
+              }}
+            />
+
             <MenuHeader />
 
             <div className={MENU_CLASSES.CONTENT}>
-              <div className={MENU_CLASSES.CONTENT_WRAPPER}>
+              {/* Contenido con stagger - aparición secuencial */}
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  visible: {
+                    transition: {
+                      staggerChildren: 0.06,
+                      delayChildren: 0.15,
+                    },
+                  },
+                }}
+                className={MENU_CLASSES.CONTENT_WRAPPER}
+              >
                 {generateCornerIcons()}
 
-                <ThemeSection
-                  themeLabel={themeLabel}
-                  toggleTheme={toggleTheme}
-                  isSystemSync={isSystemSync}
-                  syncWithSystem={syncWithSystem}
-                />
+                <motion.div
+                  variants={{
+                    hidden: { opacity: 0, x: -15 },
+                    visible: {
+                      opacity: 1,
+                      x: 0,
+                      transition: { duration: 0.3, ease: 'easeOut' },
+                    },
+                  }}
+                >
+                  <ThemeSection
+                    themeLabel={themeLabel}
+                    toggleTheme={toggleTheme}
+                    isSystemSync={isSystemSync}
+                    syncWithSystem={syncWithSystem}
+                  />
+                </motion.div>
 
-                <NavigationSection navigateTo={navigateTo} />
-              </div>
+                <motion.div
+                  variants={{
+                    hidden: { opacity: 0, x: -15 },
+                    visible: {
+                      opacity: 1,
+                      x: 0,
+                      transition: { duration: 0.3, ease: 'easeOut' },
+                    },
+                  }}
+                >
+                  <NavigationSection navigateTo={navigateTo} />
+                </motion.div>
+              </motion.div>
 
               <MenuFooter />
             </div>
