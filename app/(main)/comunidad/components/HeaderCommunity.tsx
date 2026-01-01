@@ -15,7 +15,7 @@ export default function HeaderCommunity(data: Props) {
           {data.name}
         </h2>
       </header>
-      <div className="border-light-primary neon-effect relative border-2 border-solid">
+      <div className="border-foreground neon-effect text-foreground relative border-2 border-solid">
         <div className="absolute top-3 left-3 z-30">
           <ShareButton name={data.name} description={data.description} />
         </div>

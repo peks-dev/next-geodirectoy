@@ -109,7 +109,7 @@ export const Modal = () => {
 
             <div className="transparent-container">
               {/* Contenido - sin scroll interno */}
-              <div className="p-sm text-foreground flex-1 overflow-visible text-center">
+              <div className="p-sm text-light-primary flex-1 overflow-visible text-center">
                 {renderContent()}
               </div>
               {/* Footer */}
