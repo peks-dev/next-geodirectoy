@@ -1,15 +1,16 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, type RefObject } from 'react';
 
 interface UsePanelSwipeGestureProps {
+  panelRef: RefObject<HTMLDivElement | null>;
   onClose: () => void;
   dragThreshold?: number;
 }
 
 export function usePanelSwipeGesture({
+  panelRef,
   onClose,
   dragThreshold = 100,
 }: UsePanelSwipeGestureProps) {
-  const panelRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef<number>(0);
   const isAnimating = useRef(false);
 
@@ -74,7 +75,5 @@ export function usePanelSwipeGesture({
       panel.removeEventListener('touchmove', handleTouchMove);
       panel.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [onClose, dragThreshold]);
-
-  return { panelRef };
+  }, [panelRef, onClose, dragThreshold]);
 }

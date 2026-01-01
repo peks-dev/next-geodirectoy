@@ -1,15 +1,16 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, type RefObject } from 'react';
 
 interface UsePanelDesktopGestureProps {
+  panelRef: RefObject<HTMLDivElement | null>;
   onClose: () => void;
   dragThreshold?: number;
 }
 
 export function usePanelDesktopGesture({
+  panelRef,
   onClose,
   dragThreshold = 150,
 }: UsePanelDesktopGestureProps) {
-  const panelRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const startY = useRef(0);
   const startTransform = useRef('');
@@ -88,7 +89,5 @@ export function usePanelDesktopGesture({
       window.removeEventListener('mouseup', handleMouseUp);
       panel.removeEventListener('selectstart', handleSelectStart);
     };
-  }, [onClose, dragThreshold]);
-
-  return { panelRef };
+  }, [panelRef, onClose, dragThreshold]);
 }

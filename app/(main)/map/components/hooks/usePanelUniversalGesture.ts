@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { usePanelSwipeGesture } from './usePanelSwipeGesture';
 import { usePanelDesktopGesture } from './usePanelDesktopGesture';
 
@@ -13,24 +13,17 @@ export function usePanelUniversalGesture({
 }: UsePanelUniversalGestureProps) {
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // Hooks para mobile y desktop
-  const { panelRef: swipeRef } = usePanelSwipeGesture({
-    onClose,
-    dragThreshold,
-  });
-  const { panelRef: desktopRef } = usePanelDesktopGesture({
+  usePanelSwipeGesture({
+    panelRef,
     onClose,
     dragThreshold,
   });
 
-  // Combinar referencias
-  useEffect(() => {
-    const ref = panelRef.current;
-    if (ref) {
-      swipeRef.current = ref;
-      desktopRef.current = ref;
-    }
-  }, [swipeRef, desktopRef]);
+  usePanelDesktopGesture({
+    panelRef,
+    onClose,
+    dragThreshold,
+  });
 
   return { panelRef };
 }
