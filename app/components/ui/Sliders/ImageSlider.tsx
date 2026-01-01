@@ -54,17 +54,6 @@ export default function ImageSlider({
     return <ImageSliderSkeleton />;
   }
 
-  if (!images || images.length === 0) {
-    return (
-      <div
-        className="flex w-full items-center justify-center bg-red-600"
-        style={{ height: 'clamp(18rem, 27vh, 25rem)' }}
-      >
-        <p className="text-gray-400">Sin imágenes disponibles</p>
-      </div>
-    );
-  }
-
   return (
     <div className="h-80 w-full md:h-140">
       <Swiper
