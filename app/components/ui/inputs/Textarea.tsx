@@ -31,7 +31,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     const wrapperClasses = [
       'group',
       'relative',
-      'min-h-[clamp(4rem,10vh,5.5rem)]', // Minimum height, allows expansion
+      'min-h-[clamp(15rem,20vh,20rem)]', // Minimum height, allows expansion
       'w-full',
       'border-2',
       'border-dashed',
