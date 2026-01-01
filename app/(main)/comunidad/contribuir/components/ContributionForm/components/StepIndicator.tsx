@@ -1,5 +1,6 @@
 'use client';
-
+import { motion } from 'motion/react';
+import { useMatrixEffect } from '@/app/(auth)/components/AuthForm/hooks/useMatrixEffect';
 import {
   useNavigationStore,
   type StepNumber,
@@ -22,6 +23,10 @@ const stepLabels = [
 export default function StepIndicator({ currentStep }: StepIndicatorProps) {
   const { setCurrentStep } = useNavigationStore();
 
+  // Efecto matrix en el título actual
+  const currentLabel = stepLabels[currentStep - 1];
+  const matrixLabel = useMatrixEffect(currentLabel);
+
   const handleStepClick = (stepIndex: number) => {
     // stepIndex es 0-6, los steps son 1-7
     const actualStep = (stepIndex + 1) as StepNumber;
@@ -30,9 +35,23 @@ export default function StepIndicator({ currentStep }: StepIndicatorProps) {
 
   return (
     <div className="flex w-full items-center justify-between">
-      <h2 className="heading text-md neon-effect">
-        {stepLabels[currentStep - 1]}
-      </h2>
+      <motion.h2
+        key={currentStep} // Key para resetear animación en cada cambio
+        className="heading text-md neon-effect"
+        initial={{ opacity: 0, x: -15 }}
+        animate={{
+          opacity: 1,
+          x: [-15, 0, 3, -3, 3, 0],
+        }}
+        transition={{
+          duration: 0.7,
+          ease: 'easeOut',
+          x: { duration: 0.5, times: [0, 0.4, 0.55, 0.7, 0.85, 1] },
+        }}
+      >
+        {matrixLabel}
+      </motion.h2>
+
       <ul className="flex w-3/5 justify-between">
         {stepLabels.map((label, index) => (
           <li key={index}>

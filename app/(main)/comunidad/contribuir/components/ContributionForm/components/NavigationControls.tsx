@@ -1,8 +1,7 @@
 'use client';
+import { motion } from 'motion/react';
 import Button from '@/app/components/ui/Button';
-
 import { TriangleIcon, CloseIcon, SendIcon } from '@/app/components/ui/svgs/';
-
 import { useCustomNavigation } from '@/lib/hooks/useNavigation';
 import { useModalStore } from '@/app/components/ui/Modal';
 
@@ -39,21 +38,26 @@ export default function NavigationControls({
 
   // render component
   return (
-    <div className="bg-background-secondary-dark flex items-center justify-between p-3">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.8,
+        ease: [0.16, 1, 0.3, 1],
+      }}
+      className="bg-background-secondary-dark flex items-center justify-between p-3"
+    >
       <Button variant="icon" onClick={prevStep}>
         <TriangleIcon />
       </Button>
-
       <Button variant="icon" onClick={handleCloseForm} size="xsm">
         <CloseIcon />
       </Button>
-
       {currentStep <= 6 && (
         <Button variant="icon" onClick={nextStep} className="rotate-180">
           <TriangleIcon />
         </Button>
       )}
-
       {currentStep === 7 && (
         <Button
           variant="icon"
@@ -64,6 +68,6 @@ export default function NavigationControls({
           <SendIcon />
         </Button>
       )}
-    </div>
+    </motion.div>
   );
 }
