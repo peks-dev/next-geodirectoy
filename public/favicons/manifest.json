@@ -1,0 +1,16 @@
+{
+  "name": "Basket Places",
+  "short_name": "Basket Places",
+  "description": "Directorio de comunidades de basketball",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/favicons/android-icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
