@@ -82,7 +82,7 @@ export default async function CommunityPage({ params }: PageProps) {
           }).replace(/</g, '\\u003c'),
         }}
       />
-      <div className="gap-lg flex h-full w-full flex-col p-4 lg:flex-row">
+      <div className="gap-lg flex h-full w-full flex-col p-4 pb-10 lg:flex-row">
         <HeaderCommunity
           name={community.name}
           images={community.images}

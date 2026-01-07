@@ -220,6 +220,24 @@
     @apply text-accent-primary hover:text-accent-secondary;
     @apply transition-colors duration-200;
   }
+
+  /* --- PANEL DRAG GESTURE FEEDBACK --- */
+  .panel-dragging {
+    transition: transform 0s !important;
+    box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  /* --- Community Dinamic Slider --- */
+
+  .dinamic-slider-nav-icon:hover {
+    filter: drop-shadow(0 0 3px currentColor);
+  }
+
+  .dinamic-slider-nav-icon.active {
+    color: var(--color-accent-primary);
+    filter: drop-shadow(0 0 3px currentColor);
+    border-color: var(--color-accent-primary);
+  }
 }
 
 /* --- UTILIDADES PERSONALIZADAS (OPCIONAL) --- */
@@ -292,12 +310,6 @@
   100% {
     background-position: 100% 0;
   }
-}
-
-/* --- PANEL DRAG GESTURE FEEDBACK --- */
-.panel-dragging {
-  transition: transform 0s !important;
-  box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.15) !important;
 }
 
 @keyframes fadeIn {

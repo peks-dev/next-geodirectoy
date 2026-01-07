@@ -84,7 +84,7 @@ export default function DinamicSlider({
       </div>
 
       {/* Sección 2: Controles de navegación con iconos */}
-      <nav className="dinamic-slider-navigation bg-dark-primary mx-4 mb-10 flex shrink-0 items-center justify-center">
+      <nav className="dinamic-slider-navigation bg-dark-primary flex w-full items-center justify-center">
         <ul className="flex w-full justify-around">
           {slides.map((slide, index) => (
             <li
@@ -105,18 +105,6 @@ export default function DinamicSlider({
           ))}
         </ul>
       </nav>
-
-      <style jsx>{`
-        .dinamic-slider-nav-icon:hover {
-          filter: drop-shadow(0 0 3px currentColor);
-        }
-
-        .dinamic-slider-nav-icon.active {
-          color: var(--color-accent-primary);
-          filter: drop-shadow(0 0 3px currentColor);
-          border-color: var(--color-accent-primary);
-        }
-      `}</style>
     </div>
   );
 }

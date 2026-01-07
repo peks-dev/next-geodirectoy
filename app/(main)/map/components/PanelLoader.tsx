@@ -36,7 +36,7 @@ export default function PanelLoader() {
 
       <div
         ref={panelRef}
-        className="transparent-container relative mt-auto h-[94vh] w-full grow-0 overflow-hidden py-2 shadow-2xl"
+        className="transparent-container relative mt-auto h-[94dvh] w-screen grow-0 overflow-hidden py-2 shadow-2xl"
         style={getPanelStyle()}
       >
         <div className="flex justify-center">
