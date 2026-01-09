@@ -14,6 +14,8 @@ import { useCustomNavigation } from '@/lib/hooks/useNavigation';
 import { useProfileStore } from '@/app/(main)/perfil/stores/useProfileStore';
 import { cacheService } from '@/auth/utils/cacheService';
 import { useAuth } from '../hooks/useAuth';
+import { useUIStateStore } from '@/lib/stores/useUIStateStore';
+import { usePanelLoaderStore } from '@/app/(main)/map/stores/usePanelStore';
 
 type AuthState =
   | 'idle'
@@ -37,6 +39,8 @@ export const useAuthFlow = () => {
   const searchParams = useSearchParams();
   const { updateProfile: updateProfileStore } = useProfileStore();
   const { setUserAndSession } = useAuth();
+  const { closeActivePanel } = useUIStateStore();
+  const { setLoading: setPanelLoading } = usePanelLoaderStore();
 
   // Timer cleanup effect
   useEffect(() => {
@@ -119,11 +123,27 @@ export const useAuthFlow = () => {
         destination = decoded;
       }
     }
+
+    // Cerrar cualquier panel abierto antes de navegar
+    closeActivePanel();
+    setPanelLoading(false);
+
     // Feedback visual
     showSuccessToast('Bienvenido', '¡Bienvenido de nuevo!');
     setState('success');
 
-    navigate(destination);
+    // Para rutas con intercepting routes, usar navegación hard
+    // para evitar que el modal se vuelva a montar
+    const hasInterceptingRoute = destination.includes('/comunidad/ver/');
+
+    if (hasInterceptingRoute) {
+      // Forzar recarga completa para resetear el estado de Next.js
+      window.location.href = destination;
+    } else {
+      // Para otras rutas, usar navegación normal
+      navigate(destination);
+    }
+
     setLoading(false);
     return true;
   };
