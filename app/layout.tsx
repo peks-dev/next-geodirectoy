@@ -115,6 +115,11 @@ export default async function RootLayout({
           name="msapplication-TileImage"
           content="/favicons/ms-icon-144x144.png"
         />
+        <script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="1c5d1de4-55fd-4f42-afd8-b6130440380a"
+        ></script>
       </head>
       <body
         className={`${iceland.variable} ${oxanium.variable} relative h-dvh w-screen antialiased`}
