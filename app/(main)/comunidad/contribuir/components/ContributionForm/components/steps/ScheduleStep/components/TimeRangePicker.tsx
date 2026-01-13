@@ -25,7 +25,6 @@ const TimeRangePicker = ({
   endLabel = 'Hora de fin',
   wrapperClass = '',
   inputWrapperClass = '',
-  separator = ' - ',
 }: TimeRangePickerProps) => {
   const [time, setTime] = useState<TimeRange>({
     start: initialStart,
@@ -45,19 +44,20 @@ const TimeRangePicker = ({
   };
 
   return (
-    <div className={`flex items-center justify-around ${wrapperClass}`.trim()}>
+    <div
+      className={`flex w-full items-center justify-between gap-3 ${wrapperClass}`.trim()}
+    >
       <TimeInput
         label={startLabel}
         value={time.start}
         onChange={handleStartChange}
-        wrapperClass={inputWrapperClass}
+        wrapperClass={`${inputWrapperClass} flex-1`.trim()}
       />
-      <span className="separator">{separator}</span>
       <TimeInput
         label={endLabel}
         value={time.end}
         onChange={handleEndChange}
-        wrapperClass={inputWrapperClass}
+        wrapperClass={`${inputWrapperClass} flex-1`.trim()}
       />
     </div>
   );

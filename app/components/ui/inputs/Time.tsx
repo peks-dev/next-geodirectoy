@@ -31,7 +31,9 @@ const TimeInput = forwardRef<HTMLInputElement, TimeInputProps>(
     };
 
     return (
-      <div className={`flex flex-col items-center ${wrapperClass}`.trim()}>
+      <div
+        className={`flex w-full flex-col items-center overflow-hidden ${wrapperClass}`.trim()}
+      >
         {label && (
           <label htmlFor={props.id} className={`mb-lg ${labelClass}`.trim()}>
             {label}
@@ -42,7 +44,8 @@ const TimeInput = forwardRef<HTMLInputElement, TimeInputProps>(
           type="time"
           value={value}
           onChange={handleChange}
-          className={`bg-background-interactive text-md text-accent-primary border-none ${inputClass} ${className}`.trim()}
+          className={`bg-background-interactive text-md text-accent-primary w-full border-none text-center ${inputClass} ${className}`.trim()}
+          style={{ textAlign: 'center' }}
           {...props}
         />
       </div>
