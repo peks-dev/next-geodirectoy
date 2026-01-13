@@ -89,8 +89,10 @@ export default function DinamicSlider({
           {slides.map((slide, index) => (
             <li
               key={slide.id}
-              className={`dinamic-slider-nav-icon text-accent-primary border-t-2 border-solid border-transparent transition-all duration-200 ease-in ${
-                activeIndex === index ? 'active' : ''
+              className={`dinamic-slider-nav-icon border-t-2 border-solid transition-all duration-200 ease-in hover:drop-shadow-[0_0_3px_currentColor] hover:filter ${
+                activeIndex === index
+                  ? 'border-accent-primary text-accent-primary drop-shadow-[0_0_3px_var(--color-accent-primary)] filter'
+                  : 'text-accent-primary border-transparent'
               }`}
             >
               <button
